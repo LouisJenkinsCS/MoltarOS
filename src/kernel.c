@@ -39,14 +39,14 @@ enum vga_color {
 
 static struct {
 	/// The VGA text-mode buffer
-	uint16_t *buf;
+	uint16_t *BUFFER;
 	/// The current dimension of the buffer (X and Y)
 	struct {
-		size_t x;
-		size_t y;
-	} coords;
+		size_t X;
+		size_t Y;
+	} COORDS;
 	/// Background and Foreground color of the VGA output
-	uint16_t color;
+	uint16_t COLOR;
 } VGA_TEXT_BUFFER;
 
 static const size_t VGA_WIDTH = 80;
@@ -76,41 +76,49 @@ size_t strlen(const char *str) {
 }
 
 static void vga_init() {
-	VGA_TEXT_BUFFER.buf = (uint16_t *) 0xB8000;
-	VGA_TEXT_BUFFER.coords.x = VGA_TEXT_BUFFER.coords.y = 0;
-	VGA_TEXT_BUFFER.color = vga_color_make(COLOR_LIGHT_GREY, COLOR_BLACK);
+	VGA_TEXT_BUFFER.BUFFER = (uint16_t *) 0xB8000;
+	VGA_TEXT_BUFFER.COORDS.X = VGA_TEXT_BUFFER.COORDS.Y = 0;
+	VGA_TEXT_BUFFER.COLOR = vga_color_make(COLOR_LIGHT_GREY, COLOR_BLACK);
 
 	// Clear VGA buffer of all entries
 	for(size_t y = 0; y < VGA_HEIGHT; y++) {
 		for(size_t x = 0; x < VGA_WIDTH; x++) {
 			const size_t index = y * VGA_WIDTH + x;
-			VGA_TEXT_BUFFER.buf[index] = vga_entry_make(' ', VGA_TEXT_BUFFER.color);
+			VGA_TEXT_BUFFER.BUFFER[index] = vga_entry_make(' ', VGA_TEXT_BUFFER.COLOR);
 		}
 	}
 }
 
 static void vga_color_set(uint8_t color) {
-	VGA_TEXT_BUFFER.color = color;
+	VGA_TEXT_BUFFER.COLOR = color;
 
 	// Change the color but keep the contents
 	for(size_t y = 0; y < VGA_HEIGHT; y++) {
 		for(size_t x = 0; x < VGA_WIDTH; x++) {
 			const size_t index = y * VGA_WIDTH + x;
-			VGA_TEXT_BUFFER.buf[index] = vga_entry_make(VGA_TEXT_BUFFER.buf[index], VGA_TEXT_BUFFER.color);
+			VGA_TEXT_BUFFER.BUFFER[index] = vga_entry_make(VGA_TEXT_BUFFER.BUFFER[index], VGA_TEXT_BUFFER.COLOR);
 		}
 	}
 }
 
 static void vga_entry_put_at(char c, uint8_t color, size_t x, size_t y) {
-	if(x >= VGA_WIDTH || y >= VGA_HEIGHT)
+	if(x >= VGA_WIDTH || y >= VGA_HEIGHT || c == '\n')
 		return;
 
 	const size_t index = y * VGA_WIDTH + x;
-	VGA_TEXT_BUFFER.buf[index] = vga_entry_make(c, color);
+	VGA_TEXT_BUFFER.BUFFER[index] = vga_entry_make(c, color);
 }
 
 static void vga_entry_put(char c) {
-	vga_entry_put_at(c, VGA_TEXT_BUFFER.color, VGA_TEXT_BUFFER.coords.x, VGA_TEXT_BUFFER.coords.y);
+	/*
+		Print the character to the VGA Text buffer; if it is a newline, it will fill the rest of the line
+		with spaces to simulate an actual newline.
+	*/
+	if(c == '\n')
+		while(VGA_TEXT_BUFFER.COORDS.X != (VGA_WIDTH - 1))
+			vga_entry_put_at(' ', VGA_TEXT_BUFFER.COLOR, VGA_TEXT_BUFFER.COORDS.X++, VGA_TEXT_BUFFER.COORDS.Y);
+	else
+		vga_entry_put_at(c, VGA_TEXT_BUFFER.COLOR, VGA_TEXT_BUFFER.COORDS.X, VGA_TEXT_BUFFER.COORDS.Y);
 
 	/*
 		Below to prevent overflowing the VGA buffer, we instead restart at the beginning the next
@@ -119,11 +127,11 @@ static void vga_entry_put(char c) {
 		the keyboard (once the driver is implemented) and storing the previous data as well
 		(once memory management and the heap is implemented).
 	*/
-	if(++VGA_TEXT_BUFFER.coords.x == VGA_WIDTH) {
-		VGA_TEXT_BUFFER.coords.x = 0;
+	if(++VGA_TEXT_BUFFER.COORDS.X == VGA_WIDTH) {
+		VGA_TEXT_BUFFER.COORDS.X = 0;
 
-		if(++VGA_TEXT_BUFFER.coords.y == VGA_HEIGHT) {
-			VGA_TEXT_BUFFER.coords.y = 0;
+		if(++VGA_TEXT_BUFFER.COORDS.Y == VGA_HEIGHT) {
+			VGA_TEXT_BUFFER.COORDS.Y = 0;
 		}
 	}
 }
@@ -137,6 +145,12 @@ void kmain() {
 	// Intialize the VGA_TEXT_BUFFER
 	vga_init();
 
-	// Note that newlines aren't supported yet.
-	vga_entry_write("Hello, Kernel World!\n");
+	for(size_t i = 0; i < VGA_HEIGHT; i++)
+		vga_entry_write("Original Line...\n");
+
+	vga_entry_write("Overwritten Line!\n");
+
+	vga_entry_write("Second Overwritten Line!\n");
+
+	vga_entry_write("\nSkipped Line!\n");
 }
