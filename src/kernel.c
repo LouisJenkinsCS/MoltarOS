@@ -109,13 +109,50 @@ static void vga_entry_put_at(char c, uint8_t color, size_t x, size_t y) {
 	VGA_TEXT_BUFFER.BUFFER[index] = vga_entry_make(c, color);
 }
 
+static void vga_clear_line(size_t line) {
+	for(size_t x = 0; x < VGA_WIDTH; x++) {
+		const size_t index = line * VGA_WIDTH + x;
+		VGA_TEXT_BUFFER.BUFFER[index] = vga_entry_make(' ', VGA_TEXT_BUFFER.COLOR);
+	}
+}
+
+static void vga_clear() {
+	for(size_t y = 0; y < VGA_HEIGHT; y++)
+		vga_clear_line(y);
+}
+
+static inline void vga_clear_current_line() {
+	vga_clear_line(VGA_TEXT_BUFFER.COORDS.Y);
+}
+
+/*
+	Simualte scrolling down by simply moving all contents up by one row, so the original
+	row is lost.
+*/
+static void vga_scroll() {
+	for(size_t y = 1; y < VGA_HEIGHT; y++) {
+		for(size_t x = 0; x < VGA_WIDTH; x++) {
+			// Previous and current line indexes
+			const size_t prev = (y-1) * VGA_WIDTH + x;
+			const size_t curr = y * VGA_WIDTH + x;
+
+			// The contents of the current line is moved to the previous line
+			VGA_TEXT_BUFFER.BUFFER[prev] = VGA_TEXT_BUFFER.BUFFER[curr];
+		}
+	}
+
+	// As we copied all lines down, the last line still contains old data that needs to be cleared.
+	vga_clear_current_line();
+}
+
+
 static void vga_entry_put(char c) {
 	/*
 		Print the character to the VGA Text buffer; if it is a newline, it will fill the rest of the line
 		with spaces to simulate an actual newline.
 	*/
 	if(c == '\n')
-		while(VGA_TEXT_BUFFER.COORDS.X != (VGA_WIDTH - 1))
+		while(VGA_TEXT_BUFFER.COORDS.X < VGA_WIDTH)
 			vga_entry_put_at(' ', VGA_TEXT_BUFFER.COLOR, VGA_TEXT_BUFFER.COORDS.X++, VGA_TEXT_BUFFER.COORDS.Y);
 	else
 		vga_entry_put_at(c, VGA_TEXT_BUFFER.COLOR, VGA_TEXT_BUFFER.COORDS.X, VGA_TEXT_BUFFER.COORDS.Y);
@@ -127,11 +164,12 @@ static void vga_entry_put(char c) {
 		the keyboard (once the driver is implemented) and storing the previous data as well
 		(once memory management and the heap is implemented).
 	*/
-	if(++VGA_TEXT_BUFFER.COORDS.X == VGA_WIDTH) {
+	if(++VGA_TEXT_BUFFER.COORDS.X >= VGA_WIDTH) {
 		VGA_TEXT_BUFFER.COORDS.X = 0;
 
-		if(++VGA_TEXT_BUFFER.COORDS.Y == VGA_HEIGHT) {
-			VGA_TEXT_BUFFER.COORDS.Y = 0;
+		if(++VGA_TEXT_BUFFER.COORDS.Y >= VGA_HEIGHT) {
+			VGA_TEXT_BUFFER.COORDS.Y--;
+			vga_scroll();
 		}
 	}
 }
