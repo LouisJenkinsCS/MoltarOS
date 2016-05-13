@@ -29,9 +29,17 @@ global _start
 		; Setup the stack pointer to point to the stack allocated above
 		mov esp, stack_top
 
+		; Initialize the core facilities of the kernel
+		extern kernel_init
+		call kernel_init
+
+		; Calls any global constructors '__attribute__((constructor))'
+		extern _init
+		call _init
+
 		; Finally, jump to kmain, and leave assembly behind for good
-		extern kmain
-		call kmain
+		extern kernel_main
+		call kernel_main
 
 		; If we do end up back here, the bootloader is gone and hence there is nothing left to do but halt permanently
 		cli

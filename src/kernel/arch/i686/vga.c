@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-#include "vga.h"
+#include "../../include/kernel/vga.h"
 
 /* X and Y coordinates for current position in VGA buffer */
 static size_t x, y;
