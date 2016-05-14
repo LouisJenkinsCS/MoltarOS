@@ -34,8 +34,8 @@ global _start
 		call kernel_init
 
 		; Calls any global constructors '__attribute__((constructor))'
-		extern _init
-		call _init
+		; extern _init
+		; call _init
 
 		; Finally, jump to kmain, and leave assembly behind for good
 		extern kernel_main

@@ -4,6 +4,9 @@
 
 #include "../include/kernel/vga.h"
 
+void kernel_init() {
+	// TODO
+}
 
 void kernel_main() {
 	vga_init();

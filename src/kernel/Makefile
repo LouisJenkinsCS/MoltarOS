@@ -32,7 +32,8 @@ COMPILER_WARNINGS := \
 	-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align \
 	-Wnested-externs -Wwrite-strings -Wredundant-decls  -Winline -Wconversion
 
-CFLAGS := -g -std=c11 $(COMPILER_WARNINGS)
+CFLAGS := -g -std=c11 $(COMPILER_WARNINGS) -fbuiltin
+LINKER_FLAGS := -ffreestanding -O2 -nostdlib -lgcc $(COMPILER_WARNINGS) -fbuiltin
 
 -include $(DEPENDENCIES)
 
@@ -42,11 +43,8 @@ all: MoltarOS.kernel
 
 # Target to build the kernel
 MoltarOS.kernel: $(LINKER) $(OBJECTS)
-	@echo "Sources: $(SOURCES)"
-	@echo "Headers: $(HEADERS)"
-	@echo "Dependencies: $(DEPENDENCIES)"
 	@echo "Building Kernel core files..."
-	@$(LINKER_COMPILER) -T $(LINKER) -o $@ $(CFLAGS) $(OBJECTS)
+	$(LINKER_COMPILER) -T $(LINKER) -o $@ $(LINKER_FLAGS) $(OBJECTS)
 
 # Converts source file (.c) into object file (.o)
 # MMD - Generate depedency file (.d) to make sensitive to changes in files it depends on
@@ -54,14 +52,15 @@ MoltarOS.kernel: $(LINKER) $(OBJECTS)
 # $< - First dependency in the list... I.E, for Kernel.o, $< = Kernel.c
 # $@ - The name of the target... I.E, for Kernel.o, $@ = Kernel.o
 %.o: %.c Makefile
-	@echo "Compiling $@..."
+	@echo "Compiling $<..."
 	@$(C_COMPILER) $(CFLAGS) -MMD -MP -c $< -o $@
 
 %.o: %.asm Makefile
-	@echo "Compiling $@..."
-	$(NASM_COMPILER) $< -o $@
+	@echo "Compiling $<..."
+	@$(NASM_COMPILER) $< -o $@
 
 # Disable checking for files with names of targets we declare to prevent collisions
 .PHONY: all clean dist check
 
-
+clean: 
+	-@$(RM) $(wildcard $(OBJECTS) $(DEPENDENCIES) MoltarOS.kernel)
