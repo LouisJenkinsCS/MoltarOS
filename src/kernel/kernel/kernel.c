@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <../include/kernel/vga.h>
+#include "../include/kernel/vga.h"
 
 
 void kernel_main() {

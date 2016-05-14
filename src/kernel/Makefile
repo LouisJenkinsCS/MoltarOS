@@ -1,74 +1,67 @@
-HOST?=$(shell ../default-host.sh)
-HOSTARCH:=$(shell ../target-triplet-to-arch.sh $(HOST))
- 
-CFLAGS?=-O2 -g
-CPPFLAGS?=
-LDFLAGS?=
-LIBS?=
- 
-DESTDIR?=
-PREFIX?=/usr/local
-EXEC_PREFIX?=$(PREFIX)
-BOOTDIR?=$(EXEC_PREFIX)/boot
-INCLUDEDIR?=$(PREFIX)/include
- 
-CFLAGS:=$(CFLAGS) -ffreestanding -fbuiltin -Wall -Wextra
-CPPFLAGS:=$(CPPFLAGS) -D__is_myos_kernel -Iinclude
-LDFLAGS:=$(LDFLAGS)
-LIBS:=$(LIBS) -nostdlib -lk -lgcc
- 
-ARCHDIR:=arch/$(HOSTARCH)
- 
-include $(ARCHDIR)/make.config
- 
-CFLAGS:=$(CFLAGS) $(KERNEL_ARCH_CFLAGS)
-CPPFLAGS:=$(CPPFLAGS) $(KERNEL_ARCH_CPPFLAGS)
-LDFLAGS:=$(LDFLAGS) $(KERNEL_ARCH_LDFLAGS)
-LIBS:=$(LIBS) $(KERNEL_ARCH_LIBS)
- 
-OBJS:=\
-$(KERNEL_ARCH_OBJS) \
-kernel/kernel.o \
- 
-CRTI_OBJ:=$(ARCHDIR)/crti.o
-CRTBEGIN_OBJ:=$(shell $(CC) $(CFLAGS) $(LDFLAGS) -print-file-name=crtbegin.o)
-CRTEND_OBJ:=$(shell $(CC) $(CFLAGS) $(LDFLAGS) -print-file-name=crtend.o)
-CRTN_OBJ:=$(ARCHDIR)/crtn.o
- 
-ALL_OUR_OBJS:=\
-$(CRTI_OBJ) \
-$(OBJS) \
-$(CRTN_OBJ) \
- 
-OBJ_LINK_LIST:=\
-$(CRTI_OBJ) \
-$(CRTBEGIN_OBJ) \
-$(OBJS) \
-$(CRTEND_OBJ) \
-$(CRTN_OBJ) \
- 
+# Include directories
+INCLUDE := kernel include arch/i686
+
+# List of all headers from the included directories
+HEADERS := $(shell find $(INCLUDE) -type f -name \*.h)
+
+# List of all sources (.c and .asm) from the included directories
+C_SOURCES := $(shell find $(INCLUDE) -type f -name \*.c)
+ASM_SOURCES := $(shell find $(INCLUDE) -type f -name \*.asm)
+SOURCES := $(C_SOURCES) $(ASM_SOURCES)
+
+# List of the output (.o) files from the compiled sources (.c and .asm)
+C_OBJECTS := $(patsubst %.c, %.o, $(C_SOURCES))
+ASM_OBJECTS := $(patsubst %.asm, %.o, $(ASM_SOURCES))
+OBJECTS := $(C_OBJECTS) $(ASM_OBJECTS)
+
+# List of dependency files generated for each source (.c)
+DEPENDENCIES := $(patsubst %.c, %.d, $(C_SOURCES))
+
+# Linker to be used
+LINKER := arch/i686/linker.ld
+
+# Compilers used during specific build sections
+LINKER_COMPILER := i686-elf-gcc
+C_COMPILER := clang -target -i686-elf -march=i686
+NASM_COMPILER := nasm -felf32
+
+# List of all files (.h, .c, .asm) that will be distributed when compressed (.tar)
+ALL_FILES := $(HEADERS) $(SOURCES)
+
+COMPILER_WARNINGS := \
+	-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align \
+	-Wnested-externs -Wwrite-strings -Wredundant-decls  -Winline -Wconversion
+
+CFLAGS := -g -std=c11 $(COMPILER_WARNINGS)
+
+-include $(DEPENDENCIES)
+
+
+# Target to build all of the kernel
 all: MoltarOS.kernel
- 
-.PHONY: all clean install install-headers install-kernel
- 
-MoltarOS.kernel: $(OBJ_LINK_LIST) $(ARCHDIR)/linker.ld
-	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS) $(OBJ_LINK_LIST) $(LDFLAGS) $(LIBS)
- 
-%.o: %.c
-	$(CC) -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
- 
-%.o: %.asm
-	nasm -felf32 $< -o $@
- 
-clean:
-	rm -f MoltarOS.kernel $(OBJS) $(ALL_OUR_OBJS) *.o */*.o */*/*.o
- 
-install: install-headers install-kernel
- 
-install-headers:
-	mkdir -p $(DESTDIR)$(INCLUDEDIR)
-	cp -RTv include $(DESTDIR)$(INCLUDEDIR)
- 
-install-kernel: MoltarOS.kernel
-	mkdir -p $(DESTDIR)$(BOOTDIR)
-	cp MoltarOS.kernel $(DESTDIR)$(BOOTDIR)
+
+# Target to build the kernel
+MoltarOS.kernel: $(LINKER) $(OBJECTS)
+	@echo "Sources: $(SOURCES)"
+	@echo "Headers: $(HEADERS)"
+	@echo "Dependencies: $(DEPENDENCIES)"
+	@echo "Building Kernel core files..."
+	@$(LINKER_COMPILER) -T $(LINKER) -o $@ $(CFLAGS) $(OBJECTS)
+
+# Converts source file (.c) into object file (.o)
+# MMD - Generate depedency file (.d) to make sensitive to changes in files it depends on
+# MP - Avoids errors when header files are removed from filesystem
+# $< - First dependency in the list... I.E, for Kernel.o, $< = Kernel.c
+# $@ - The name of the target... I.E, for Kernel.o, $@ = Kernel.o
+%.o: %.c Makefile
+	@echo "Compiling $@..."
+	@$(C_COMPILER) $(CFLAGS) -MMD -MP -c $< -o $@
+
+%.o: %.asm Makefile
+	@echo "Compiling $@..."
+	$(NASM_COMPILER) $< -o $@
+
+# Disable checking for files with names of targets we declare to prevent collisions
+.PHONY: all clean dist check
+
+
