@@ -21,7 +21,7 @@ DEPENDENCIES := $(patsubst %.c, %.d, $(C_SOURCES))
 LINKER := arch/i686/linker.ld
 
 # Compilers used during specific build sections
-LINKER_COMPILER := i686-elf-gcc
+LINKER_COMPILER := i686-elf-gcc -static
 C_COMPILER := clang -target -i686-elf -march=i686
 NASM_COMPILER := nasm -felf32
 
@@ -32,8 +32,9 @@ COMPILER_WARNINGS := \
 	-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align \
 	-Wnested-externs -Wwrite-strings -Wredundant-decls  -Winline -Wconversion
 
-CFLAGS := -g -std=c11 $(COMPILER_WARNINGS) -fbuiltin
-LINKER_FLAGS := -ffreestanding -O2 -nostdlib -lgcc $(COMPILER_WARNINGS) -fbuiltin
+CFLAGS := -g -std=gnu11 $(COMPILER_WARNINGS) -fbuiltin -Iinclude -D__IS_MOLTAROS
+LINKER_FLAGS := -ffreestanding -O2 -nostdlib -lgcc $(COMPILER_WARNINGS) -fbuiltin -D__IS_MOLTAROS
+LIBC := ../libc/libk.a
 
 -include $(DEPENDENCIES)
 
@@ -42,9 +43,9 @@ LINKER_FLAGS := -ffreestanding -O2 -nostdlib -lgcc $(COMPILER_WARNINGS) -fbuilti
 all: MoltarOS.kernel
 
 # Target to build the kernel
-MoltarOS.kernel: $(LINKER) $(OBJECTS)
+MoltarOS.kernel: $(LINKER) $(OBJECTS) $(LIBC) Makefile
 	@echo "Building Kernel core files..."
-	$(LINKER_COMPILER) -T $(LINKER) -o $@ $(LINKER_FLAGS) $(OBJECTS)
+	$(LINKER_COMPILER) $(LINKER_FLAGS) -T $(LINKER) -o $@ $(OBJECTS) $(LIBC)
 
 # Converts source file (.c) into object file (.o)
 # MMD - Generate depedency file (.d) to make sensitive to changes in files it depends on
@@ -60,7 +61,7 @@ MoltarOS.kernel: $(LINKER) $(OBJECTS)
 	@$(NASM_COMPILER) $< -o $@
 
 # Disable checking for files with names of targets we declare to prevent collisions
-.PHONY: all clean dist check
+.PHONY: all clean
 
 clean: 
 	-@$(RM) $(wildcard $(OBJECTS) $(DEPENDENCIES) MoltarOS.kernel)

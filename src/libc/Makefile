@@ -1,88 +1,39 @@
-HOST?=$(shell ../default-host.sh)
-HOSTARCH:=$(shell ../target-triplet-to-arch.sh $(HOST))
+# Include directories
+INCLUDE := include include/sys stdio stdlib string
 
-CFLAGS?=-O2 -g
-CPPFLAGS?=
-LDFLAGS?=
-LIBS?=
+# Sources, Headers, and Objects
+SOURCES := $(shell find $(INCLUDE) -type f -name \*.c)
+HEADERS := $(shell find $(INCLUDE) -type f -name \*.h)
+OBJECTS := $(patsubst %.c, %.o, $(SOURCES))
 
-DESTDIR?=
-PREFIX?=/usr/local
-EXEC_PREFIX?=$(PREFIX)
-INCLUDEDIR?=$(PREFIX)/include
-LIBDIR?=$(EXEC_PREFIX)/lib
+# Extremely long list of compiler warnings...
+COMPILER_WARNINGS := \
+	-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align \
+	-Wnested-externs -Wwrite-strings -Wredundant-decls  -Winline -Wconversion
 
-CFLAGS:=$(CFLAGS) -Wall -Wextra
-CPPFLAGS:=$(CPPFLAGS) -D__is_myos_libc -Iinclude
-LIBK_CFLAGS:=$(CFLAGS) -ffreestanding -fbuiltin
-LIBK_CPPFLAGS:=$(CPPFLAGS) -D__is_myos_kernel
+# Compiler Flags
+CFLAGS := -O2 -g $(COMPILER_WARNINGS) -ffreestanding -fbuiltin -Iinclude -D__IS_MOLTAROS
 
-ARCHDIR:=arch/$(HOSTARCH)
+C_COMPILER := clang -target -i686-elf -march=i686
 
-include $(ARCHDIR)/make.config
+# List of dependency files generated for each source (.c)
+DEPENDENCIES := $(patsubst %.c, %.d, $(C_SOURCES))
 
-CFLAGS:=$(CFLAGS) $(ARCH_CFLAGS)
-CPPFLAGS:=$(CPPFLAGS) $(ARCH_CPPFLAGS)
-LIBK_CFLAGS:=$(LIBK_CFLAGS) $(KERNEL_ARCH_CFLAGS)
-LIBK_CPPFLAGS:=$(LIBK_CPPFLAGS) $(KERNEL_ARCH_CPPFLAGS)
+-include $(DEPENDENCIES)
 
-FREEOBJS:=\
-$(ARCH_FREEOBJS) \
-stdio/printf.o \
-stdio/putchar.o \
-stdio/puts.o \
-stdlib/abort.o \
-string/memcmp.o \
-string/memcpy.o \
-string/memmove.o \
-string/memset.o \
-string/strlen.o \
+.PHONY: all clean
 
-HOSTEDOBJS:=\
-$(ARCH_HOSTEDOBJS) \
+all: libk.a
 
-OBJS:=\
-$(FREEOBJS) \
-$(HOSTEDOBJS) \
+# Kernel implementation for libc
+libk.a: $(OBJECTS) Makefile
+	@echo "Building $@..."
+	@$(AR) rcs $@ $(OBJECTS)
 
-LIBK_OBJS:=$(FREEOBJS:.o=.libk.o)
-
-BINARIES=libc.a libg.a libk.a
-
-all: $(BINARIES)
-
-.PHONY: all clean install install-headers install-libs
-
-libc.a: $(OBJS)
-	$(AR) rcs $@ $(OBJS)
-
-libg.a:
-	$(AR) rcs $@
-
-libk.a: $(LIBK_OBJS)
-	$(AR) rcs $@ $(LIBK_OBJS)
-
-%.o: %.c
-	$(CC) -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
-
-%.o: %.S
-	$(CC) -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
-
-%.libk.o: %.c
-	$(CC) -c $< -o $@ -std=gnu11 $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)
-
-%.libk.o: %.S
-	$(CC) -c $< -o $@ $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)
+%.o: %.c Makefile
+	@echo "Compiling $<..."
+	@$(C_COMPILER) -c $< -o $@ $(CFLAGS) -std=gnu11
 
 clean:
-	rm -f $(BINARIES) $(OBJS) $(LIBK_OBJS) *.o */*.o */*/*.o
-
-install: install-headers install-libs
-
-install-headers:
-	mkdir -p $(DESTDIR)$(INCLUDEDIR)
-	cp -RTv include $(DESTDIR)$(INCLUDEDIR)
-
-install-libs: $(BINARIES)
-	mkdir -p $(DESTDIR)$(LIBDIR)
-	cp $(BINARIES) $(DESTDIR)$(LIBDIR)
+	@echo "Cleaning libc..."
+	-@$(RM) libk.a $(OBJECTS) *.o */*.o */*/*.o

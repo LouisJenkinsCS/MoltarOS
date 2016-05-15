@@ -50,7 +50,7 @@ void vga_set_color(enum vga_color foreground, enum vga_color background) {
 	for(size_t i = 0; i < vga_height; i++) {
 		for(size_t j = 0; j < vga_width; j++) {
 			const size_t index = (i * vga_width) + j;
-			buf[index] = color_char(buf[index]);
+			buf[index] = color_char((char) buf[index]);
 		}
 	}
 }
@@ -111,14 +111,14 @@ void vga_scroll_down() {
 
 
 static uint8_t make_color(enum vga_color foreground, enum vga_color background) {
-	return foreground | background << 4;
+	return (uint8_t) (foreground | background << 4);
 }
 
 static uint16_t color_char(const char c) {
-	uint16_t c16 = c;
+	uint16_t c16 = (uint16_t) c;
 	uint16_t color16 = color;
 
-	return c16 | color16 << 8;
+	return (uint16_t) (c16 | color16 << 8);
 }
 
 static size_t get_index() {

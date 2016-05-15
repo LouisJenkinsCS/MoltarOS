@@ -1,16 +1,15 @@
 #include <stdio.h>
 
-#if defined(__is_myos_kernel)
-#include <kernel/tty.h>
+#ifdef __IS_MOLTAROS
+#include "../../kernel/include/kernel/vga.h"
 #endif
 
-int putchar(int ic)
-{
-#if defined(__is_myos_kernel)
-	char c = (char) ic;
-	terminal_write(&c, sizeof(c));
+int putchar(int c) {
+#ifdef __IS_MOLTAROS
+	vga_putc((char) c);
 #else
-	// TODO: You need to implement a write system call.
+	// TODO: Write syscall
 #endif
-	return ic;
+
+	return c;
 }
