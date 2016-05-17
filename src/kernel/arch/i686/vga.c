@@ -2,7 +2,7 @@
 
 #include "../../include/kernel/vga.h"
 
-/* X and Y coordinates for current position in VGA buffer */
+/* X and Y coordinates for current position in VGA buffer */ 
 static size_t x, y;
 
 /* The current VGA color mask */

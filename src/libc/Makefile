@@ -17,7 +17,7 @@ CFLAGS := -O2 -g $(COMPILER_WARNINGS) -ffreestanding -fbuiltin -Iinclude -D__IS_
 C_COMPILER := clang -target -i686-elf -march=i686
 
 # List of dependency files generated for each source (.c)
-DEPENDENCIES := $(patsubst %.c, %.d, $(C_SOURCES))
+DEPENDENCIES := $(patsubst %.c, %.d, $(SOURCES))
 
 -include $(DEPENDENCIES)
 

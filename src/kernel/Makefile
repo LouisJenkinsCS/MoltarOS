@@ -1,5 +1,5 @@
 # Include directories
-INCLUDE := kernel include arch/i686
+INCLUDE := kernel include arch/i686 include/kernel
 
 # List of all headers from the included directories
 HEADERS := $(shell find $(INCLUDE) -type f -name \*.h)
@@ -44,8 +44,8 @@ all: MoltarOS.kernel
 
 # Target to build the kernel
 MoltarOS.kernel: $(LINKER) $(OBJECTS) $(LIBC) Makefile
-	@echo "Building Kernel core files..."
-	$(LINKER_COMPILER) $(LINKER_FLAGS) -T $(LINKER) -o $@ $(OBJECTS) $(LIBC)
+	@echo "Building Kernel image..."
+	@$(LINKER_COMPILER) $(LINKER_FLAGS) -T $(LINKER) -o $@ $(OBJECTS) $(LIBC)
 
 # Converts source file (.c) into object file (.o)
 # MMD - Generate depedency file (.d) to make sensitive to changes in files it depends on
@@ -54,7 +54,7 @@ MoltarOS.kernel: $(LINKER) $(OBJECTS) $(LIBC) Makefile
 # $@ - The name of the target... I.E, for Kernel.o, $@ = Kernel.o
 %.o: %.c Makefile
 	@echo "Compiling $<..."
-	@$(C_COMPILER) $(CFLAGS) -MMD -MP -c $< -o $@
+	@$(C_COMPILER) $(CFLAGS) -c $< -o $@
 
 %.o: %.asm Makefile
 	@echo "Compiling $<..."
@@ -63,5 +63,6 @@ MoltarOS.kernel: $(LINKER) $(OBJECTS) $(LIBC) Makefile
 # Disable checking for files with names of targets we declare to prevent collisions
 .PHONY: all clean
 
-clean: 
+clean:
+	@echo "Cleaning up Kernel files and image..."
 	-@$(RM) $(wildcard $(OBJECTS) $(DEPENDENCIES) MoltarOS.kernel)
