@@ -26,9 +26,11 @@ cd ../tmp;
 # Build the CD
 genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o MoltarOS.iso iso;
 
+# If we fail to build the CD...
 if [ $? -ne 0 ]; then
 	echo "Failed to build the cd!";
 	exit;
 fi
 
+# Finally, run the virtual machine.
 bochs -f bochs.bxrc;

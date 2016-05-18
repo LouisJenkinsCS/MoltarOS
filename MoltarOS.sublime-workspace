@@ -520,10 +520,34 @@
 	"buffers":
 	[
 		{
+			"file": "src/kernel/include/kernel/gdt.h",
+			"settings":
+			{
+				"buffer_size": 594,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/theif519/Documents/jamesm-tutorials/trunk/doc/the_gdt_and_idt.txt",
+			"settings":
+			{
+				"buffer_size": 16021,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/kernel/Makefile",
+			"settings":
+			{
+				"buffer_size": 2425,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "src/kernel/kernel/kernel.c",
 			"settings":
 			{
-				"buffer_size": 479,
+				"buffer_size": 557,
 				"line_ending": "Windows"
 			}
 		},
@@ -531,72 +555,8 @@
 			"file": "src/libc/Makefile",
 			"settings":
 			{
-				"buffer_size": 1069,
+				"buffer_size": 1067,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/Makefile",
-			"settings":
-			{
-				"buffer_size": 2377,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/arch/i686/vga.c",
-			"settings":
-			{
-				"buffer_size": 3046,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/libc/stdio/putchar.c",
-			"settings":
-			{
-				"buffer_size": 208,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/libc/include/sys/cdefs.h",
-			"settings":
-			{
-				"buffer_size": 77,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/libc/include/stdio.h",
-			"settings":
-			{
-				"buffer_size": 149,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/libc/include/stdlib.h",
-			"settings":
-			{
-				"buffer_size": 117,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/libc/include/string.h",
-			"settings":
-			{
-				"buffer_size": 307,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/libc/stdio/printf.c",
-			"settings":
-			{
-				"buffer_size": 1480,
-				"line_ending": "Unix"
 			}
 		}
 	],
@@ -830,9 +790,7 @@
 		"/C/Users/theif519/Documents/GitHub/MoltarOS",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/kernel",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc",
@@ -840,16 +798,44 @@
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/include/sys",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/stdio",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/stdlib",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/string"
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/string",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/tmp",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/tmp/iso",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/tmp/iso/boot",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/tmp/iso/boot/grub"
 	],
 	"file_history":
 	[
+		"/C/Users/theif519/Documents/jamesm-tutorials/branches/the_gdt_and_idt/Makefile",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/build.sh",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/include/stdlib.h",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/stdio/printf.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/vga.d",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/vga.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/kernel.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/tmp/iso/boot/grub/grub.cfg",
+		"/C/Users/theif519/Documents/jamesm-tutorials/branches/the_gdt_and_idt/scripts/update_image.sh",
+		"/C/Users/theif519/Documents/jamesm-tutorials/branches/the_gdt_and_idt/scripts/run_bochs.sh",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/tmp/bochs.conf",
+		"/C/Users/theif519/Documents/jamesm-tutorials/trunk/doc/genesis.txt",
+		"/C/Users/theif519/Documents/jamesm-tutorials/trunk/doc/index.txt",
+		"/C/Users/theif519/Documents/jamesm-tutorials/branches/the_gdt_and_idt/src/common.h",
+		"/C/Users/theif519/Documents/jamesm-tutorials/branches/the_gdt_and_idt/src/common.c",
+		"/C/Users/theif519/Documents/jamesm-tutorials/branches/the_gdt_and_idt/scripts/bochsrc.txt",
+		"/F/menu.lst",
+		"/C/Users/theif519/Documents/jamesm-tutorials/branches/the_gdt_and_idt/src/multiboot.h",
+		"/C/Users/theif519/Documents/jamesm-tutorials/trunk/doc/environment_setup.txt",
+		"/C/Users/theif519/Documents/jamesm-tutorials/trunk/doc/backtracing_and_symbol_lookup.txt",
+		"/C/Users/theif519/Documents/jamesm-tutorials/branches/the_gdt_and_idt/src/gdt.h",
+		"/C/Users/theif519/Documents/jamesm-tutorials/branches/the_gdt_and_idt/src/gdt.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/Makefile",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/Makefile",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/kernel/vga.h",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/stdio/putchar.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/include/sys/cdefs.h",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/include/stdio.h",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/include/string.h",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/kernel/vga.h",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/stdio/puts.c",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/stdio/printf.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/string/strlen.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/string/memcpy.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/string/memmove.c",
@@ -857,13 +843,10 @@
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/stdlib/abort.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/string/memcmp.c",
 		"/C/Users/theif519/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/include/sys/cdefs.h",
 		"/C/Users/theif519/AppData/Roaming/Sublime Text 3/Packages/User/MoltarOS.sublime-project",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/Makefile.bak",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/kernel.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/boot.asm",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/crti.asm",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/vga.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/crtn.asm",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/kernel.d",
 		"/C/Users/theif519/Documents/VirtualMachine_Shared/isodir/boot/grub/grub.cfg",
@@ -950,28 +933,7 @@
 		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/Misc/queue_test.mk",
 		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/logs/priority_queue_test.log",
 		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/Misc/priority_queue_test.mk",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/tests/priority_queue_test.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/tests/queue_test.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/tests/stack_test.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/memory/hazard.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/string/string_buffer.h",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/threading/tests/thread_pool_test.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/threading/Misc/thread_pool_test.mk",
-		"/C/Users/theif519/Documents/GW2_Serial.txt",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/Tests/list_test.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/queue.h",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/networking/connection.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/networking/server.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/threading/cond_locks.h",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/threading/event_loop.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/threading/scoped_lock.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/threading/event_loop.h",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/io/logger.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/networking/http.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/networking/http.h",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/misc/timer.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/networking/client.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/memory/hazard.h"
+		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/tests/priority_queue_test.c"
 	],
 	"find":
 	{
@@ -990,6 +952,9 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"1089",
+			"55aa",
+			"aa55",
 			"PATH",
 			"i386",
 			"myos",
@@ -1114,10 +1079,7 @@
 			"c_utils_log_level_e",
 			"SCOPED_LOCK",
 			"connections",
-			"amount_of_connections",
-			"sockets",
-			"amount_of_sockets",
-			"SCOPED_LOCK_FROM"
+			"amount_of_connections"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1257,143 +1219,30 @@
 		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
-		"whole_word": true,
+		"whole_word": false,
 		"wrap": true
 	},
 	"groups":
 	[
 		{
-			"selected": 9,
+			"selected": 4,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/kernel/kernel/kernel.c",
+					"file": "src/kernel/include/kernel/gdt.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 479,
+						"buffer_size": 594,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								474,
-								474
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/libc/Makefile",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1069,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								998,
-								998
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/kernel/Makefile",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2377,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1409,
-								1409
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 495.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/kernel/arch/i686/vga.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3046,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1568,
-								1568
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 977.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/libc/stdio/putchar.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 208,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								135,
-								135
+								333,
+								333
 							]
 						],
 						"settings":
@@ -1408,138 +1257,112 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "src/libc/include/sys/cdefs.h",
+					"buffer": 1,
+					"file": "/C/Users/theif519/Documents/jamesm-tutorials/trunk/doc/the_gdt_and_idt.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 77,
+						"buffer_size": 16021,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								76,
-								76
+								34,
+								34
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C.sublime-syntax"
+							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "src/libc/include/stdio.h",
+					"buffer": 2,
+					"file": "src/kernel/Makefile",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 149,
+						"buffer_size": 2425,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								33,
-								33
+								1583,
+								1583
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C.sublime-syntax"
+							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 349.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "src/libc/include/stdlib.h",
+					"buffer": 3,
+					"file": "src/kernel/kernel/kernel.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 117,
+						"buffer_size": 557,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								108,
-								108
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "src/libc/include/string.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 307,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								298,
-								298
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "src/libc/stdio/printf.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1480,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								81,
-								81
+								162,
+								162
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C.sublime-syntax",
 							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 90.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/libc/Makefile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1067,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								896,
+								896
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,

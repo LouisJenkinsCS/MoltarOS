@@ -29,6 +29,12 @@ global _start
 		; Setup the stack pointer to point to the stack allocated above
 		mov esp, stack_top
 
+		; EBX contains a pointer to the multiboot info structure that we should save for later
+		push ebx
+
+		; Zero EBP which is used to signify the end of a stack trace
+		mov ebp, 0
+
 		; Initialize the core facilities of the kernel
 		extern kernel_init
 		call kernel_init
