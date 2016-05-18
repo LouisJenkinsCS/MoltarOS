@@ -9,6 +9,13 @@
 */
 #define GDT_MAX_ENTRIES 3
 
+#define GDT_DESCRIPTOR_NULL 0
+#define GDT_DESCRIPTOR_CODE 1
+#define GDT_DESCRIPTOR_DATA 2
+
+#define GDT_ADDRESS_MIN 0
+#define GDT_ADDRESS_MAX 0xFFFFF
+
 // Invoked from assembly
 extern void gdt_flush(uint32_t);
 
@@ -24,16 +31,32 @@ void gdt_init() {
 	ptr.limit = (sizeof(struct gdt_entry) * GDT_MAX_ENTRIES) - 1;
 	ptr.base = (uint32_t) &entries;
 
-	// Setup and initialize the Null, Code, and Data segments below (respectively)
-	gdt_set_gate(0, 0, 0, 0, 0);
-	gdt_set_gate(1, 0, 0xFFFFF,
-			GDT_ACCESS_RW | GDT_ACCESS_EXECUTABLE | GDT_ACCESS_PRESENT,
-			GDT_FLAGS_SIZE | GDT_FLAGS_GRANULARITY
-			);
-	gdt_set_gate(2, 0, 0xFFFFF,
-			GDT_ACCESS_RW | GDT_ACCESS_PRESENT,
-			GDT_FLAGS_SIZE | GDT_FLAGS_GRANULARITY
-			);
+	/*
+		The below sets up each descriptor accordingly. They maintain the following format...
+
+		gdt_set_gate(
+			[DESCRIPTOR], [ADDR_MIN], [ADDR_MAX],
+			[ACCESS_BITS],
+			[FLAGS_BITS]
+		);
+
+		Where DESCRIPTOR is mapped directly to it's corresponding index.
+	*/
+	gdt_set_gate(
+		GDT_DESCRIPTOR_NULL, GDT_ADDRESS_MIN, GDT_ADDRESS_MIN,
+		GDT_ACCESS_NONE,
+		GDT_FLAGS_NONE
+	);
+	gdt_set_gate(
+		GDT_DESCRIPTOR_CODE, GDT_ADDRESS_MIN, GDT_ADDRESS_MAX,
+		GDT_ACCESS_RW | GDT_ACCESS_EXECUTABLE | GDT_ACCESS_PRESENT,
+		GDT_FLAGS_SIZE | GDT_FLAGS_GRANULARITY
+	);
+	gdt_set_gate(
+		GDT_DESCRIPTOR_DATA, GDT_ADDRESS_MIN, GDT_ADDRESS_MAX,
+		GDT_ACCESS_RW | GDT_ACCESS_PRESENT,
+		GDT_FLAGS_SIZE | GDT_FLAGS_GRANULARITY
+	);
 
 	// Update the CPU's GDT
 	gdt_flush((uint32_t) &ptr);

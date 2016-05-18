@@ -7,6 +7,7 @@
 	Access byte constants used to help with overall readability (and for my own benefit towards
 	fully understanding everything) to use when attempting to read and manage these flags.
 */
+#define GDT_ACCESS_NONE 0
 #define GDT_ACCESS_ACCESSED 1 << 0
 #define GDT_ACCESS_RW 1 << 1
 #define GDT_ACCESS_DIRECTION 1 << 2
@@ -21,6 +22,7 @@
 /*
 	Flags byte used to help with overall readability.
 */
+#define GDT_FLAGS_NONE 0
 #define GDT_FLAGS_GARBAGE 2 << 0
 #define GDT_FLAGS_SIZE 1 << 2
 #define GDT_FLAGS_GRANULARITY 1 << 3

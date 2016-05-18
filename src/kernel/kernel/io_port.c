@@ -21,13 +21,13 @@ uint8_t inb(uint16_t port) {
 }
 
 uint16_t inw(uint16_t port) {
-	uint8_t ret;
+	uint16_t ret;
 	asm volatile ("inw %1, %0" : "=a" (ret) : "Nd" (port));
 	return ret;
 }
 
 uint32_t inl(uint16_t port) {
-	uint8_t ret;
+	uint32_t ret;
 	asm volatile ("inl %1, %0" : "=a" (ret) : "Nd" (port));
 	return ret;
 }

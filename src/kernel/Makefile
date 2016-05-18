@@ -54,7 +54,7 @@ MoltarOS.kernel: $(LINKER) $(OBJECTS) $(LIBC) Makefile
 # $@ - The name of the target... I.E, for Kernel.o, $@ = Kernel.o
 %.o: %.c Makefile
 	@echo "Compiling $<..."
-	@$(C_COMPILER) $(CFLAGS) -c $< -o $@
+	@$(C_COMPILER) -I$(shell pwd) $(CFLAGS) -c $< -o $@
 
 %.o: %.asm Makefile
 	@echo "Compiling $<..."
