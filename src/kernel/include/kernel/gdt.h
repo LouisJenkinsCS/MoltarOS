@@ -54,7 +54,10 @@ struct __attribute__((packed)) gdt_ptr {
 };
 
 
-
+/*
+	Initializes the Global Descriptor Table, setting up and initializing the Null, Code, and Data segments
+	as well as loading it into the CPU.
+*/
 void gdt_init();
 
 #endif /* MOLTAROS_GDT_H */

@@ -5,12 +5,16 @@
 
 #define __IS_MOLTAROS 1
 
-#include <kernel/vga.h>
+#include <include/kernel/vga.h>
+#include <include/kernel/gdt.h>
+#include <include/kernel/idt.h>
 
 const char *msg = "When are we getting ready to leave?";
 
 void kernel_init() {
 	vga_init();
+	gdt_init();
+	idt_init();
 }
 
 #define STRINGIFY_THIS(x) #x
@@ -19,4 +23,5 @@ void kernel_init() {
 
 void kernel_main() {
 	printf("[%s](%s:%s): \"%s\"", __FILE__, __FUNCTION__, STRINGIFY(__LINE__), msg);
+	asm volatile ("int $0x3");
 }

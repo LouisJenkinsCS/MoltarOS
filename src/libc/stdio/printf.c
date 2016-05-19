@@ -12,6 +12,32 @@ static inline void print(const char* data, size_t len) {
 		putchar(data[i]);
 }
 
+/*
+	Lazy implementation, defaults to hexadecimal to two places
+*/
+static inline void hex_to_string(int hex) {
+	char buf[10];
+	size_t index = 9;
+
+	print("0x", 0);
+
+	while(hex % 16) {
+		int num = hex % 16;
+		int c;
+
+		// If remainder greater than 10, convert into character [A-F]
+		if(num >= 10)
+			c = 'A' + (num - 10);
+		else
+			c = '0' + num;
+
+		buf[index--] = (char) c;
+		hex /= 16;
+	}
+
+	print(buf + index + 1, (9 - index));
+}
+
 int printf(const char * restrict format, ...) {
 	va_list params;
 	va_start(params, format);
@@ -46,6 +72,9 @@ int printf(const char * restrict format, ...) {
 				break;
 			case 's':
 				print(va_arg(params, const char *), 0);
+				break;
+			case 'x':
+				hex_to_string(va_arg(params, int));
 				break;
 			case '%':
 				// Double format tokens, '%%' evaluate to one '%'
