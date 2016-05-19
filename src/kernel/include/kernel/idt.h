@@ -121,4 +121,21 @@ extern void interrupt_service_request_30();
 extern void interrupt_service_request_31();
 extern void interrupt_service_request_255();
 
+extern void interrupt_request_0 ();
+extern void interrupt_request_1 ();
+extern void interrupt_request_2 ();
+extern void interrupt_request_3 ();
+extern void interrupt_request_4 ();
+extern void interrupt_request_5 ();
+extern void interrupt_request_6 ();
+extern void interrupt_request_7 ();
+extern void interrupt_request_8 ();
+extern void interrupt_request_9 ();
+extern void interrupt_request_10();
+extern void interrupt_request_11();
+extern void interrupt_request_12();
+extern void interrupt_request_13();
+extern void interrupt_request_14();
+extern void interrupt_request_15();
+
 #endif /* MOLTAROS_IDT_H */

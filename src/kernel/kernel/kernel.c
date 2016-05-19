@@ -22,6 +22,5 @@ void kernel_init() {
 #define STRINGIFY(x) STRINGIFY_THIS(x)
 
 void kernel_main() {
-	printf("[%s](%s:%s): \"%s\"", __FILE__, __FUNCTION__, STRINGIFY(__LINE__), msg);
-	asm volatile ("int $0x3");
+	printf("[%s](%s:%s): \"%s\"\n", __FILE__, __FUNCTION__, STRINGIFY(__LINE__), msg);
 }

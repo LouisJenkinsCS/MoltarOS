@@ -5,6 +5,12 @@
 
 #define CODE_DESCR 0x8
 
+#define PIC_MASTER_COMMAND 0x20
+#define PIC_MASTER_DATA 0x21
+#define PIC_SLAVE_COMMAND 0xA0
+#define PIC_SLAVE_DATA 0xA1
+#define PIC_EOI 0x20
+
 #define IDT_MAX_ENTRIES 256
 
 static struct idt_entry entries[IDT_MAX_ENTRIES];
@@ -28,6 +34,18 @@ void idt_init() {
 	ptr.limit = (sizeof(struct idt_entry) * IDT_MAX_ENTRIES) - 1;
 	ptr.base = (uint32_t) &entries;
 
+	// Remap the IRQ table
+	outb (0x20, 0x11);
+	outb (0xA0, 0x11);
+	outb (0x21, 0x20);
+	outb (0xA1, 0x28);
+	outb (0x21, 0x04);
+	outb (0xA1, 0x02);
+	outb (0x21, 0x01);
+	outb (0xA1, 0x01);
+	outb (0x21, 0x0);
+	outb (0xA1, 0x0);
+
 	/*
 		We now initialize and setup each gate for interrupt numbers 0 to 32, which are the crucial
 		hardware interrupts, and 255, the software interrupt for system calls.
@@ -39,6 +57,8 @@ void idt_init() {
 			[FLAGS]
 		);
 	*/
+
+	// Setup and initialize ISR to handle CPU hardware interrupts.
 	idt_set_gate(
 		0, (uint32_t)interrupt_service_request_0, CODE_DESCR,
 		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
@@ -167,6 +187,76 @@ void idt_init() {
 		31, (uint32_t)interrupt_service_request_31, CODE_DESCR,
 		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
 	);
+	idt_set_gate(
+		255, (uint32_t)interrupt_service_request_255, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+
+	// Setup and initialize IRQ to remap PIC.
+	idt_set_gate(
+		32, (uint32_t)interrupt_request_0, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		33, (uint32_t)interrupt_request_1, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		34, (uint32_t)interrupt_request_2, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		35, (uint32_t)interrupt_request_3, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		36, (uint32_t)interrupt_request_4, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		37, (uint32_t)interrupt_request_5, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		38, (uint32_t)interrupt_request_6, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		39, (uint32_t)interrupt_request_7, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		40, (uint32_t)interrupt_request_8, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		41, (uint32_t)interrupt_request_9, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		42, (uint32_t)interrupt_request_10, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		43, (uint32_t)interrupt_request_11, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		44, (uint32_t)interrupt_request_12, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		45, (uint32_t)interrupt_request_13, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		46, (uint32_t)interrupt_request_14, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
+	idt_set_gate(
+		47, (uint32_t)interrupt_request_15, CODE_DESCR,
+		IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT
+	);
 
 	idt_flush((uint32_t) &ptr);
 }
@@ -184,7 +274,7 @@ void idt_handler (struct registers *registers) {
 	if(handlers[registers->int_num])
 		handlers[registers->int_num](registers);
 	else
-		printf("Unexpected Interrupt: %x", registers->int_num);
+		printf("\nUnexpected Interrupt: %x\n", registers->int_num);
 }
 
 static void idt_set_gate(uint8_t int_num, uint32_t addr, uint16_t selector, uint8_t flags) {
