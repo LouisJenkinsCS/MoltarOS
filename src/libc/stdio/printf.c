@@ -4,6 +4,46 @@
 
 #include <string.h>
 
+// Implementation of itoa()
+void int_to_str(int num, int base)
+{
+	char str[100];
+    int i = 0;
+    bool isNegative = false;
+
+    /* Handle 0 explicitely, otherwise empty string is printed for 0 */
+    if (num == 0)
+    {
+        putchar('0');
+        return;
+    }
+
+    // In standard itoa(), negative numbers are handled only with 
+    // base 10. Otherwise numbers are considered unsigned.
+    if (num < 0 && base == 10)
+    {
+        isNegative = true;
+        num = -num;
+    }
+
+    // Process individual digits
+    while (num != 0)
+    {
+        int rem = num % base;
+        str[i++] = (rem > 9)? (rem-10) + 'A' : rem + '0';
+        num = num/base;
+    }
+
+    // If number is negative, append '-'
+    if (isNegative)
+        str[i++] = '-';
+
+    str[i] = '\0'; // Append string terminator
+
+    for(int j = strlen(str) - 1; j >= 0; j--)
+    	putchar(str[j]);
+}
+
 static inline void print(const char* data, size_t len) {
 	if(!len)
 		len = strlen(data);
@@ -74,7 +114,11 @@ int printf(const char * restrict format, ...) {
 				print(va_arg(params, const char *), 0);
 				break;
 			case 'x':
-				hex_to_string(va_arg(params, int));
+				print("0x", 0);
+				int_to_str(va_arg(params, int), 16);
+				break;
+			case 'd':
+				int_to_str(va_arg(params, int), 10);
 				break;
 			case '%':
 				// Double format tokens, '%%' evaluate to one '%'

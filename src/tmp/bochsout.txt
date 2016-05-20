@@ -33,7 +33,7 @@
 00000000000i[      ]   SB16 support: yes
 00000000000i[      ]   USB support: yes
 00000000000i[      ]   VGA extension support: vbe cirrus voodoo
-00000000000i[MEM0  ] allocated memory at 0533B020. after alignment, vector=0533C000
+00000000000i[MEM0  ] allocated memory at 052FE020. after alignment, vector=052FF000
 00000000000i[MEM0  ] 32.00MB
 00000000000i[MEM0  ] mem block size = 0x00100000, blocks=32
 00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('C:\Program Files (x86)\Bochs-2.6.8/BIOS-bochs-latest')
@@ -45,7 +45,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Thu May 19 23:19:23 2016 (time0=1463696363)
+00000000000i[CMOS  ] Setting initial clock to: Fri May 20 21:56:40 2016 (time0=1463777800)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -74,7 +74,7 @@
 00000000000i[CD1   ] load cdrom with path='C:\Users\theif519\Documents\GitHub\MoltarOS\src\tmp\MoltarOS.iso'
 00000000000i[CD1   ] Opening image file as a cd
 00000000000i[HD    ] Media present in CD-ROM drive
-00000000000i[HD    ] Capacity is 257 sectors (0.50 MB)
+00000000000i[HD    ] Capacity is 258 sectors (0.50 MB)
 00000000000i[HD    ] Using boot sequence cdrom, none, none
 00000000000i[HD    ] Floppy boot signature check is enabled
 00000000000i[PLUGIN] init_dev of 'pci_ide' plugin device by virtual method
@@ -188,31 +188,30 @@
 00012319930i[BXVGA ] VBE known Display Interface b0c5
 00012322854i[VBIOS ] VBE Bios $Id: vbe.c,v 1.65 2014/07/08 18:02:25 vruppert Exp $
 00016534314i[BIOS  ] IDE time out
-00155000000i[WINGUI] dimension update x=720 y=400 fontheight=16 fontwidth=9 bpp=8
-03098767860i[BIOS  ] Booting from 07c0:0000
-03099972616i[BIOS  ] int13_harddisk: function 41, unmapped device for ELDL=80
-03099976296i[BIOS  ] int13_harddisk: function 08, unmapped device for ELDL=80
-03099979967i[BIOS  ] *** int 15h function AX=00c0, BX=0000 not yet supported!
-04129490388i[CPU0  ] WARNING: HLT instruction with IF=0!
-11423000000p[WINGUI] >>PANIC<< POWER button turned off.
-11423000000i[CPU0  ] CPU is in protected mode (halted)
-11423000000i[CPU0  ] CS.mode = 32 bit
-11423000000i[CPU0  ] SS.mode = 32 bit
-11423000000i[CPU0  ] EFER   = 0x00000000
-11423000000i[CPU0  ] | EAX=00000012  EBX=0002ffa0  ECX=000b8000  EDX=00102047
-11423000000i[CPU0  ] | ESP=00108c34  EBP=00000000  ESI=00056bf9  EDI=00056bee
-11423000000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df if tf sf zf AF PF cf
-11423000000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
-11423000000i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
-11423000000i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-11423000000i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-11423000000i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-11423000000i[CPU0  ] |  FS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-11423000000i[CPU0  ] |  GS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
-11423000000i[CPU0  ] | EIP=001013d7 (001013d7)
-11423000000i[CPU0  ] | CR0=0x60000011 CR2=0x00000000
-11423000000i[CPU0  ] | CR3=0x00000000 CR4=0x00000000
-11423000000i[CPU0  ] 0x00000000001013d7>> jmp .-3 (0x001013d6) : EBFD
-11423000000i[CMOS  ] Last time is 1463696374 (Thu May 19 23:19:34 2016)
-11423000000i[      ] restoring default signal behavior
-11423000000i[SIM   ] quit_sim called with exit code 1
+00155076000i[WINGUI] dimension update x=720 y=400 fontheight=16 fontwidth=9 bpp=8
+03098775896i[BIOS  ] Booting from 07c0:0000
+03099977712i[BIOS  ] int13_harddisk: function 41, unmapped device for ELDL=80
+03099981392i[BIOS  ] int13_harddisk: function 08, unmapped device for ELDL=80
+03099985063i[BIOS  ] *** int 15h function AX=00c0, BX=0000 not yet supported!
+88022000000p[WINGUI] >>PANIC<< POWER button turned off.
+88022000000i[CPU0  ] CPU is in protected mode (halted)
+88022000000i[CPU0  ] CS.mode = 32 bit
+88022000000i[CPU0  ] SS.mode = 32 bit
+88022000000i[CPU0  ] EFER   = 0x00000000
+88022000000i[CPU0  ] | EAX=000000e9  EBX=0002ffa0  ECX=00000040  EDX=00000040
+88022000000i[CPU0  ] | ESP=00108c0c  EBP=00108c30  ESI=00102076  EDI=00102023
+88022000000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf zf af pf cf
+88022000000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+88022000000i[CPU0  ] |  CS:0008( 0001| 0|  0) 00000000 ffffffff 1 1
+88022000000i[CPU0  ] |  DS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+88022000000i[CPU0  ] |  SS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+88022000000i[CPU0  ] |  ES:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+88022000000i[CPU0  ] |  FS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+88022000000i[CPU0  ] |  GS:0010( 0002| 0|  0) 00000000 ffffffff 1 1
+88022000000i[CPU0  ] | EIP=00101277 (00101277)
+88022000000i[CPU0  ] | CR0=0x60000011 CR2=0x00000000
+88022000000i[CPU0  ] | CR3=0x00000000 CR4=0x00000000
+88022000000i[CPU0  ] 0x0000000000101277>> jmp .-6 (0x00101276) : E9FAFFFFFF
+88022000000i[CMOS  ] Last time is 1463777888 (Fri May 20 21:58:08 2016)
+88022000000i[      ] restoring default signal behavior
+88022000000i[SIM   ] quit_sim called with exit code 1
