@@ -8,8 +8,9 @@
 #define PIT_REPEAT 0x36
 
 #include <stdint.h>
+#include <include/idt.h>
 
-void init_timer(uint32_t frequency);
+void init_timer(uint32_t frequency, void (*cb)(struct registers *registers));
 
 
 #endif /* MOLTAROS_TIMER_H */

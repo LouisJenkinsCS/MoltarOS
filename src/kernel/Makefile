@@ -1,5 +1,5 @@
 # Include directories
-INCLUDE := kernel include arch/i686 include/kernel
+INCLUDE := kernel include arch/i686 display drivers
 
 # List of all headers from the included directories
 HEADERS := $(shell find $(INCLUDE) -type f -name \*.h)

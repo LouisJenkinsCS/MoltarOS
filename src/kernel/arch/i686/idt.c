@@ -1,5 +1,5 @@
-#include <include/kernel/idt.h>
-#include <include/kernel/io_port.h>
+#include <include/idt.h>
+#include <include/io_port.h>
 #include <string.h>
 #include <stdio.h>
 

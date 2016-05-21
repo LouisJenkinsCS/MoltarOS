@@ -21,8 +21,39 @@ section .create_stack nobits
 			resb 1024 * 16
 		stack_top:
 
-; Setting up the stack and finally passing control back to our preferred language (C)
 section .text
+
+; gdt_flush -- Load the GDT (Global Descriptor Table)
+global gdt_flush
+
+	gdt_flush:
+		; Obtain the gdt_ptr passed and load it
+		mov eax, [esp + 4]
+		lgdt [eax]
+
+		; Setup the kernel's Data Segment Descriptor
+		mov ax, 0x10
+		mov ds, ax
+		mov es, ax
+		mov fs, ax
+		mov gs, ax
+		mov ss, ax
+
+		; Far Jump to the kernel's Code Segment flush label
+		jmp 0x8:.flush
+	.flush:
+		ret
+
+; idt_flush -- Load the IDT (Interrupt Descriptor Table)
+global idt_flush
+
+	idt_flush:
+		; Obtain idt_ptr structure on stack and load it.
+		mov eax, [esp + 4]
+		lidt [eax]
+		ret
+
+; Setting up the stack and finally passing control back to our preferred language (C)
 global _start
 
 	_start:
