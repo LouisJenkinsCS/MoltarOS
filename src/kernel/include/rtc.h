@@ -7,7 +7,7 @@
 	Driver to interface with the system's Real-Time Clock, allowing the retrieval of date and time.
 */
 
-uint8_t rtc_init();
+void rtc_init();
 
 uint8_t rtc_get_second();
 

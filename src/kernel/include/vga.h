@@ -42,5 +42,12 @@ void vga_scroll_down();
 
 void vga_scroll_up();
 
+void vga_set_x(size_t x);
+
+void vga_set_y(size_t y);
+
+size_t vga_get_x();
+
+size_t vga_get_y();
 
 #endif /* MOLTAROS_VGA_H */

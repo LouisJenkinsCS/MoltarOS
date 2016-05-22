@@ -5,7 +5,7 @@
 #include <string.h>
 
 // Implementation of itoa()
-void int_to_str(int num, int base)
+void int_to_str(long num, int base)
 {
 	char str[100];
     int i = 0;
@@ -30,7 +30,7 @@ void int_to_str(int num, int base)
     while (num != 0)
     {
         int rem = num % base;
-        str[i++] = (rem > 9)? (rem-10) + 'A' : rem + '0';
+        str[i++] = (rem > 9)? (char)(rem-10) + 'A' : (char) rem + '0';
         num = num/base;
     }
 
@@ -118,7 +118,7 @@ int printf(const char * restrict format, ...) {
 				int_to_str(va_arg(params, int), 16);
 				break;
 			case 'd':
-				int_to_str(va_arg(params, int), 10);
+				int_to_str(va_arg(params, long), 10);
 				break;
 			case '%':
 				// Double format tokens, '%%' evaluate to one '%'

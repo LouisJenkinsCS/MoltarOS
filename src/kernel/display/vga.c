@@ -1,8 +1,9 @@
 #include <stdint.h>
 
 #include <include/vga.h>
+#include <include/io_port.h>
 
-/* X and Y coordinates for current position in VGA buffer */ 
+/* X and Y coordinates for current position in VGA buffer */
 static size_t x, y;
 
 /* The current VGA color mask */
@@ -24,6 +25,8 @@ static inline uint16_t color_char(const char c);
 static inline size_t get_index();
 
 static inline void clear_line(size_t line);
+
+static void update_cursor();
 
 
 
@@ -86,6 +89,8 @@ void vga_putc(const char c) {
 			vga_scroll_down();
 		}
 	}
+
+	update_cursor();
 }
 
 void vga_clear() {
@@ -108,6 +113,28 @@ void vga_scroll_down() {
 	clear_line(y);
 }
 
+void vga_set_x(size_t _x) {
+	if(x < vga_width)
+		x = _x;
+
+	update_cursor();
+}
+
+void vga_set_y(size_t _y) {
+	if(y < vga_height)
+		y = _y;
+
+	update_cursor();
+}
+
+size_t vga_get_x() {
+	return x;
+}
+
+size_t vga_get_y() {
+	return y;
+}
+
 
 
 static uint8_t make_color(enum vga_color foreground, enum vga_color background) {
@@ -121,11 +148,25 @@ static uint16_t color_char(const char c) {
 	return (uint16_t) (c16 | color16 << 8);
 }
 
-static size_t get_index() {
+static inline size_t get_index() {
 	return (y * vga_width) + x;
 }
 
 static void clear_line(size_t line) {
 	for(size_t i = 0; i < vga_width; i++)
 		buf[(line * vga_width) + i] = color_char(' ');
+}
+
+static void update_cursor() {
+		uint16_t pos = (uint16_t) get_index();
+		uint8_t low = pos & 0xFF;
+		uint8_t high = (pos >> 8) & 0xFF;
+
+		// Set the lower 8-bits of the cursor position
+		outb(0x3D4, 0x0F);
+		outb(0x3D5, low);
+
+		// Set the higher 8-bits of the cursor position
+		outb(0x3D4, 0x0E);
+		outb(0x3D5, high);
 }

@@ -4,6 +4,94 @@
 		"selected_items":
 		[
 			[
+				"ui",
+				"uint32_t"
+			],
+			[
+				"uin",
+				"uint32_t"
+			],
+			[
+				"init_",
+				"init_default_handlers"
+			],
+			[
+				"default",
+				"default_interrupt_handler"
+			],
+			[
+				"PIC_",
+				"PIC_SLAVE_START_OFFSET"
+			],
+			[
+				"default_irq",
+				"default_irq_master_handler"
+			],
+			[
+				"PIC_MAS_",
+				"PIC_MASTER_START_OFFSET"
+			],
+			[
+				"inter",
+				"interrupt_handler"
+			],
+			[
+				"defau",
+				"default_interrupt_handler"
+			],
+			[
+				"kerne",
+				"kernel_tick"
+			],
+			[
+				"int",
+				"int_to_str"
+			],
+			[
+				"PIT",
+				"PIT_CHANNEL0"
+			],
+			[
+				"prin",
+				"print_tick"
+			],
+			[
+				"uint",
+				"uint8_t"
+			],
+			[
+				"PIC_MAS",
+				"PIC_MASTER_COMMAND"
+			],
+			[
+				"PIC_SLAVE",
+				"PIC_SLAVE_START_OFFSET"
+			],
+			[
+				"PIC_SLA",
+				"PIC_SLAVE_START_OFFSET"
+			],
+			[
+				"remap",
+				"remap_pic"
+			],
+			[
+				"hex",
+				"hex_to_string"
+			],
+			[
+				"in",
+				"int_num"
+			],
+			[
+				"inte",
+				"interrupt_handler"
+			],
+			[
+				"IDT_F",
+				"IDT_FLAGS_GATE_INTERRUPT"
+			],
+			[
 				"MAX",
 				"GDT_ADDRESS_MAX"
 			],
@@ -32,14 +120,6 @@
 				"limit_high"
 			],
 			[
-				"uin",
-				"uint8_t"
-			],
-			[
-				"ui",
-				"uint8_t"
-			],
-			[
 				"GDT_ACCE",
 				"GDT_ACCESS_PRIVILEDGE_RING_TWO"
 			],
@@ -50,10 +130,6 @@
 			[
 				"por",
 				"port_receive_byte"
-			],
-			[
-				"uint",
-				"uint16_t"
 			],
 			[
 				"STR",
@@ -264,14 +340,6 @@
 				"C_UTILS_SERIALIZE_ARG_"
 			],
 			[
-				"defau",
-				"default_max"
-			],
-			[
-				"default",
-				"default_min"
-			],
-			[
 				"C_U",
 				"C_UTILS_UNACCESSIBLE"
 			],
@@ -446,141 +514,33 @@
 			[
 				"initi",
 				"initial_ref_count"
-			],
-			[
-				"c_utils_list_crea",
-				"c_utils_list_create_conf"
-			],
-			[
-				"c_utils_list_remove",
-				"c_utils_list_remove_all"
-			],
-			[
-				"c_utils_list",
-				"c_utils_list_delete_at"
-			],
-			[
-				"c_utils_list_delete",
-				"c_utils_list_delete_all"
-			],
-			[
-				"C_UTILS_SCOP",
-				"C_UTILS_SCOPED_LOCK0"
-			],
-			[
-				"arr",
-				"array_of_items"
-			],
-			[
-				"dele",
-				"delete_item"
-			],
-			[
-				"de",
-				"delete_item"
-			],
-			[
-				"c_utils_list_cr",
-				"c_utils_list_create_conf"
-			],
-			[
-				"destroy",
-				"c_utils_event_source_fd_destroy"
-			],
-			[
-				"fd_crea",
-				"c_utils_event_source_fd_create"
-			],
-			[
-				"remove",
-				"c_utils_event_loop_fd_remove"
-			],
-			[
-				"event_loop_ad",
-				"c_utils_event_loop_fd_add"
-			],
-			[
-				"C_UTILS_EVEN",
-				"C_UTILS_EVENT_SOURCE_LOCAL"
-			],
-			[
-				"c_utils_even",
-				"c_utils_event_source_fd"
-			],
-			[
-				"TYPE_EOF",
-				"C_UTILS_EVENT_SOURCE_TYPE_EOF"
-			],
-			[
-				"TYPE_RE",
-				"C_UTILS_EVENT_SOURCE_TYPE_READ"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "src/kernel/kernel/gdt.c",
+			"file": "src/kernel/include/rtc.h",
 			"settings":
 			{
-				"buffer_size": 2671,
+				"buffer_size": 413,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/kernel/gdt_flush.asm",
+			"file": "src/kernel/include/keyboard.h",
 			"settings":
 			{
-				"buffer_size": 485,
+				"buffer_size": 95,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/include/kernel/gdt.h",
+			"file": "src/kernel/display/vga.c",
 			"settings":
 			{
-				"buffer_size": 1603,
+				"buffer_size": 3034,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/kernel/kernel.c",
-			"settings":
-			{
-				"buffer_size": 400,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/kernel/io_port.c",
-			"settings":
-			{
-				"buffer_size": 706,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/kernel/vga.c",
-			"settings":
-			{
-				"buffer_size": 3041,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/Makefile",
-			"settings":
-			{
-				"buffer_size": 2440,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/theif519/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
-			"settings":
-			{
-				"buffer_size": 1940,
-				"line_ending": "Unix"
 			}
 		}
 	],
@@ -664,11 +624,15 @@
 				"Package Control: Remove Package"
 			],
 			[
-				"insta",
+				"ins",
 				"Package Control: Install Package"
 			],
 			[
 				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
 				"Package Control: Install Package"
 			],
 			[
@@ -780,7 +744,7 @@
 				"Preferences: Browse Packages"
 			]
 		],
-		"width": 416.0
+		"width": 432.0
 	},
 	"console":
 	{
@@ -817,7 +781,6 @@
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/kernel",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/include",
@@ -832,25 +795,43 @@
 	],
 	"file_history":
 	[
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/gdt_flush.asm",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/kernel/io_port.h",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/io_port.c",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/port.h",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/timer.h",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/gdt.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/display/vga.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/idt.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/idt_handler.asm",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/linker.ld",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/stdio/printf.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/idt.h",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/exceptions.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/kernel/gdt.h",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/timer.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/kernel.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/io_port.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/vga.c",
+		"/C/Users/theif519/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/Makefile",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/boot.asm",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/kernel/timer.h",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/idt_handler.asm",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/idt.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/gdt.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/kernel/idt.h",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/gdt_flush.asm",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/idt_flush.asm",
+		"/C/Users/theif519/Documents/jamesm-tutorials/trunk/src/idt.c",
+		"/C/Users/theif519/Documents/jamesm-tutorials/trunk/src/keyboard.c",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/include/kernel/io_port.h",
+		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/kernel/port.h",
 		"/C/Users/theif519/Documents/jamesm-tutorials/trunk/src/gdt.h",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/Makefile",
 		"/C/Users/theif519/Documents/jamesm-tutorials/trunk/doc/genesis.txt",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/Makefile",
 		"/C/Users/theif519/Documents/jamesm-tutorials/trunk/src/boot.s",
 		"/C/Users/theif519/Documents/jamesm-tutorials/trunk/doc/backtracing_and_symbol_lookup.txt",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/tmp/bochsout.txt",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/boot.asm",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/build.sh",
 		"/C/Users/theif519/Documents/jamesm-tutorials/branches/the_gdt_and_idt/Makefile",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/include/stdlib.h",
-		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/stdio/printf.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/vga.d",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/vga.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/tmp/iso/boot/grub/grub.cfg",
@@ -878,7 +859,6 @@
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/string/memset.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/stdlib/abort.c",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/libc/string/memcmp.c",
-		"/C/Users/theif519/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
 		"/C/Users/theif519/AppData/Roaming/Sublime Text 3/Packages/User/MoltarOS.sublime-project",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/Makefile.bak",
 		"/C/Users/theif519/Documents/GitHub/MoltarOS/src/kernel/arch/i686/crti.asm",
@@ -942,24 +922,7 @@
 		"/C/Users/theif519/Documents/GitHub/C_Utils/io/event_loop_fd.c",
 		"/C/Users/theif519/Documents/GitHub/C_Utils/io/event_loop_fd.h",
 		"/C/Users/theif519/Documents/GitHub/C_Utils/memory/ref_count.h",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/iterator.h",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/Logs/list_test.log",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/string/string_buffer.c",
-		"/C/Users/theif519/Documents/GitHub/theif519.github.io/index.html",
-		"/C/Ruby22-x64/lib/ruby/gems/2.2.0/extensions/x64-mingw32/2.2.0/json-1.8.3/gem_make.out",
-		"/C/Ruby22-x64/lib/ruby/gems/2.2.0/extensions/x64-mingw32/2.2.0/redcarpet-3.3.4/gem_make.out",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/string/Logs/string_buffer.log",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/Misc/list_test.mk",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/threading/scoped_lock.h",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/helpers.h",
-		"/C/Users/theif519/Desktop/Uplay.lnk",
-		"/C/cygwin64/usr/include/sys/ioctl.h",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/memory/tests/hazard_test.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/string/string_manip.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/string/string_manip.h",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/networking/Tests/server_file_downloader_test.c",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/memory/misc/hazard_test.mk",
-		"/C/Users/theif519/Documents/GitHub/C_Utils/networking/Tests/client_file_downloader_test.c"
+		"/C/Users/theif519/Documents/GitHub/C_Utils/data_structures/iterator.h"
 	],
 	"find":
 	{
@@ -978,6 +941,31 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"PIC_MASTER_START_OFFSET",
+			"PIC_SLAVE_START_OFFSET",
+			"IDT_FLAGS_GATE_INTERRUPT32 \\| IDT_FLAGS_PRIVILEDGE_RING_ZERO \\| IDT_FLAGS_PRESENT",
+			"IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT",
+			"IRQ",
+			"idt_set_gate \\((.*?CODE_DESCR, )(.*T)(.*)",
+			"0x8E",
+			"0x08",
+			"idt_set_gate \\((.*?CODE_DESCR, )(.*T)(.*)",
+			"irq",
+			"ISR_ERRCODE",
+			"ISR_NOERRCODE",
+			"IDT_FLAGS_GATE_INTERRUPT32 \\| IDT_FLAGS_PRESENT",
+			"IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRESENT",
+			"idt_set_gate \\((.*?CODE_DESCR, )(.*T)(.*)",
+			"idt_set_gate \\((.*?CODE_DESCR, )(.*T)",
+			"idt_set_gate \\((.*?CODE_DESCR, )(.*;)",
+			"idt_set_gate \\((.*?CODE_DESCR, )(.*\\))",
+			"IDT_FLAGS_GATE_INTERRUPT32 \\| IDT_FLAGS_PRESENT",
+			"IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT",
+			"IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRESENT",
+			"CODE_DESCRIPTOR_SEGMENT",
+			"0x8E",
+			"0x08",
+			"isr",
 			"1089",
 			"55aa",
 			"aa55",
@@ -1080,32 +1068,7 @@
 			"C_UTILS_LOGGER_AUTO_CREATE",
 			"DS_Queue",
 			"DS_Stack_",
-			"TU_EVENTS_H",
-			"DS_Stack",
-			"TP_Pool",
-			"c_utils_",
-			"MU_Logger",
-			"EVENT",
-			"MU_",
-			"FLAG_GET",
-			"SET",
-			"FLAG_GET",
-			"FLAG",
-			"ARG_CHECK",
-			"C_UTILS_HTTP_Version_e",
-			"NU_",
-			"SCOPED_LOCK",
-			"DS_",
-			"NU_HTTP_Version_e",
-			"NU_HTTP_Method_e",
-			"SCOPED_LOCK",
-			"connections",
-			"amount_of_connections",
-			"init_locks",
-			"c_utils_log_level_e",
-			"SCOPED_LOCK",
-			"connections",
-			"amount_of_connections"
+			"TU_EVENTS_H"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1113,6 +1076,32 @@
 		"regex": true,
 		"replace_history":
 		[
+			"PIC_MASTER_OFFSET",
+			"PIC_SLAVE_OFFSET",
+			"irq_flags",
+			"isr_flags",
+			"irq_generate",
+			"idt_set_gate(\\n\\t\\t\\1\\n\\t\\t\\2\\n\\t);",
+			"IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT",
+			"CODE_DESCR",
+			"interrupt_request_",
+			"isr_generate_err",
+			"isr_generate_noerr",
+			"IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT",
+			"idt_set_gate(\\n\\t\\t\\1\\n\\t\\t\\2\\n\\t);",
+			"idt_set_gate(\\n\\t\\t\\1\\n\\t\\t\\2\\n\\t",
+			"idt_set_gate(\\n\\t\\t\\1\\n\\t\\t\\2\\n\\t)",
+			"idt_set_gate(\\n\\t\\t\\1\\n\\t\\t\\2\\n\\t);",
+			"idt_set_gate(\\n\\t\\t\\1\\n\\t\\t\\2\\n);",
+			"idt_set_gate(\\n\\t\\1\\n\\t\\2\\n);",
+			"idt_set_gate(\\1\\n\\t\\2\\n);",
+			"IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRIVILEDGE_RING_ZERO | IDT_FLAGS_PRESENT",
+			"CODE_DESCR",
+			"SEG_DESCR_CODE",
+			"IDT_FLAGS_GATE_INTERRUPT32 | IDT_FLAGS_PRESENT",
+			"CODE_DESCRIPTOR_SEGMENT",
+			"interrupt_service_request_",
+			"interrupt_service_request",
 			"MoltarOS",
 			"COORDS",
 			"VGA_TEXT_BUFFER.coords.y",
@@ -1214,33 +1203,7 @@
 			"sock_pool",
 			"sock_pool_size",
 			"C_UTILS_SCOPED_LOCK_FROM",
-			"synchronized",
-			"C_UTILS_LOG_TRACE",
-			"C_UTILS_SCOPED_LOCK",
-			"c_utils_hazard",
-			"C_UTILS_ARG_CHECK",
-			"struct c_utils_stack",
-			"struct c_utils_node",
-			"C_UTILS_STACK_H",
-			"c_utils_stack",
-			"struct c_utils_stack",
-			"pthread_yield()",
-			"c_utils_hazard",
-			"C_UTILS_",
-			"c_utils_queue",
-			"C_UTILS_HAZARD_PER_THREAD",
-			"C_UTILS_HAZARD_PER_THREADS",
-			"C_UTILS_HAZARD_THREADS",
-			"C_UTILS_HAZARD_PER_THREAD",
-			"c_utils_queue",
-			"struct c_utils_queue",
-			"C_UTILS_QUEUE_H",
-			"struct c_utils_queue",
-			"struct c_utils_node",
-			"priority_queue",
-			"lock",
-			"take_item",
-			"prev"
+			"synchronized"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1251,58 +1214,29 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/kernel/kernel/gdt.c",
+					"file": "src/kernel/include/rtc.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2671,
+						"buffer_size": 413,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1516,
-								1516
+								245,
+								245
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 765.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/kernel/kernel/gdt_flush.asm",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 485,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								338,
-								338
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/NASM x86 Assembly/Assembly x86.tmLanguage",
-							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1312,77 +1246,49 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "src/kernel/include/kernel/gdt.h",
+					"buffer": 1,
+					"file": "src/kernel/include/keyboard.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1603,
+						"buffer_size": 95,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1303,
-								1303
+								95,
+								95
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 45.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/kernel/kernel/kernel.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 400,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								316,
-								316
-							]
-						],
-						"settings":
-						{
+							"auto_name": "",
 							"syntax": "Packages/C++/C.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "src/kernel/kernel/io_port.c",
-					"semi_transient": false,
+					"buffer": 2,
+					"file": "src/kernel/display/vga.c",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 706,
+						"buffer_size": 3034,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								355,
-								355
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1394,94 +1300,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/kernel/kernel/vga.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3041,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								350,
-								350
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/kernel/Makefile",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2440,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1800,
-								1800
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 315.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/C/Users/theif519/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1940,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								347,
-								347
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
