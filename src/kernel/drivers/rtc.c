@@ -1,6 +1,7 @@
 #include <include/rtc.h>
 #include <include/io_port.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 // Output port for Real-Time Clock
 #define RTC_OUT 0x70
@@ -47,5 +48,13 @@ uint8_t rtc_get_year() {
 
 // Print time
 void rtc_print() {
-	printf("%d:%d:%d", rtc_get_hour(), rtc_get_minute(), rtc_get_second());
+	// EST is UTC-5
+	uint8_t hour = (rtc_get_hour() - 5) % 24;
+	bool pm = false;
+	if(hour > 12) {
+		pm = true;
+		hour -= 12;
+	}
+
+	printf("%d:%d:%d %s", hour, rtc_get_minute(), rtc_get_second(), pm ? "PM" : "AM");
 }

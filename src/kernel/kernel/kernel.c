@@ -13,7 +13,7 @@
 
 const char *msg = "When are we getting ready to leave?";
 
-size_t ticks_x, ticks_y, seconds_x, seconds_y;
+size_t ticks_x, ticks_y, time_x, time_y;
 
 void kernel_init() {
 	vga_init();
@@ -24,16 +24,15 @@ void kernel_init() {
 static void kernel_tick(struct registers *regs) {
 	(void) regs;
 	static uint32_t ticks = 0;
-	static uint32_t seconds = 0;
 
 	vga_set_x(ticks_x);
 	vga_set_y(ticks_y);
 	printf("%d", ++ticks);
 
 	if(ticks % 1000 == 0) {
-		vga_set_x(seconds_x);
-		vga_set_y(seconds_y);
-		printf("%d", ++seconds);
+		vga_set_x(time_x);
+		vga_set_y(time_y);
+		rtc_print();
 	}
 }
 
@@ -42,16 +41,14 @@ static void kernel_tick(struct registers *regs) {
 #define STRINGIFY(x) STRINGIFY_THIS(x)
 
 void kernel_main() {
-	printf("Operating System: MoltarOS\nKernel: Moltar\nVersion: 0.001a\nBoot Time: ");
+	printf("Operating System: MoltarOS\nKernel: Moltar\nVersion: 0.001a\nTime: ");
+	time_x = vga_get_x();
+	time_y = vga_get_y();
 	rtc_print();
 
 	printf("\nTesting Clock at 1KHz...\nTicks: 0");
 	ticks_x = vga_get_x() - 1;
 	ticks_y = vga_get_y();
-
-	printf("\nSeconds: 0");
-	seconds_x = vga_get_x() - 1;
-	seconds_y = vga_get_y();
 
 	init_timer(1000, kernel_tick);
 
@@ -59,5 +56,4 @@ void kernel_main() {
 
 	while(true)
 		asm volatile ("hlt");
-
 }
