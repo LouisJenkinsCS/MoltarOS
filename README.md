@@ -28,4 +28,4 @@ These will, without a doubt, take a very long time, and I may not ever finish th
 
 Implemented the GDT, IDT (and IRQs and ISRs), reprogrammed the PIC's (Master and Slave), and created an interrupt handler for the PIT. Unfortunately, right now it uses the PIT to call the RTC rather than handling RTc separately, but that will come next, kind of busy right now.
 
-![Screenshot](/screenshots/os_progress.png)
+![Screenshot](/os_progress.PNG)
