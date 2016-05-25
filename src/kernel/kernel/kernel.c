@@ -33,12 +33,9 @@ static void kernel_tick(struct registers *regs) {
 		vga_set_x(time_x);
 		vga_set_y(time_y);
 		rtc_print();
+		vga_putc(' ');
 	}
 }
-
-#define STRINGIFY_THIS(x) #x
-
-#define STRINGIFY(x) STRINGIFY_THIS(x)
 
 void kernel_main() {
 	printf("Operating System: MoltarOS\nKernel: Moltar\nVersion: 0.001a\nTime: ");

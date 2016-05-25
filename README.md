@@ -20,5 +20,12 @@ MoltarOS is not intended to be a commercial or competitive operating system, it 
 
 8) ELF support
 
-
 These will, without a doubt, take a very long time, and I may not ever finish them, however if and when I do, another notable goal would be to implement support for X windows server for a basic GUI.
+
+#Progress Update
+
+## Version .001a
+
+Implemented the GDT, IDT (and IRQs and ISRs), reprogrammed the PIC's (Master and Slave), and created an interrupt handler for the PIT. Unfortunately, right now it uses the PIT to call the RTC rather than handling RTc separately, but that will come next, kind of busy right now.
+
+![Screenshot](screenshots/os_progress.png)

@@ -49,12 +49,17 @@ uint8_t rtc_get_year() {
 // Print time
 void rtc_print() {
 	// EST is UTC-5
-	uint8_t hour = (rtc_get_hour() - 5) % 24;
+	int16_t hour = rtc_get_hour();
 	bool pm = false;
+	hour = (hour - 5) % 24;
+
 	if(hour > 12) {
 		pm = true;
 		hour -= 12;
 	}
+
+	if(hour < 0)
+		hour += 12;
 
 	printf("%d:%d:%d %s", hour, rtc_get_minute(), rtc_get_second(), pm ? "PM" : "AM");
 }
