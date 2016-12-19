@@ -5,9 +5,15 @@
 
 static const uint32_t oscillator_frequency = 1193180;
 
+static void timer_default_irq(struct registers *regs) {
+	// NOP
+}
 
+void timer_init() {
+	register_interrupt_handler(IRQ0, timer_default_irq);
+}
 
-void init_timer(uint32_t frequency, void (*cb)(struct registers *registers)) {
+void timer_set_handler(uint32_t frequency, void (*cb)(struct registers *registers)) {
 	// Note: Frequency MUST be large enough so that rate fits within a 2-byte range
 	uint16_t rate = (uint16_t) (oscillator_frequency / frequency);
 

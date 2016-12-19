@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #ifdef __IS_MOLTAROS
-#include "../../kernel/include/kernel/vga.h"
+#include "../../kernel/include/vga.h"
 #endif
 
 int putchar(int c) {
