@@ -4,8 +4,6 @@
 #include <include/idt.h>
 #include <include/io_port.h>
 
-extern const struct scan_code SCAN_CODES[0x80];
-
 bool shift_held = false;
 
 static void keyboard_irq_handler(struct registers *regs) {

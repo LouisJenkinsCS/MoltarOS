@@ -69,5 +69,5 @@ void kernel_main() {
 	keyboard_init();
 	// kernel_clock_test();
 	kernel_keyboard_test();
-	
+
 }

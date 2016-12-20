@@ -6,9 +6,39 @@
 
 #import <stdint.h>
 
+struct kbd_event {
+    // Held Key States
+    bool shift : 1;
+    bool alt : 1;
+    bool ctrl : 1;
+    bool fn : 1;
+
+    // Toggle Key States
+    bool caps : 1;
+    bool scroll : 1;
+    bool num : 1;
+
+    // Pressed/Released State
+    bool state : 1;
+    // Note: All the above is packed into 1 byte. :)
+
+    // Mapped Key Code
+    uint8_t keycode;
+};
+
 struct scan_code {
   uint8_t normal;
-  uint8_t escaped;  
+  uint8_t escaped;
+};
+
+enum {
+    KBD_ESC = 0x1, KBD_F1, KBD_F2, KBD_F3, KBD_F4, KBD_F5, KBD_F6,
+    KBD_F7, KBD_F8, KBD_F9, KBD_F10, KBD_F11, KBD_F12, KBD_PRTSCR,
+    KBD_SCROLL_LOCK, KBD_PAUSE, KBD_INSERT, KBD_DELETE, KBD_PAGE_UP, KBD_PAGE_DOWN,
+    KBD_GRAVE_ACCENT, KBD_1, KBD_2, KBD_3, KBD_4, KBD_5, KBD_6, KBD_7, KBD_8, KBD_9,
+    KBD_0, KBD_MINUS, KBD_EQUALS, KBD_BACKSPACE, KBD_NUMLOCK, KBD_KP_SLASH, KBD_KP_ASTERISK,
+    KBD_KP_MINUS, KBD_TAB, KBD_Q, KBD_W, KBD_E, KBD_R, KBD_T, KBD_Y, KBD_U, KBD_I, KBD_O,
+    KBD_P, KBD_LBRACKET, KBD_RBRACKET, KBD_BACK_SLASH, KBD_KP_7, KBD_KP_8, KBD_KP_9, KBD_KP_PLUS
 };
 
 #define ESC 0x1
