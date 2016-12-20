@@ -4,7 +4,7 @@
 #include <include/idt.h>
 #include <include/io_port.h>
 
-bool shift_held = false;
+static uint8_t (*scan_to_char(uint8_t));
 
 static void keyboard_irq_handler(struct registers *regs) {
 	// Get what key has been pressed
