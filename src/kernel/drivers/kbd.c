@@ -1,4 +1,4 @@
-#include <include/keyboard.h>
+#include <include/kbd.h>
 #include <include/vga.h>
 #include <stdbool.h>
 #include <include/idt.h>
