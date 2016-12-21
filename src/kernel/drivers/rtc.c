@@ -13,7 +13,7 @@ static uint8_t as_binary(uint8_t bcd) {
 }
 
 void rtc_init() {
-	// TODO
+	// TODO: Register IRQ handler (IRQ8)
 }
 
 uint8_t rtc_get_second() {
