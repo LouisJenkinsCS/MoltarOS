@@ -28,3 +28,10 @@ The below depicts an early "schedule" or rather a path I will be taking in terms
 Implemented the GDT, IDT (and IRQs and ISRs), reprogrammed the PIC's (Master and Slave), and created an interrupt handler for the PIT. Unfortunately, right now it uses the PIT to call the RTC rather than handling RTc separately, but that will come next, kind of busy right now.
 
 ![Screenshot](/os_progress.PNG)
+
+## Version .001b
+
+Implemented the keyboard driver, but it won't be able to communicate with other components (such as an interactive shell) until memory management is implemented... perhaps, not even until processes and scheduling is implemented. That is the next thing I will be releasing. Currently, when you execute
+the OS, it will have a blank screen, until you use the keyboard. When executing the keyboard, it will display what key has been pressed and what has been released... but only one at a time unfortunaately, no multi-key press events are supported.
+
+![Screenshot](/kbd_input.PNG)
