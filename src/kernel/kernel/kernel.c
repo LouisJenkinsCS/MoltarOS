@@ -9,7 +9,7 @@
 #include <include/gdt.h>
 #include <include/idt.h>
 #include <include/timer.h>
-#include <include/keyboard.h>
+#include <include/kbd.h>
 #include <include/rtc.h>
 
 const char *msg = "When are we getting ready to leave?";

@@ -6,6 +6,7 @@
 #define KBD_PORT 0x60
 #define RELEASE_MASK 0x80
 #define KBD_NSCANS 0x80
+#define KBD_ESCAPED_NSCANS 0xE0
 
 /*
     Character Codes: The layout is based on my work laptop's keyboard layout.
@@ -201,6 +202,22 @@ static const uint8_t KBD_SCAN_TABLE[KBD_NSCANS] = {
     [0x53] = KBD_KP_KEY_PERIOD,
     [0x57] = KBD_KEY_F11,
     [0x58] = KBD_KEY_F12
+};
+
+static const uint8_t KBD_ESCAPED_SCAN_TABLE[KBD_NSCANS] = {
+    [0x1C] = KBD_KP_KEY_ENTER,
+    [0x1D] = KBD_KEY_RCTRL,
+    [0x35] = KBD_KP_KEY_SLASH,
+    [0x38] = KBD_KEY_RALT,
+    [0x48] = KBD_KEY_UP,
+    [0x49] = KBD_KEY_PAGE_UP,
+    [0x4B] = KBD_KEY_LEFT,
+    [0x4D] = KBD_KEY_RIGHT,
+    [0x4F] = KBD_KEY_PAGE_DOWN,
+    [0x50] = KBD_KEY_DOWN,
+    [0x51] = KBD_KEY_PAGE_DOWN,
+    [0x52] = KBD_KEY_INSERT,
+    [0x53] = KBD_KEY_DELETE
 };
 
 void keyboard_init();
