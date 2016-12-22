@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"KBD_KEY_PAGE",
+				"KBD_KEY_PAGE_DOWN"
+			],
+			[
+				"KBD_KEY_BACK",
+				"KBD_KEY_BACK_SLASH"
+			],
+			[
 				"KBD_KEY_F",
 				"KBD_KEY_F9"
 			],
@@ -19,7 +27,7 @@
 			"file": "src/kernel/kernel/kernel.c",
 			"settings":
 			{
-				"buffer_size": 1287,
+				"buffer_size": 1282,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -28,8 +36,16 @@
 			"file": "src/kernel/drivers/kbd.c",
 			"settings":
 			{
-				"buffer_size": 963,
+				"buffer_size": 9994,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/kernel/drivers/rtc.c",
+			"settings":
+			{
+				"buffer_size": 1134,
 				"line_ending": "Windows"
 			}
 		},
@@ -37,7 +53,7 @@
 			"file": "src/kernel/include/kbd.h",
 			"settings":
 			{
-				"buffer_size": 2600,
+				"buffer_size": 2307,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -46,7 +62,8 @@
 			"file": "README.md",
 			"settings":
 			{
-				"buffer_size": 1985,
+				"buffer_size": 2582,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -71,7 +88,7 @@
 			"file": "src/kernel/include/helpers.h",
 			"settings":
 			{
-				"buffer_size": 135,
+				"buffer_size": 185,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -174,12 +191,18 @@
 		"/C/Github/MoltarOS",
 		"/C/Github/MoltarOS/src",
 		"/C/Github/MoltarOS/src/kernel",
+		"/C/Github/MoltarOS/src/kernel/arch",
+		"/C/Github/MoltarOS/src/kernel/arch/i686",
+		"/C/Github/MoltarOS/src/kernel/display",
 		"/C/Github/MoltarOS/src/kernel/drivers",
 		"/C/Github/MoltarOS/src/kernel/include",
-		"/C/Github/MoltarOS/src/kernel/kernel"
+		"/C/Github/MoltarOS/src/kernel/kernel",
+		"/C/Github/MoltarOS/src/libc",
+		"/C/Github/MoltarOS/src/libc/stdio"
 	],
 	"file_history":
 	[
+		"/C/Github/MoltarOS/src/kernel/drivers/kbd_table.c",
 		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings"
 	],
 	"find":
@@ -198,6 +221,18 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"UP",
+			"SPACE",
+			"(str = .*\";)",
+			"\"KP_KEY_",
+			"\"KEY_",
+			"\"KBD_",
+			"(.*),",
+			"(.*)(,)?",
+			"(.*),?",
+			"(.*),",
+			"(0x\\d\\d)\\s+(\\w+)",
+			" pressed",
 			"KEY_K",
 			"KBD_KP",
 			"KBD_",
@@ -211,6 +246,15 @@
 		"regex": true,
 		"replace_history":
 		[
+			"\\1\\n\\t\\t\\tbreak;",
+			"\\1\\n\\t\\tbreak;\\n",
+			"\\1\\nbreak;\\t\\t\\n",
+			"\"(keypad) ",
+			"\"",
+			"case \\1:\\n\\tstr = \"\\1\";",
+			"case \\1: str = \"\\1\";",
+			"[\\1] = \\2",
+			"",
 			"KBD_KEY_P",
 			"KBD_KEY_$1",
 			"KBD_KP_KEY_",
@@ -225,7 +269,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -234,15 +278,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1287,
+						"buffer_size": 1282,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								207,
-								207
+								977,
+								977
 							]
 						],
 						"settings":
@@ -251,7 +295,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 120.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 6,
@@ -263,15 +307,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 963,
+						"buffer_size": 9994,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								259,
-								259
+								9911,
+								9911
 							]
 						],
 						"settings":
@@ -280,7 +324,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 8994.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -288,19 +332,48 @@
 				},
 				{
 					"buffer": 2,
-					"file": "src/kernel/include/kbd.h",
+					"file": "src/kernel/drivers/rtc.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2600,
+						"buffer_size": 1134,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2132,
-								2132
+								346,
+								346
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 120.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/kernel/include/kbd.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2307,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								320,
+								320
 							]
 						],
 						"settings":
@@ -310,27 +383,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1740.0,
+						"translation.y": 420.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 4,
 					"file": "README.md",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1985,
+						"buffer_size": 2582,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1381,
-								1381
+								2582,
+								2582
 							]
 						],
 						"settings":
@@ -338,14 +411,14 @@
 							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 5,
 					"file": "src/kernel/include/kbd_hal.h",
 					"semi_transient": false,
 					"settings":
@@ -357,8 +430,8 @@
 						"selection":
 						[
 							[
-								189,
-								189
+								358,
+								358
 							]
 						],
 						"settings":
@@ -368,14 +441,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 60.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "src/kernel/include/bit_array.h",
 					"semi_transient": false,
 					"settings":
@@ -399,24 +472,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "src/kernel/include/helpers.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 135,
+						"buffer_size": 185,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								99,
-								55
+								119,
+								119
 							]
 						],
 						"settings":
@@ -431,7 +504,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
 					"file": "src/kernel/kernel/timer.c",
 					"semi_transient": false,
 					"settings":
@@ -456,11 +529,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 9,
 					"semi_transient": false,
 					"settings":
 					{
@@ -486,11 +559,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": "MoltarOS.sublime-project",
 					"semi_transient": false,
 					"settings":
@@ -514,11 +587,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/SublimeLinter/SublimeLinter.sublime-settings",
 					"semi_transient": false,
 					"settings":
@@ -544,7 +617,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 10,
 					"type": "text"
 				}
 			]
@@ -627,7 +700,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 188.0,
+	"side_bar_width": 244.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

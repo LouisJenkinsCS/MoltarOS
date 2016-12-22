@@ -12,8 +12,8 @@ The below depicts an early "schedule" or rather a path I will be taking in terms
 - [x] Interrupts (IRQ + ISR)
 - [x] VGA Display Driver
 - [x] Keyboard Driver
-- [ ] Interactive Shell
 - [ ] Memory Management (Physical + Virtual)
+- [ ] Interactive Shell
 - [ ] File System
 - [ ] Multitasking and Scheduling
 - [ ] Networking
