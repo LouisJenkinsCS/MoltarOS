@@ -11,6 +11,7 @@ typedef struct memheap memheap_t;
 // a chunk of blocks of memory: it should not be confused with a block in and of itself.
 // It is the header for a contiguous chunk of memory, given by the user. It also uses some
 // space to hold a bitmap, acting as a descriptor for certain blocks.
+// Implementation based on Pancakes' Bitmap Heap, seen here: http://wiki.osdev.org/User:Pancakes/BitmapHeapImplementation
 struct memblock {
 	// Pointer to the next superblock in a linked-list fashion.
 	memblock_t *next;

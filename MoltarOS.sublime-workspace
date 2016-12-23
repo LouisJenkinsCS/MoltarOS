@@ -4,6 +4,62 @@
 		"selected_items":
 		[
 			[
+				"block",
+				"block_offset"
+			],
+			[
+				"blo",
+				"block_offset"
+			],
+			[
+				"uint",
+				"uint32_t"
+			],
+			[
+				"memb",
+				"memblock_get_block_count"
+			],
+			[
+				"memblo",
+				"memblock_get_bitmap"
+			],
+			[
+				"uin",
+				"uintptr_t"
+			],
+			[
+				"curr",
+				"current_id"
+			],
+			[
+				"nex",
+				"next_id"
+			],
+			[
+				"prev",
+				"previous_id"
+			],
+			[
+				"blocks",
+				"blocks_needed"
+			],
+			[
+				"membl",
+				"memblock_get_bitmap"
+			],
+			[
+				"bl",
+				"block_size"
+			],
+			[
+				"get",
+				"memblock_get_block_count"
+			],
+			[
+				"siz",
+				"block_size"
+			],
+			[
 				"KBD_KEY_PAGE",
 				"KBD_KEY_PAGE_DOWN"
 			],
@@ -68,6 +124,54 @@
 			}
 		},
 		{
+			"file": "src/kernel/kernel/memory_management.c",
+			"settings":
+			{
+				"buffer_size": 4840,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/kernel/include/mm/page.h",
+			"settings":
+			{
+				"buffer_size": 1447,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "#include <include/mm/page.h>\n#include <include/helpers.h>\n#include <stdbool.h>\n\n// Keeps track of which frames (blocks of physical memory that virtual memory is mapped to) are in use\nstatic struct {\n\t// Mapping of whether a frame is in use or not.\n\tuint32_t *bitmap;\n\t// Number of bitmap entries\n\tuint32_t size;\n} frames;\n\n// While the maximum value for an unsigned integer is equivalent to 4,294,967,296, which\n// is the same as the maximum valid memory, we have to take into account that each page\n// is 4KBs, and that the number of possible pages is 1,000,000. Hence this is a safe error value.\nstatic const uint32_t PAGE_ERR = (uint32_t) -1;\n\n\nstatic inline uint32_t index_of(uint32_t);\n\nstatic inline uint32_t offset_of(uint32_t);\n\nstatic uint32_t first_free_frame();\n\n\n\nvoid page_init() {\n\t// TODO\n}\n\nvoid page_alloc(page_entry_t *entry, bool kernel, bool write) {\n\tif (entry->frame_addr != 0) {\n\t\tentry->f\t\n\t}\n}\n\nvoid page_free(page_entry_t *entry) {\n\t// TODO\n}\n\n\n\nstatic uint32_t first_free_frame() {\n\t// For each bitmapped frame entry\n\tfor(uint32_t i = 0; i < index_of(frames.size); i++) {\n\t\t// If all bits are set, then there is nothing here for us\n\t\tif (frames.bitmap[i] != 0xFFFFFFFF) {\n\t\t\t// We know that at least one bit is free, find it\n\t\t\tfor (uint32_t j = 0; j < 32; j++) {\n\t\t\t\tuint32_t bit = 0x1 << j;\n\t\t\t\t// If the bit to test for is unset, we found our entry\n\t\t\t\tif (!(frames.bitmap[i] & bit)) {\n\t\t\t\t\treturn i * 32 + j;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\treturn PAGE_ERR;\n}\n\n\nstatic inline uint32_t index_of(uint32_t idx) {\n\treturn idx / 32;\n}\n\nstatic inline uint32_t offset_of(uint32_t idx) {\n\treturn idx % 32;\n}",
+			"file": "src/kernel/mm/page.c",
+			"file_size": 1677,
+			"file_write_time": 131269790154508745,
+			"settings":
+			{
+				"buffer_size": 1618,
+				"encoding": "UTF-8",
+				"line_ending": "Windows",
+				"name": "#include <include/mm/page.h>"
+			}
+		},
+		{
+			"file": "src/libc/string/memset.c",
+			"settings":
+			{
+				"buffer_size": 191,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/kernel/include/memory_management.h",
+			"settings":
+			{
+				"buffer_size": 1444,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "src/kernel/include/kbd_hal.h",
 			"settings":
 			{
@@ -76,19 +180,10 @@
 			}
 		},
 		{
-			"file": "src/kernel/include/bit_array.h",
-			"settings":
-			{
-				"buffer_size": 629,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "src/kernel/include/helpers.h",
 			"settings":
 			{
-				"buffer_size": 185,
+				"buffer_size": 822,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -103,10 +198,10 @@
 			}
 		},
 		{
-			"contents": "Package Control Messages\n========================\n\nSublimeLinter-contrib-clang\n---------------------------\n\n  SublimeLinter-clang\n  -------------------------------\n  This linter plugin for SublimeLinter provides an interface to clang.\n  \n  ** IMPORTANT! **\n  \n  Before this plugin will activate, you *must*\n  follow the installation instructions here:\n  \n  https://github.com/nirm03/SublimeLinter-clang\n",
+			"contents": "Package Control Messages\n========================\n\nSublimeLinter-contrib-clang\n---------------------------\n\n  SublimeLinter-clang\n  -------------------------------\n  This linter plugin for SublimeLinter provides an interface to clang.\n  \n  ** IMPORTANT! **\n  \n  Before this plugin will activate, you *must*\n  follow the installation instructions here:\n  \n  https://github.com/nirm03/SublimeLinter-clang\n\n\nClangAutoComplete\n-----------------\n\n  #ClangAutoComplete\n  =================\n  \n  Sublime Text 3 plugin that offers auto-completion of C/C++ structure members or class attributes and methods.\n  \n  This plug-in is still maintained, but not very actively. I recommend to consider [EasyClangComplete](https://packagecontrol.io/packages/EasyClangComplete) for more features and frequent updates.\n  \n  ![Example](example.png)\n  \n  ##Installation\n  \n  1. Install \"clang\". Note that some people reported issue with clang 3.5.2 when compiled from Cygwin. If you are facing issues on Windows, try to download directly from the official [clang website](http://llvm.org/releases/download.html).\n  2. Install from Package Control, or clone this repository and put it in your Sublime's packages directory to install from git.\n  3. Edit the settings to your needs (in menu `Preferences/Package Settings/ClaugAutoComplete/Settings`). \n  \n  ##Troubleshooting\n  If completion does not work, it is almost always because of a problem with the `include_dirs` settings.\n  \n  1. Set the `debug` settings to `\"true\"` and attempt completion. An output panel will appear containing the result of the process. For it to work, there has to be lines starting with `COMPLETION:`. If you see any error like `#include <file>: file not found`, you need to add the path to that file in the `include_dirs` settings.\n  \n  2. The standard header files should automatically be located, but if nothing works, you should try to manually add them. Here is what it could look like\n          \n   ```C\n   \"include_dirs\" : [\n                \"/usr/include/c++/4.4.7/\",                      /* Where you find iostream, vector, etc. */\n                \"/usr/lib/clang/3.4.2/include\",                 /* stdbool, etc */\n                \"/usr/include/c++/4.4.4/x86_64-redhat-linux/\",  /* bits folder */\n                \"/usr/include\",\n   ```\n   \n   If you can't find the equivalent path try to search your system to find those key files and add the paths, i.e.\n   \n   ```bash\n  sudo find / -name \"iostream\"\n  sudo find / -name \"stdbool.h\"\n  sudo find / -name \"c++config.h\"\n   ```\n          \n  3. Make sure Sublime's own auto-complete settings are properly configured, I've had trouble with mine.\n  Here is my C.sublime-settings as an example\n  \n  \n          {\n                  \"auto_complete\": true,\n                  \"auto_complete_selector\": \"source - comment\",\n                  \"auto_complete_triggers\":\n                  [\n                          {\n                                  \"characters\": \".\"\n                          },\n                          {\n                                  \"characters\": \">\"\n                          },\n                  ],\n                  \"extensions\":\n                  [\n                          \"c\",\n                          \"h\"\n                  ]\n          }\n  \n  ##Settings\n  \n   - include_dirs: List of directories where relevant header files are located\n   - autocomplete_all: Trigger auto-completion on every keypress (will slow down sublime)\n   - selectors: List of characters that will trigger auto-completion ( if \"autocomplete_all\" is set to \"false\" )\n   - clang_binary: Location of clang binary (if it is not in the path)\n   - You can copy the whole settings file under your project base folder named as \".clangautocomplete\" to have the plugin load those instead of the general settings.\n   - debug and verbose: Set to true to help understand what is going wrong (if completion is not working)\n  \n  ##Recommended plugins for C development\n  Here are some useful plugins I use alongside ClangAutoComplete to have a more complete experience.\n  - [CTags: Code navigation, goto definition](https://packagecontrol.io/packages/CTags)\n  - [SublimeLinter](https://packagecontrol.io/packages/SublimeLinter) and [SublimeLinter-contrib-clang](https://packagecontrol.io/packages/SublimeLinter-contrib-clang): Errors and warnings highlights. \n   \n  ##License\n  DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\n  \n  Version 2, December 2004\n  \n  Copyright (C) 2016 Pierre-Louis Caron-Auger\n  \n  Everyone is permitted to copy and distribute verbatim or modified copies of this license document, and changing it is allowed as long as the name is changed.\n  \n  DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION\n  \n  0.You just DO WHAT THE FUCK YOU WANT TO.\n\n\nEasyClangComplete\n-----------------\n\n  Sublime Text 3 plugin that offers clang-based auto-completion for C++\n  \n  # Let't get started! #\n  You're just two simple steps away!\n  \n  ## 1. Install clang ##\n  - **Ubuntu**: `sudo apt-get install clang`\n  - **Windows**: install the latest release from `clang`\n    [website](http://llvm.org/releases/download.html) (v >= 3.9)\n  - **OSX**: ships `clang` by default. You are all set!\n  - **Other Systems**: use your bundled package manager or install from `clang`\n    [website](http://llvm.org/releases/download.html)\n  \n  ## 2. Configure your includes ##\n  \n  ### Using CMake? ###\n  Plugin will run cmake on a proper `CMakeLists.txt` in your project folder and\n  will use information from it to complete your code out of the box.\n  \n  ### Have a compilation database? ###\n  Plugin will search for a compilation database `compile_commands.json` in the\n  project folder and will load it to complete your code. If you want to specify a custom path to a comilation database you can do it in settings:\n  ```json\n  \"flags_sources\": [\n      {\"file\": \"compile_commands.json\", \"search_in\": \"<YOUR_PATH>\"},\n  ]\n  ```\n  \n  ### None of the above? ###\n  You will need a little bit of manual setup for now. `Clang` will automatically\n  search for headers in the folder that contains the file you are working on and\n  its parent. If you have a more sophisticated project you will need to help\n  `clang` just a little bit. There are three ways to do it.\n  \n  Pick *ANY* of the following:\n  \n  - Set include dirs in `\"common_flags\"` setting in `User Settings`:\n    + See default [settings](EasyClangComplete.sublime-settings) to get started.\n      These flags will be included in every project you run.\n  - Add `.clang_complete` file to the root of your project folder.\n    + This file should contain all includes and macroses you want to use.\n    + Example:\n    ```\n    -Isrc\n    -I/usr/include\n    ```\n  - Override `\"common_flags\"` setting in your project file! Just define the same\n    setting in project specific settings with either one of two prefixes:\n    `\"ecc_\"` or `\"easy_clang_complete_\"`. See the project file in this repo for a\n    working example. Minimal example for clarity:\n  \n    ```json\n    {\n      \"settings\":\n      {\n        \"ecc_common_flags\": [\"-Isrc\", \"-I/usr/include\"],\n        \"easy_clang_complete_verbose\": true\n      }\n    }\n    ```\n  \n  ## That's it! You're ready to use the plugin! ##\n  \n  ## More info here ##\n  Get more info in a readme:\n  https://github.com/niosus/EasyClangComplete/blob/master/README.md\n  \n  Please see the default settings [file](EasyClangComplete.sublime-settings)\n  shipped with the plugin for explanations and sane default values.\n  \n  ## Thanks ##\n  It is really important for me that you are using the plugin. If you have\n  problems - submit issues and we will eventually solve them together.\n  \n  If you like the plugin, consider supporting the development! It takes me quite\n  some time to implement everything as good as I can. Find ways to support the\n  plugin here: https://github.com/niosus/EasyClangComplete#support-it\n",
 			"settings":
 			{
-				"buffer_size": 403,
+				"buffer_size": 7923,
 				"line_ending": "Windows",
 				"name": "Package Control Messages",
 				"read_only": true,
@@ -138,24 +233,28 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 490.0,
-		"last_filter": "inst",
+		"height": 129.0,
+		"last_filter": "remove",
 		"selected_items":
 		[
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
 			[
 				"inst",
 				"Package Control: Install Package"
 			],
 			[
-				"remove",
-				"Package Control: Remove Package"
+				"ins",
+				"Package Control: Install Package"
 			],
 			[
 				"install",
 				"Package Control: Install Package"
 			]
 		],
-		"width": 571.0
+		"width": 582.0
 	},
 	"console":
 	{
@@ -196,14 +295,23 @@
 		"/C/Github/MoltarOS/src/kernel/display",
 		"/C/Github/MoltarOS/src/kernel/drivers",
 		"/C/Github/MoltarOS/src/kernel/include",
+		"/C/Github/MoltarOS/src/kernel/include/mm",
 		"/C/Github/MoltarOS/src/kernel/kernel",
+		"/C/Github/MoltarOS/src/kernel/mm",
 		"/C/Github/MoltarOS/src/libc",
-		"/C/Github/MoltarOS/src/libc/stdio"
+		"/C/Github/MoltarOS/src/libc/stdio",
+		"/C/Github/MoltarOS/src/libc/stdlib",
+		"/C/Github/MoltarOS/src/libc/string"
 	],
 	"file_history":
 	[
-		"/C/Github/MoltarOS/src/kernel/drivers/kbd_table.c",
-		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings"
+		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/ClangAutoComplete.sublime-settings",
+		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/ClangAutoComplete/ClangAutoComplete.sublime-settings",
+		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+		"/C/Github/MoltarOS/src/kernel/include/bitmap.h",
+		"/C/Github/MoltarOS/src/kernel/mem/mem.h",
+		"/C/Github/MoltarOS/src/kernel/mm/page.h",
+		"/C/Github/MoltarOS/src/kernel/drivers/kbd_table.c"
 	],
 	"find":
 	{
@@ -269,7 +377,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -298,7 +406,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -327,7 +435,7 @@
 						"translation.y": 8994.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -356,7 +464,7 @@
 						"translation.y": 120.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -386,7 +494,7 @@
 						"translation.y": 420.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -414,11 +522,153 @@
 						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
 					"buffer": 5,
+					"file": "src/kernel/kernel/memory_management.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4840,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2869,
+								2869
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 720.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/kernel/include/mm/page.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1447,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1417,
+								1417
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 60.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/kernel/mm/page.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1618,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								912,
+								912
+							]
+						],
+						"settings":
+						{
+							"auto_name": "#include <include/mm/page.h>",
+							"syntax": "Packages/C++/C.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 540.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/libc/string/memset.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 191,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "src/kernel/include/memory_management.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1444,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								638,
+								638
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
 					"file": "src/kernel/include/kbd_hal.h",
 					"semi_transient": false,
 					"settings":
@@ -448,48 +698,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "src/kernel/include/bit_array.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 629,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								523,
-								523
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
+					"buffer": 11,
 					"file": "src/kernel/include/helpers.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 185,
+						"buffer_size": 822,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								119,
-								119
+								605,
+								605
 							]
 						],
 						"settings":
@@ -504,7 +726,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 12,
 					"file": "src/kernel/kernel/timer.c",
 					"semi_transient": false,
 					"settings":
@@ -529,23 +751,23 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 13,
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 403,
+						"buffer_size": 7923,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								402,
-								357
+								482,
+								482
 							]
 						],
 						"settings":
@@ -556,14 +778,14 @@
 							"word_wrap": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2820.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 14,
 					"file": "MoltarOS.sublime-project",
 					"semi_transient": false,
 					"settings":
@@ -587,11 +809,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 15,
 					"file": "/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/SublimeLinter/SublimeLinter.sublime-settings",
 					"semi_transient": false,
 					"settings":
@@ -617,7 +839,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 15,
 					"type": "text"
 				}
 			]
@@ -662,7 +884,7 @@
 	"project": "MoltarOS.sublime-project",
 	"replace":
 	{
-		"height": 80.0
+		"height": 52.0
 	},
 	"save_all_on_build": true,
 	"select_file":
