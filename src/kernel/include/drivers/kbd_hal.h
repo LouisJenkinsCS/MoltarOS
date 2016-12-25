@@ -1,8 +1,8 @@
 #ifndef MOLTAROS_KBD_HAL_H
 #define MOLTAROS_KBD_HAL_H
 
-#include <include/bit_array.h>
-#include <include/kbd.h>
+#include <include/helpers.h>
+#include <include/drivers/kbd.h>
 #import <stdint.h>
 
 static struct {

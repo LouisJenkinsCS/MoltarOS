@@ -1,5 +1,5 @@
 # Include directories
-INCLUDE := kernel include arch/i686 display drivers
+INCLUDE := kernel x86 drivers
 
 # List of all headers from the included directories
 HEADERS := $(shell find $(INCLUDE) -type f -name \*.h)
@@ -18,7 +18,7 @@ OBJECTS := $(C_OBJECTS) $(ASM_OBJECTS)
 DEPENDENCIES := $(patsubst %.c, %.d, $(C_SOURCES))
 
 # Linker to be used
-LINKER := arch/i686/linker.ld
+LINKER := x86/linker.ld
 
 # Compilers used during specific build sections
 LINKER_COMPILER := i686-elf-gcc -static

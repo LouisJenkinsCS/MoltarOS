@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include <stdint.h>
 #include <string.h>
 
 // Implementation of itoa()
@@ -20,7 +21,7 @@ void int_to_str(long num, int base)
 
     // In standard itoa(), negative numbers are handled only with 
     // base 10. Otherwise numbers are considered unsigned.
-    if (num < 0 && base == 10)
+    if (num < 0)
     {
         isNegative = true;
         num = -num;
@@ -29,9 +30,9 @@ void int_to_str(long num, int base)
     // Process individual digits
     while (num != 0)
     {
-        int rem = num % base;
-        str[i++] = (rem > 9)? (char)(rem-10) + 'A' : (char) rem + '0';
-        num = num/base;
+        int rem = num % (char) base;
+        str[i++] = (rem > 9) ? 'A' + (char)(rem - 10) : '0' + (char) rem;
+        num = num / base;
     }
 
     // If number is negative, append '-'
@@ -55,7 +56,7 @@ static inline void print(const char* data, size_t len) {
 /*
 	Lazy implementation, defaults to hexadecimal to two places
 */
-static inline void hex_to_string(int hex) {
+static inline void hex_to_string(uint32_t hex) {
 	char buf[10];
 	size_t index = 9;
 
@@ -115,7 +116,7 @@ int printf(const char * restrict format, ...) {
 				break;
 			case 'x':
 				print("0x", 0);
-				int_to_str(va_arg(params, int), 16);
+				int_to_str(va_arg(params, long), 16);
 				break;
 			case 'd':
 				int_to_str(va_arg(params, long), 10);

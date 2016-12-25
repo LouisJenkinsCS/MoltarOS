@@ -1,5 +1,5 @@
-#include <include/rtc.h>
-#include <include/io_port.h>
+#include <include/drivers/rtc.h>
+#include <include/x86/io_port.h>
 #include <stdio.h>
 #include <stdbool.h>
 

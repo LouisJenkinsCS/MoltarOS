@@ -33,4 +33,4 @@ if [ $? -ne 0 ]; then
 fi
 
 # Finally, run the virtual machine.
-bochs -f bochs.bxrc;
+bochs -f bochsrc.bxrc;

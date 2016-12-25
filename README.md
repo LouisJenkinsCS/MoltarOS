@@ -12,8 +12,8 @@ The below depicts an early "schedule" or rather a path I will be taking in terms
 - [x] Interrupts (IRQ + ISR)
 - [x] VGA Display Driver
 - [x] Keyboard Driver
-- [ ] Interactive Shell
 - [ ] Memory Management (Physical + Virtual)
+- [ ] Interactive Shell
 - [ ] File System
 - [ ] Multitasking and Scheduling
 - [ ] Networking
@@ -21,7 +21,7 @@ The below depicts an early "schedule" or rather a path I will be taking in terms
 - [ ] ELF Binary Support
 - [ ] Graphical User Interfaces
 
-#Progress Update
+#Progress Update & Changelog
 
 ## Version .001a
 
@@ -35,3 +35,16 @@ Implemented the keyboard driver, but it won't be able to communicate with other 
 the OS, it will have a blank screen, until you use the keyboard. When executing the keyboard, it will display what key has been pressed and what has been released... but only one at a time unfortunaately, no multi-key press events are supported.
 
 ![Screenshot](/kbd_input.PNG)
+
+## Version .001c
+
+Began implementation of memory management, but not finished yet. Paging SHOULD be implemented very soon (and most code has been written), as well the heap is also mainly written using Pancakes' Bitmap Heap implementation, and paired with the identity paging technique, development of all other parts of the OS should proceed as expected. Today, I also managed to make use of the multiboot info struct that GRUB
+gives us that was pushed on the stack in 'kernel_init', and now it can detect the amount of physical memory (RAM) that the machine (or virtual machine) has to offer. This is crucial to finished memory management.
+
+As well, there has been a huge restructure in terms of the hierarchy and logical structure of the operating system. For example, the folders 'mm' and 'drivers' now also have their own respective folders in the
+include folder, I.E 'drivers/vga.c' will have it's header in 'include/drivers/vga.h'. While in terms of usability, it is not too much of an update (yet, memory management will be in version .002), there has been
+a significant amount of work and should be pushed to master.
+
+Lastly, I also added a nice logger macro, `KLOG`, and panic macro, `KPANIC`.
+
+![Screenshot](/ram_and_kbd.PNG)

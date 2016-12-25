@@ -1,7 +1,7 @@
 #include <stdint.h>
 
-#include <include/vga.h>
-#include <include/io_port.h>
+#include <include/drivers/vga.h>
+#include <include/x86/io_port.h>
 
 /* X and Y coordinates for current position in VGA buffer */
 static size_t x, y;
