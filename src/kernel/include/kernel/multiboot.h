@@ -62,32 +62,26 @@ struct multiboot_mmap {
 
 
 static bool multiboot_RAM(struct multiboot_info *mbinfo, uint32_t *start, uint32_t *end) {
+	bool found = false;
 	printf("Flags: %d\n", mbinfo->flags);
 	// Check if there is a memory mapping available
 	if (mbinfo->flags & (1 << 6)) {
-		// We are going to be skipping the lower ram...
-		bool found_lower = false;
-		KLOG("MMAP Entries: %d\n", mbinfo->mmap_length / 16);
+		KLOG("MMAP Entries: %d", mbinfo->mmap_length / 24);
 		struct multiboot_mmap *mmap = mbinfo->mmap_addr;
 		while(mmap < mbinfo->mmap_addr + mbinfo->mmap_length) {
-			KLOG("MMAP Type: %x, MMAP Start: %x, MMAP Length: %x, MMAP Size: %x\n", mmap->type, mmap->start_high, mmap->length_high, mmap->size);
+			KLOG("MMAP Entry: {Type: %s, Start: %x, Length: %x}", mmap->type == MULTIBOOT_MMAP_RAM ? "RAM" : "RESERVED", mmap->start_low, mmap->length_low);
 			// Jackpot... (The OS is 32-bit, so there is no upper currently.)
 			if (mmap->type == MULTIBOOT_MMAP_RAM) {
-				KLOG("MMAP RAM entry found!\n");
 				*start = mmap->start_low;
 				*end = *start + mmap->length_low;
-				if (found_lower) { 
-					return true;
-				} else {
-					found_lower = true;
-				}
+				found = true;
 			}
 
 			mmap = (struct multiboot_mmap *) ((uint32_t) mmap + mmap->size + sizeof(mmap->size));
 		}
 	}
 	
-	return false;
+	return found;
 }
 
 #endif /* MOLTAROS_MULTIBOOT_H */

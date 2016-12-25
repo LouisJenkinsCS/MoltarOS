@@ -27,7 +27,6 @@ void kernel_init(struct multiboot_info *info) {
 	uint32_t start;
 	bool retval = multiboot_RAM(info, &start, &PHYSICAL_MEMORY_SIZE);
 	KLOG("RAM Stats: Available: %d, Start: %d, End: %d", retval, start, PHYSICAL_MEMORY_SIZE);
-	KPANIC("STOP EARLY!");
 }
 
 static void kernel_tick(struct registers *regs) {
