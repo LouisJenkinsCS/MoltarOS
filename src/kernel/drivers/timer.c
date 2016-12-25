@@ -1,11 +1,12 @@
-#include <include/timer.h>
-#include <include/io_port.h>
+#include <include/drivers/timer.h>
+#include <include/x86/io_port.h>
+#include <include/helpers.h>
 #include <stdio.h>
 #include <limits.h>
 
 static const uint32_t oscillator_frequency = 1193180;
 
-static void timer_default_irq(struct registers *regs) {
+static void timer_default_irq(struct registers *UNUSED(regs)) {
 	// NOP
 }
 

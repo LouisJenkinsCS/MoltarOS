@@ -5,22 +5,29 @@
 
 #define __IS_MOLTAROS 1
 
-#include <include/vga.h>
-#include <include/gdt.h>
-#include <include/idt.h>
-#include <include/timer.h>
-#include <include/kbd.h>
-#include <include/rtc.h>
+#include <include/drivers/vga.h>
+#include <include/x86/gdt.h>
+#include <include/x86/idt.h>
+#include <include/drivers/timer.h>
+#include <include/drivers/kbd.h>
+#include <include/drivers/rtc.h>
+#include <include/kernel/multiboot.h>
+#include <include/kernel/logger.h>
+#include <stdint.h>
 
-const char *msg = "When are we getting ready to leave?";
+uint32_t PHYSICAL_MEMORY_SIZE;
 
 size_t ticks_x, ticks_y, time_x, time_y;
 
-void kernel_init() {
+void kernel_init(struct multiboot_info *info) {
 	vga_init();
 	gdt_init();
 	idt_init();
 	timer_init();
+	uint32_t start;
+	bool retval = multiboot_RAM(info, &start, &PHYSICAL_MEMORY_SIZE);
+	KLOG("RAM Stats: Available: %d, Start: %d, End: %d", retval, start, PHYSICAL_MEMORY_SIZE);
+	KPANIC("STOP EARLY!");
 }
 
 static void kernel_tick(struct registers *regs) {

@@ -1,7 +1,8 @@
 #include <include/mm/page.h>
 #include <include/mm/alloc.h>
 #include <include/helpers.h>
-#include <include/idt.h>
+#include <include/kernel/logger.h>
+#include <include/x86/idt.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -72,9 +73,7 @@ void page_alloc(page_entry_t *entry, bool supervisor, bool write) {
 	uint32_t frame_idx = first_free_frame();
 	// Out of Memory	
 	if (frame_idx == PAGE_ERR) {
-		// TODO: Fix macro, having issues getting to compile
-		printf("[%s:%s:%s] PANIC: \"" "Out Of Memory: Failed to locate a free frame!" "\"", __FILE__, __FUNCTION__, STRINGIFY(__LINE__));
-		PANIC;
+		KPANIC("Out Of Memory: Failed to locate a free frame!");
 	}
 	// Claim the page and setup
 	BITMAP_SET(frames.bitmap, frame_idx);
@@ -163,8 +162,7 @@ static void page_fault_handler(struct registers *UNUSED(regs)) {
 	asm volatile ("mov %%cr2, %0" : "=r" (fault_addr));
 
 	// TODO: Handle page faults
-	printf("[%s:%s:%s] PANIC: \"" "Page Fault" "\"", __FILE__, __FUNCTION__, STRINGIFY(__LINE__));
-	PANIC;
+	KPANIC("Page Fault");
 }
 
 static inline uint32_t index_of(uint32_t idx) {

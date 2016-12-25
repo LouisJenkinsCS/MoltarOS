@@ -4,20 +4,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define STRINGIFY(x) _STRINGIFY(x)
-#define _STRINGIFY(x) #x
-
-// Kernel Panic which will just print error message and spin
-#define PANIC \
-do { \
-	asm volatile ("cli"); \
-	while (true) \
-		asm volatile ("hlt"); \
-} while (0)
-
-#define PANIC_MSG(format, ...) (printf("[%s:%s:%s] PANIC: \"" format "\"", __FILE__, __FUNCTION__, STRINGIFY(__LINE__),  __VA_ARGS__))
-
-
 // Ceiling of integer divison.
 #define CEILING(x,y) (((x) + (y) - 1) / (y))
 

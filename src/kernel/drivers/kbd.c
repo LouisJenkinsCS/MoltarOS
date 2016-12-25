@@ -1,7 +1,7 @@
-#include <include/kbd.h>
-#include <include/vga.h>
-#include <include/idt.h>
-#include <include/io_port.h>
+#include <include/drivers/kbd.h>
+#include <include/drivers/vga.h>
+#include <include/x86/idt.h>
+#include <include/x86/io_port.h>
 #include <include/helpers.h>
 #include <stdbool.h>
 #include <stdio.h>
