@@ -54,13 +54,17 @@ void page_init() {
 	frames.current = frames.kernel;
 
 	// Ensure identity paging for currently in-use memory...
+	uint32_t tmp = ALLOC_PHYSICAL_ADDRESS_OFFSET;
+	ALLOC_PHYSICAL_ADDRESS_OFFSET = 0;
+
 	paddr_t addr = 0;
 	while (addr < PHYSICAL_MEMORY_END) {
-		// Allocates frames that are read-only from userspace  
-		page_alloc(get_page(addr, true, frames.kernel), false, true);
+		// Allocates frames that are read-write from userspace  
+		page_alloc(get_page(addr, true, frames.kernel), false, false);
 		addr += 0x1000;
 	}
 
+	ALLOC_PHYSICAL_ADDRESS_OFFSET = tmp;
 	// Register our interrupt handler
 	register_interrupt_handler(14, page_fault_handler);
 	frames.kernel->physical_addr = frames.kernel->physical_tables;
@@ -130,13 +134,15 @@ static void switch_directory(page_directory_t *dir) {
 	frames.current = dir;
 	// Sets the current in-use page tables
 	asm volatile ("mov %0, %%cr3" :: "r" (dir->physical_addr));
+	KLOG("Set CR3");
 	
 	// Set register cr0's PG bit to enable paging
 	uint32_t cr0;
 	asm volatile ("mov %%cr0, %0" : "=r" (cr0));
+	KLOG("CR0's Old Value: %d", cr0);
 	cr0 |= 0x80000000;
 	asm volatile ("mov %0, %%cr0" :: "r" (cr0));
-	vga_print("switch_directory");
+	KLOG("Enabled Paging!");
 }
 
 static uint32_t first_free_frame() {
@@ -159,7 +165,7 @@ static uint32_t first_free_frame() {
 }
 
 static void page_fault_handler(struct registers *r) {
-	vga_print("Page Fault!");
+	KLOG("Page Fault!");
 	// Address that triggered the page fault is located in register CR2
 	uint32_t fault_addr;
 	asm volatile ("mov %%cr2, %0" : "=r" (fault_addr));
