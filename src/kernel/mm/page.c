@@ -2,6 +2,7 @@
 #include <include/mm/alloc.h>
 #include <include/helpers.h>
 #include <include/kernel/logger.h>
+#include <include/drivers/vga.h>
 #include <include/x86/idt.h>
 #include <stdbool.h>
 #include <string.h>
@@ -24,7 +25,11 @@ static struct {
 static const uint32_t PAGE_ERR = (uint32_t) -1;
 
 // Amount of physical memory at our disposal.
-extern uint32_t PHYSICAL_MEMORY_SIZE;
+extern uint32_t PHYSICAL_MEMORY_START;
+extern uint32_t PHYSICAL_MEMORY_END;
+extern uint32_t ALLOC_PHYSICAL_ADDRESS_OFFSET;
+
+static const uint32_t PAGE_ALIGNED = 0xFFFFF000;
 
 
 static inline uint32_t index_of(uint32_t);
@@ -41,23 +46,24 @@ static page_entry_t *get_page(uint32_t, bool, page_directory_t *);
 
 void page_init() {
 	// Initialize frames bitmap
-	frames.size = PHYSICAL_MEMORY_SIZE / 0x1000;
-	frames.bitmap = kcalloc(index_of(frames.size));
+	frames.size = PHYSICAL_MEMORY_END / 0x1000;
+	frames.bitmap = (uint32_t *) alloc(index_of(frames.size), NULL, false);
 
 	// Create the kernel page directory
-	frames.kernel = kcalloc_aligned(sizeof(page_directory_t));
+	frames.kernel = (page_directory_t *) alloc(sizeof(page_directory_t), NULL, true);
 	frames.current = frames.kernel;
 
-	// Fill out directory by allocating pages for all address space up to end of physical memory. 
-	// Since the pages are not setup yet, it will be forced to allocate it (sequential to physical address),
-	// so virtual address will always be equivalent to physical address.
-	for (uint32_t offset = 0; offset < PHYSICAL_MEMORY_SIZE; offset += 0x1000) {
+	// Ensure identity paging for currently in-use memory...
+	paddr_t addr = 0;
+	while (addr < PHYSICAL_MEMORY_END) {
 		// Allocates frames that are read-only from userspace  
-		page_alloc(get_page(offset, true, frames.kernel), false, false);
+		page_alloc(get_page(addr, true, frames.kernel), false, true);
+		addr += 0x1000;
 	}
 
 	// Register our interrupt handler
 	register_interrupt_handler(14, page_fault_handler);
+	frames.kernel->physical_addr = frames.kernel->physical_tables;
 
 	// Set kernel as current page directory
 	switch_directory(frames.kernel);
@@ -97,7 +103,7 @@ void page_free(page_entry_t *entry) {
 
 
 static page_entry_t *get_page(uint32_t addr, bool create, page_directory_t *dir) { 
-	// Calculations are based on page indice, not raw addresses
+	// The address becomes an index
 	addr /= 0x1000;
 	uint32_t table_idx = addr / 1024;
 	uint32_t page_idx = addr % 1024;
@@ -108,10 +114,11 @@ static page_entry_t *get_page(uint32_t addr, bool create, page_directory_t *dir)
 	} else if (create) {
 		// Allocate new table and obtain physical address of newly allocated table
 		uint32_t physical_addr;
-		dir->tables[table_idx] = (page_table_t *) kcalloc_aligned_phys(sizeof(page_table_t), &physical_addr);
+		dir->tables[table_idx] = (page_table_t *) alloc(sizeof(page_table_t), &physical_addr, true);
+		memset(dir->tables[table_idx], 0, sizeof(page_table_t));
 
 		// 0x7 => 0111 => PRESENT | READ-WRITE | USER-MODE
-		dir->tables_addr[table_idx] = physical_addr | 0x7;
+		dir->physical_tables[table_idx] = physical_addr | 0x7;
 
 		return &dir->tables[table_idx]->pages[page_idx];
 	} else {
@@ -122,13 +129,14 @@ static page_entry_t *get_page(uint32_t addr, bool create, page_directory_t *dir)
 static void switch_directory(page_directory_t *dir) {
 	frames.current = dir;
 	// Sets the current in-use page tables
-	asm volatile ("mov %0, %%cr3" :: "r" (&dir->tables_addr));
+	asm volatile ("mov %0, %%cr3" :: "r" (dir->physical_addr));
 	
 	// Set register cr0's PG bit to enable paging
 	uint32_t cr0;
 	asm volatile ("mov %%cr0, %0" : "=r" (cr0));
 	cr0 |= 0x80000000;
 	asm volatile ("mov %0, %%cr0" :: "r" (cr0));
+	vga_print("switch_directory");
 }
 
 static uint32_t first_free_frame() {
@@ -150,19 +158,20 @@ static uint32_t first_free_frame() {
 	return PAGE_ERR;
 }
 
-static const uint32_t NOT_PRESENT = 0x1;
-static const uint32_t INVALID_WRITE = 0x2;
-static const uint32_t USER_MODE_ACCESS = 0x4;
-static const uint32_t RESERVED_OVERWRITTEN = 0x8;
-static const uint32_t INSTRUCTION_FETCH = 0x10;
-
-static void page_fault_handler(struct registers *UNUSED(regs)) {
+static void page_fault_handler(struct registers *r) {
+	vga_print("Page Fault!");
 	// Address that triggered the page fault is located in register CR2
 	uint32_t fault_addr;
 	asm volatile ("mov %%cr2, %0" : "=r" (fault_addr));
 
-	// TODO: Handle page faults
-	KPANIC("Page Fault");
+	int present  = !(r->err_code & 0x1) ? 1 : 0;
+	int rw       = r->err_code & 0x2    ? 1 : 0;
+	int user     = r->err_code & 0x4    ? 1 : 0;
+	int reserved = r->err_code & 0x8    ? 1 : 0;
+	int id       = r->err_code & 0x10   ? 1 : 0;
+
+	KLOG("Segmentation fault. (p:%d,rw:%d,user:%d,res:%d,id:%d) at 0x%x eip:0x%x\n",
+			present, rw, user, reserved, id, fault_addr, r->eip);
 }
 
 static inline uint32_t index_of(uint32_t idx) {

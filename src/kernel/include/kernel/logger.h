@@ -19,6 +19,11 @@ do { \
 		asm volatile ("hlt"); \
 } while (0)
 
+#define KFRAME \
+do {\
+	printf("FUNCTION: %s, FP: %x, CALLER FP: %x", __FUNCTION__, __builtin_frame_address(0), __builtin_frame_address(1)); \
+} while (0)
+
 #define STRINGIFY(x) _STRINGIFY(x)
 #define _STRINGIFY(x) #x
 

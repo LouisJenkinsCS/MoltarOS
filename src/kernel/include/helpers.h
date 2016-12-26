@@ -4,6 +4,13 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define HALT \
+do { \
+	asm volatile ("cli"); \
+	while (true) \
+		asm volatile ("hlt"); \
+} while (0) 
+
 // Ceiling of integer divison.
 #define CEILING(x,y) (((x) + (y) - 1) / (y))
 

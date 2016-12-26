@@ -1,5 +1,5 @@
 # Include directories
-INCLUDE := kernel x86 drivers
+INCLUDE := kernel x86 drivers mm
 
 # List of all headers from the included directories
 HEADERS := $(shell find $(INCLUDE) -type f -name \*.h)

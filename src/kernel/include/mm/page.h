@@ -6,20 +6,20 @@
 
 typedef struct page_entry {
 	// Is this entry present in memory
-	bool present : 1;
+	uint32_t present : 1;
 	// Is this entry read-only or read-write
-	bool read_write : 1;
+	uint32_t read_write : 1;
 	// Is this entry in supervisor-mode or user-mode 
-	bool user_mode : 1;
+	uint32_t user_mode : 1;
 	// Has this entry been accessed before? (Set by CPU)
-	bool accessed : 1;
+	uint32_t accessed : 1;
 	// Has this entry been written to? (Set by CPU)
 	bool dirty : 1;
-	// Padded bits
-	uint32_t  _unused_ : 7;
+	// Reserved
+	uint32_t  __unused__ : 7;
 	// Higher 20 bits of frame address (frame_addr << 12)
 	uint32_t frame_addr : 20;
-} page_entry_t;
+} __attribute__((packed)) page_entry_t;
 
 typedef struct page_table {
 	// A 4KB chunk of page entries
@@ -34,7 +34,7 @@ typedef struct page_directory {
 	// The mapping of physical addresses for each table, managed
 	// because the CR3 register requires this.
 	// tables_addr[i] is the physical address of tables[i].
-	uint32_t tables_addr[1024];
+	uint32_t physical_tables[1024];
 	// The physical address of tables_addr for cases where this
 	// directory is allocated in virtual memory, which arises when
 	// cloning page directories.

@@ -13,9 +13,11 @@
 #include <include/drivers/rtc.h>
 #include <include/kernel/multiboot.h>
 #include <include/kernel/logger.h>
-#include <stdint.h>
+#include <include/mm/page.h>
+#include <include/helpers.h>
 
-uint32_t PHYSICAL_MEMORY_SIZE;
+uint32_t PHYSICAL_MEMORY_END;
+uint32_t PHYSICAL_MEMORY_START;
 
 size_t ticks_x, ticks_y, time_x, time_y;
 
@@ -24,9 +26,10 @@ void kernel_init(struct multiboot_info *info) {
 	gdt_init();
 	idt_init();
 	timer_init();
-	uint32_t start;
-	bool retval = multiboot_RAM(info, &start, &PHYSICAL_MEMORY_SIZE);
-	KLOG("RAM Stats: Available: %d, Start: %d, End: %d", retval, start, PHYSICAL_MEMORY_SIZE);
+	bool retval = multiboot_RAM(info, &PHYSICAL_MEMORY_START, &PHYSICAL_MEMORY_END);
+	KLOG("RAM Stats: Available: %d, Start: %d, End: %d", retval, PHYSICAL_MEMORY_START, PHYSICAL_MEMORY_END);
+	page_init();
+	HALT;
 }
 
 static void kernel_tick(struct registers *regs) {
