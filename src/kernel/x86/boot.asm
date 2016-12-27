@@ -70,9 +70,11 @@ global _start
 		extern kernel_init
 		call kernel_init
 
-		; Calls any global constructors '__attribute__((constructor))'
-		; extern _init
-		; call _init
+		; Clean up stack frame
+		add esp, 4
+
+		; Zero EBP again since kernel_init will have changed it
+		mov ebp, 0
 
 		; Finally, jump to kmain, and leave assembly behind for good
 		extern kernel_main

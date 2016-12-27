@@ -58,7 +58,7 @@ void page_init() {
 	paddr_t addr = 0;
 	while (addr < PHYSICAL_MEMORY_END) {
 		// Allocates frames that are read-write from userspace  
-		page_alloc( get_page(addr, true, frames.kernel), false, false);
+		page_alloc(get_page(addr, true, frames.kernel), false, false);
 		addr += 0x1000;
 	}
 
@@ -165,19 +165,44 @@ static uint32_t first_free_frame() {
 	return PAGE_ERR;
 }
 
+static const uint32_t PRESENT = 0x1;
+static const uint32_t READ_WRITE = 0x2;
+static const uint32_t USER_MODE = 0x4;
+
 static void page_fault_handler(struct registers *r) {
 	// Address that triggered the page fault is located in register CR2
 	uint32_t fault_addr;
 	asm volatile ("mov %%cr2, %0" : "=r" (fault_addr));
 
-	int present  = !(r->err_code & 0x1) ? 1 : 0;
-	int rw       = r->err_code & 0x2    ? 1 : 0;
-	int user     = r->err_code & 0x4    ? 1 : 0;
-	int reserved = r->err_code & 0x8    ? 1 : 0;
-	int id       = r->err_code & 0x10   ? 1 : 0;
+	const char *msg;
+	switch (r->err_code & (PRESENT | READ_WRITE | USER_MODE)) {
+		case 0:
+			msg = "Supervisory process tried to read a non-present page entry";
+			break;
+		case PRESENT:
+			msg = "Supervisory process tried to read a page and caused a protection fault";
+			break;
+		case READ_WRITE:
+			msg = "Supervisory process tried to write to a non-present page entry";
+			break;
+		case PRESENT | READ_WRITE:
+			msg = "Supervisory process tried to write a page and caused a protection fault";
+			break;
+		case USER_MODE:
+			msg = "User process tried to read a non-present page entry";
+			break;
+		case USER_MODE | PRESENT:
+			msg = "User process tried to read a page and caused a protection fault";
+			break;
+		case USER_MODE | READ_WRITE:
+			msg = "User process tried to write to a non-present page entry";
+			break;
+		case USER_MODE | READ_WRITE | PRESENT:
+			msg = "User process tried to write a page and caused a protection fault";
 
-	KPANIC("Page Fault! (present:%d,read-write:%d,usermode:%d,reserved:%d,instruction:%d) at %x eip:%x",
-			present, rw, user, reserved, id, fault_addr, r->eip);
+	}
+
+	KPANIC("PAGE FAULT!!! Address: %x, Reason: %s", fault_addr, msg);
 }
 
 static inline uint32_t index_of(uint32_t idx) {

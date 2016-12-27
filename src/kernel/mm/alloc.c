@@ -7,12 +7,13 @@
 uint32_t ALLOC_PHYSICAL_ADDRESS_OFFSET;
 
 static const uint32_t PAGE_ALIGNED = 0xFFFFF000;
+static const uint32_t STACK_SIZE = 16 * 1024 * 1024;
 
 extern uint32_t PHYSICAL_MEMORY_START;
 extern uint32_t PHYSICAL_MEMORY_END;
 
 void alloc_init() {
-		ALLOC_PHYSICAL_ADDRESS_OFFSET = PHYSICAL_MEMORY_START;
+		ALLOC_PHYSICAL_ADDRESS_OFFSET = PHYSICAL_MEMORY_START + STACK_SIZE;
 }
 
 paddr_t alloc(size_t size, uint32_t *phys_addr, bool aligned) {

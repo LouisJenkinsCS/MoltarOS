@@ -28,11 +28,10 @@ void kernel_init(struct multiboot_info *info) {
 	timer_init();
 	bool retval = multiboot_RAM(info, &PHYSICAL_MEMORY_START, &PHYSICAL_MEMORY_END);
 	KLOG("RAM Stats: Available: %d, Start: %d, End: %d", retval, PHYSICAL_MEMORY_START, PHYSICAL_MEMORY_END);
-	page_init();
 }
 
-static void kernel_tick(struct registers *regs) {
-	(void) regs;
+static void kernel_tick(struct registers *UNUSED(regs)) {
+	KFRAME;
 	static uint32_t ticks = 0;
 
 	vga_set_x(ticks_x);
@@ -48,6 +47,7 @@ static void kernel_tick(struct registers *regs) {
 }
 
 static void kernel_clock_test() {
+	KFRAME;
 	printf("Operating System: MoltarOS\nKernel: Moltar\nVersion: 0.001a\nTime: ");
 	time_x = vga_get_x();
 	time_y = vga_get_y();
@@ -73,9 +73,11 @@ static void kernel_keyboard_test() {
 	}
 }
 
-void kernel_main() {
+void kernel_main(void) {
+	KFRAME;
 	// KLOG("Initializing Keyboard...");
 	// keyboard_init();
+	page_init();
 	kernel_clock_test();
 	// KLOG("Initiating Keyboard Test...");
 	// kernel_keyboard_test();
