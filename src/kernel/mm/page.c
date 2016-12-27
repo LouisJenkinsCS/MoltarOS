@@ -29,6 +29,8 @@ extern uint32_t PHYSICAL_MEMORY_START;
 extern uint32_t PHYSICAL_MEMORY_END;
 extern uint32_t ALLOC_PHYSICAL_ADDRESS_OFFSET;
 
+static void switch_directory(page_directory_t *dir);
+
 static const uint32_t PAGE_ALIGNED = 0xFFFFF000;
 
 
@@ -38,13 +40,13 @@ static void page_fault_handler(struct registers *);
 
 static uint32_t first_free_frame();
 
-static void switch_directory(page_directory_t *);
-
 static page_entry_t *get_page(uint32_t, bool, page_directory_t *);
 
 
 
 void page_init() {
+	KLOG("Enabling Paging...");
+
 	// Initialize frames bitmap
 	frames.size = PHYSICAL_MEMORY_END / 0x1000;
 	frames.bitmap = (uint32_t *) alloc(index_of(frames.size), NULL, false);
@@ -53,24 +55,20 @@ void page_init() {
 	frames.kernel = (page_directory_t *) alloc(sizeof(page_directory_t), NULL, true);
 	frames.current = frames.kernel;
 
-	// Ensure identity paging for currently in-use memory...
-	uint32_t tmp = ALLOC_PHYSICAL_ADDRESS_OFFSET;
-	ALLOC_PHYSICAL_ADDRESS_OFFSET = 0;
-
 	paddr_t addr = 0;
 	while (addr < PHYSICAL_MEMORY_END) {
 		// Allocates frames that are read-write from userspace  
-		page_alloc(get_page(addr, true, frames.kernel), false, false);
+		page_alloc( get_page(addr, true, frames.kernel), false, false);
 		addr += 0x1000;
 	}
 
-	ALLOC_PHYSICAL_ADDRESS_OFFSET = tmp;
 	// Register our interrupt handler
 	register_interrupt_handler(14, page_fault_handler);
 	frames.kernel->physical_addr = frames.kernel->physical_tables;
 
 	// Set kernel as current page directory
 	switch_directory(frames.kernel);
+	KLOG("Enabled Paging!");
 }
 
 void page_alloc(page_entry_t *entry, bool supervisor, bool write) {
@@ -134,15 +132,18 @@ static void switch_directory(page_directory_t *dir) {
 	frames.current = dir;
 	// Sets the current in-use page tables
 	asm volatile ("mov %0, %%cr3" :: "r" (dir->physical_addr));
-	KLOG("Set CR3");
 	
 	// Set register cr0's PG bit to enable paging
 	uint32_t cr0;
 	asm volatile ("mov %%cr0, %0" : "=r" (cr0));
-	KLOG("CR0's Old Value: %d", cr0);
 	cr0 |= 0x80000000;
-	asm volatile ("mov %0, %%cr0" :: "r" (cr0));
-	KLOG("Enabled Paging!");
+	asm volatile (
+		"mov %0, %%cr0\n" \
+		"jmp label\n" \
+		"nop\n" \
+		"nop\n" \
+		"label:\n" \
+		:: "r" (cr0));
 }
 
 static uint32_t first_free_frame() {
@@ -165,7 +166,6 @@ static uint32_t first_free_frame() {
 }
 
 static void page_fault_handler(struct registers *r) {
-	KLOG("Page Fault!");
 	// Address that triggered the page fault is located in register CR2
 	uint32_t fault_addr;
 	asm volatile ("mov %%cr2, %0" : "=r" (fault_addr));
@@ -176,7 +176,7 @@ static void page_fault_handler(struct registers *r) {
 	int reserved = r->err_code & 0x8    ? 1 : 0;
 	int id       = r->err_code & 0x10   ? 1 : 0;
 
-	KLOG("Segmentation fault. (p:%d,rw:%d,user:%d,res:%d,id:%d) at 0x%x eip:0x%x\n",
+	KPANIC("Page Fault! (present:%d,read-write:%d,usermode:%d,reserved:%d,instruction:%d) at %x eip:%x",
 			present, rw, user, reserved, id, fault_addr, r->eip);
 }
 

@@ -29,7 +29,6 @@ void kernel_init(struct multiboot_info *info) {
 	bool retval = multiboot_RAM(info, &PHYSICAL_MEMORY_START, &PHYSICAL_MEMORY_END);
 	KLOG("RAM Stats: Available: %d, Start: %d, End: %d", retval, PHYSICAL_MEMORY_START, PHYSICAL_MEMORY_END);
 	page_init();
-	HALT;
 }
 
 static void kernel_tick(struct registers *regs) {
@@ -75,8 +74,10 @@ static void kernel_keyboard_test() {
 }
 
 void kernel_main() {
-	keyboard_init();
-	// kernel_clock_test();
-	kernel_keyboard_test();
+	// KLOG("Initializing Keyboard...");
+	// keyboard_init();
+	kernel_clock_test();
+	// KLOG("Initiating Keyboard Test...");
+	// kernel_keyboard_test();
 
 }

@@ -4,6 +4,62 @@
 		"selected_items":
 		[
 			[
+				"PH",
+				"PHYSICAL_MEMORY_END"
+			],
+			[
+				"page",
+				"page_alloc"
+			],
+			[
+				"PHYSI",
+				"PHYSICAL_MEMORY_END"
+			],
+			[
+				"physica",
+				"physical_addr"
+			],
+			[
+				"page_en",
+				"page_directory_entry_t"
+			],
+			[
+				"read",
+				"read_write"
+			],
+			[
+				"__",
+				"__FUNCTION__"
+			],
+			[
+				"frame",
+				"frame_addr"
+			],
+			[
+				"PAGE",
+				"PAGE_ALIGNED"
+			],
+			[
+				"PHY",
+				"PHYSICAL_MEMORY_START"
+			],
+			[
+				"PHYS",
+				"PHYSICAL_MEMORY_END"
+			],
+			[
+				"pl",
+				"physical_displacement"
+			],
+			[
+				"phys",
+				"physical_displacement"
+			],
+			[
+				"alig",
+				"aligned"
+			],
+			[
 				"found",
 				"found_lower"
 			],
@@ -36,10 +92,6 @@
 				"fault_addr"
 			],
 			[
-				"phys",
-				"physical_addr"
-			],
-			[
 				"ph",
 				"physical_addr"
 			],
@@ -60,10 +112,6 @@
 				"size_t"
 			],
 			[
-				"frame",
-				"frame_idx"
-			],
-			[
 				"fram",
 				"frame_addr\tuint32_t frame_addr"
 			],
@@ -74,10 +122,6 @@
 			[
 				"bit",
 				"bitmap\tuint32_t * bitmap"
-			],
-			[
-				"__",
-				"__FILE__"
 			],
 			[
 				"__F",
@@ -160,108 +204,46 @@
 	"buffers":
 	[
 		{
-			"contents": "#ifndef MOLTAROS_LOGGER_H\n#define MOLTAROS_LOGGER_H\n\n#include <stdio.h>\n\n#ifndef NDEBUG\n\t#define KLOG(format, ...) printf(format \"\\n\", ##__VA_ARGS__)\n#else\n\t#define KLOG(format, ...)\n#endif\n\n\n// Kernel Panic which will just print error message and spin\n#define KPANIC(format, ...) \\\ndo { \\\n\tprintf(\"[%s:%s:%s] PANIC: \\\"\" format \"\\\"\\n\", __FILE__, __FUNCTION__, STRINGIFY(__LINE__),  ##__VA_ARGS__); \\\n\tasm volatile (\"cli\"); \\\n\twhile (true) \\\n\t\tasm volatile (\"hlt\"); \\\n} while (0)\n\n#define STRINGIFY(x) _STRINGIFY(x)\n#define _STRINGIFY(x) #x\n\n#endif /* MOLTAROS_LOGGER_H */",
-			"file": "src/kernel/include/kernel/logger.h",
-			"file_size": 595,
-			"file_write_time": 131271768832386810,
-			"settings":
-			{
-				"buffer_size": 571,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "src/kernel/kernel/kernel.c",
 			"settings":
 			{
-				"buffer_size": 1592,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/build.sh",
-			"settings":
-			{
-				"buffer_size": 691,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "#ifndef MOLTAROS_MULTIBOOT_H\n#define MOLTAROS_MULTIBOOT_H\n\n#include <include/kernel/logger.h>\n#include <stdint.h>\n\n#define MULTIBOOT_MMAP_RAM 1\n\n// GRUB's Multiboot information structure, which we push on the stack for use during kernel_init.\n// It is used to determine hardware information, such as the amount of available RAM.\nstruct multiboot_info {\n\t// Determines what information is available in this structure\n\tuint32_t flags;\n\n\t// Only valid if bit 0 of flags is set.\n\t// Indicate amount of low and high memory respectively\n\tuint32_t mem_low;\n\tuint32_t mem_high;\n\n\t// Only valid if bit 1 of flags is set.\n\t// Indicates which disk device we were loaded from.\n\tuint32_t boot_device;\n\n\t// Only valid if bit 2 of flags is set.\n\tuint32_t cmdline;\n\n\t// Only valid if bit 3 of flags is set.\n\t// Indicates the number of boot modules loaded\n\t// alongside us, with the addr being the physical\n\t// address an array of them.\n\tuint32_t mod_count;\n\tuint32_t mod_addr;\n\n\t// Symbol table, which we ignore\n\tuint8_t sym_table[16];\n\n\t// Only valid if bit 6 of flags is set.\n\t// Describe the memory mappings and the size\n\t// of their buffers. Of notable importance is\n\t// RAM, which we use to obtain physical memory size. \n\tuint32_t mmap_length;\n\tuint32_t mmap_addr;\n};\n\n// GRUB's memory map structure. The 'size' field is located at offset -4\n// which means we have to take special care when going to the next entry.\nstruct multiboot_mmap {\n\t// Size of this entry.\n\tuint32_t size;\n\n\t// The start address\n\tuint32_t start_low;\n\tuint32_t start_high;\n\n\t// The length of this memory mapping\n\tuint32_t length_low;\n\tuint32_t length_high;\n\n\t// Whether this memory mapping is for RAM or some reserved area.\n\tuint32_t type;\n};\n\n\nstatic bool multiboot_RAM(struct multiboot_info *mbinfo, uint32_t *start, uint32_t *end) {\n\tbool found = false;\n\tprintf(\"Flags: %d\\n\", mbinfo->flags);\n\t// Check if there is a memory mapping available\n\tif (mbinfo->flags & (1 << 6)) {\n\t\tKLOG(\"MMAP Entries: %d\", mbinfo->mmap_length / 24);\n\t\tstruct multiboot_mmap *mmap = mbinfo->mmap_addr;\n\t\twhile(mmap < mbinfo->mmap_addr + mbinfo->mmap_length) {\n\t\t\tKLOG(\"MMAP Entry: {Type: %s, Start: %x, Length: %x}\", mmap->type == MULTIBOOT_MMAP_RAM ? \"RAM\" : \"RESERVED\", mmap->start_low, mmap->length_low);\n\t\t\t// Jackpot... (The OS is 32-bit, so there is no upper currently.)\n\t\t\tif (mmap->type == MULTIBOOT_MMAP_RAM) {\n\t\t\t\t*start = mmap->start_low;\n\t\t\t\t*end = *start + mmap->length_low;\n\t\t\t\tfound = true;\n\t\t\t}\n\n\t\t\tmmap = (struct multiboot_mmap *) ((uint32_t) mmap + mmap->size + sizeof(mmap->size));\n\t\t}\n\t}\n\t\n\treturn found;\n}\n\n#endif /* MOLTAROS_MULTIBOOT_H */",
-			"file": "src/kernel/include/kernel/multiboot.h",
-			"file_size": 2690,
-			"file_write_time": 131271772523139141,
-			"settings":
-			{
-				"buffer_size": 2604,
+				"buffer_size": 1695,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/libc/stdio/printf.c",
+			"file": "src/kernel/include/helpers.h",
 			"settings":
 			{
-				"buffer_size": 2967,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/kernel/mm/heap.c",
-			"settings":
-			{
-				"buffer_size": 4830,
+				"buffer_size": 966,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "#ifndef MOLTAROS_ALLOC_H\n#define MOLTAROS_ALLOC_H\n\n#include <stddef.h>\n#include <stdint.h>\n\nvoid *kmalloc(size_t size);\n\nvoid *kcalloc(size_t size);\n\nvoid *kmalloc_aligned(size_t size);\n\nvoid *kcalloc_aligned_phys(size_t size, uint32_t *phys_ptr);\n\nvoid *kcalloc_aligned(size_t size);\n\nvoid kfree(void *ptr);\n\n#endif\n",
+			"file": "src/kernel/include/kernel/logger.h",
+			"settings":
+			{
+				"buffer_size": 727,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "src/kernel/include/mm/alloc.h",
-			"file_size": 336,
-			"file_write_time": 131269863584971260,
 			"settings":
 			{
-				"buffer_size": 317,
+				"buffer_size": 257,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/drivers/kbd.c",
+			"file": "src/kernel/mm/alloc.c",
 			"settings":
 			{
-				"buffer_size": 10018,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/drivers/rtc.c",
-			"settings":
-			{
-				"buffer_size": 1146,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "README.md",
-			"settings":
-			{
-				"buffer_size": 3832,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "#ifndef MOLTAROS_PAGE_H\n#define MOLTAROS_PAGE_H\n\n#include <stdint.h>\n#include <stdbool.h>\n\ntypedef struct page_entry {\n\t// Is this entry present in memory\n\tbool present : 1;\n\t// Is this entry read-only or read-write\n\tbool read_write : 1;\n\t// Is this entry in supervisor-mode or user-mode \n\tbool user_mode : 1;\n\t// Has this entry been accessed before? (Set by CPU)\n\tbool accessed : 1;\n\t// Has this entry been written to? (Set by CPU)\n\tbool dirty : 1;\n\t// Padded bits\n\tuint32_t  _unused_ : 7;\n\t// Higher 20 bits of frame address (frame_addr << 12)\n\tuint32_t frame_addr : 20;\n} page_entry_t;\n\ntypedef struct page_table {\n\t// A 4KB chunk of page entries\n\tpage_entry_t pages[1024];\n} page_table_t;\n\ntypedef struct page_directory {\n\t// A 4KB chunk of pointers to page tables. Unlike\n\t// page_table_t's pages, which take up a constant amount\n\t// of space, unused tables can be deallocated to save space.\n\tpage_table_t *tables[1024];\n\t// The mapping of physical addresses for each table, managed\n\t// because the CR3 register requires this.\n\t// tables_addr[i] is the physical address of tables[i].\n\tuint32_t tables_addr[1024];\n\t// The physical address of tables_addr for cases where this\n\t// directory is allocated in virtual memory, which arises when\n\t// cloning page directories.\n\tuint32_t physical_addr;\n} page_directory_t;\n\nvoid page_init();\n\nvoid page_alloc(page_entry_t *entry, bool kernel, bool write);\n\nvoid page_free(page_entry_t *entry);\n\n#endif",
-			"file": "src/kernel/include/mm/page.h",
-			"file_size": 1495,
-			"file_write_time": 131269827512102988,
-			"settings":
-			{
-				"buffer_size": 1446,
+				"buffer_size": 1102,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -270,89 +252,8 @@
 			"file": "src/kernel/mm/page.c",
 			"settings":
 			{
-				"buffer_size": 5232,
+				"buffer_size": 5643,
 				"encoding": "UTF-8",
-				"line_ending": "Windows",
-				"name": "#include <include/mm/page.h>"
-			}
-		},
-		{
-			"file": "src/kernel/x86/exceptions.c",
-			"settings":
-			{
-				"buffer_size": 30,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/x86/gdt.c",
-			"settings":
-			{
-				"buffer_size": 2736,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/x86/idt.c",
-			"settings":
-			{
-				"buffer_size": 7585,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/x86/io_port.c",
-			"settings":
-			{
-				"buffer_size": 704,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/Makefile",
-			"settings":
-			{
-				"buffer_size": 2413,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/libc/stdio/putchar.c",
-			"settings":
-			{
-				"buffer_size": 209,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "#ifndef MOLTAROS_KBD_HAL_H\n#define MOLTAROS_KBD_HAL_H\n\n#include <include/helpers.h>\n#include <include/drivers/kbd.h>\n#import <stdint.h>\n\nstatic struct {\n    // Held Key States\n    bool shift : 1;\n    bool alt : 1;\n    bool ctrl : 1;\n    bool fn : 1;\n\n    // Toggle Key States\n    bool caps : 1;\n    bool scroll : 1;\n    bool num : 1;\n\n    // Pressed/Released State\n    bool state : 1;\n    // Note: All the above is packed into 1 byte. :)\n\n    // Bit array of currently pressed keys\n    uint8_t pressed[BIT_ARRAY_SZ(256)];\n} KBD_STATE;\n\n#endif /* endif MOLTAROS_KBD_HAL_H */",
-			"file": "src/kernel/include/drivers/kbd_hal.h",
-			"file_size": 600,
-			"file_write_time": 131271612487712619,
-			"settings":
-			{
-				"buffer_size": 573,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "#ifndef MOLTAROS_TIMER_H\n#define MOLTAROS_TIMER_H\n\n#define PIT_CHANNEL0 0x40\n#define PIT_CHANNEL1 0x41\n#define PIT_CHANNEL2 0x42\n#define PIT_COMMAND 0x43\n#define PIT_REPEAT 0x36\n\n#include <stdint.h>\n#include <include/x86/idt.h>\n\nvoid timer_init();\n\nvoid timer_set_handler(uint32_t frequency, void (*cb)(struct registers *registers));\n\n#endif /* MOLTAROS_TIMER_H */",
-			"file": "src/kernel/include/drivers/timer.h",
-			"file_size": 380,
-			"file_write_time": 131271614330734232,
-			"settings":
-			{
-				"buffer_size": 364,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/drivers/timer.c",
-			"settings":
-			{
-				"buffer_size": 1013,
 				"line_ending": "Windows"
 			}
 		},
@@ -365,31 +266,30 @@
 			}
 		},
 		{
-			"file": "src/libc/string/memset.c",
+			"file": "src/kernel/include/mm/page.h",
 			"settings":
 			{
-				"buffer_size": 191,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "#ifndef MOLTAROS_MEMORY_MANAGEMENT_H\n#define MOLTAROS_MEMORY_MANAGEMENT_H\n\n#include <stdint.h>\n#include <stddef.h>\n\ntypedef struct memblock memblock_t;\ntypedef struct memheap memheap_t;\n\n// memblock_t is a simple memory \"superblock\", which is effectively a header to\n// a chunk of blocks of memory: it should not be confused with a block in and of itself.\n// It is the header for a contiguous chunk of memory, given by the user. It also uses some\n// space to hold a bitmap, acting as a descriptor for certain blocks.\n// Implementation based on Pancakes' Bitmap Heap, seen here: http://wiki.osdev.org/User:Pancakes/BitmapHeapImplementation\nstruct memblock {\n\t// Pointer to the next superblock in a linked-list fashion.\n\tmemblock_t *next;\n\t// The total size in raw bytes of this superblock.\n\tuint32_t total_size;\n\t// Number of blocks used.\n\tuint32_t used;\n\t// The size of the individual blocks of memory.\n\tuint32_t block_size;\n\t// Index to the bitmap entry after the last allocation, a naive optimization where\n\t// the next allocation is assumed to be more likely in the same superblock and contain\n\t// free space immediately after. This yields significant increase in performance when the\n\t// block has not filled the initial superblock, but may degrade performance when it has.\n\tuint32_t last_alloc;\n};\n\nstruct memheap {\n\tmemblock_t *head;\n};\n\n\n\n#endif /* endif MOLTAROS_MEMORY_MANAGEMENT_H */",
-			"file": "src/kernel/include/mm/heap.h",
-			"file_size": 1482,
-			"file_write_time": 131269833669254287,
-			"settings":
-			{
-				"buffer_size": 1393,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/include/helpers.h",
-			"settings":
-			{
-				"buffer_size": 863,
+				"buffer_size": 1489,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/kernel/Makefile",
+			"settings":
+			{
+				"buffer_size": 2416,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 1811,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -459,21 +359,46 @@
 		"/C/Github/MoltarOS/src/kernel",
 		"/C/Github/MoltarOS/src/kernel/drivers",
 		"/C/Github/MoltarOS/src/kernel/include",
-		"/C/Github/MoltarOS/src/kernel/kernel",
+		"/C/Github/MoltarOS/src/kernel/include/drivers",
+		"/C/Github/MoltarOS/src/kernel/include/kernel",
+		"/C/Github/MoltarOS/src/kernel/include/mm",
 		"/C/Github/MoltarOS/src/kernel/mm",
 		"/C/Github/MoltarOS/src/kernel/x86",
 		"/C/Github/MoltarOS/src/libc",
 		"/C/Github/MoltarOS/src/libc/stdio",
-		"/C/Github/MoltarOS/src/libc/stdlib",
-		"/C/Github/MoltarOS/src/libc/string"
+		"/C/Github/MoltarOS/src/libc/stdlib"
 	],
 	"file_history":
 	[
+		"/C/Github/MoltarOS/src/kernel/include/kernel/multiboot.h",
+		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+		"/C/Github/MoltarOS/src/build.sh",
+		"/C/Github/MoltarOS/src/kernel/include/kernel/logger.h",
 		"/C/Github/MoltarOS/src/kernel/kernel/kernel.c",
+		"/C/Github/MoltarOS/src/libc/stdio/printf.c",
+		"/C/Github/MoltarOS/src/kernel/mm/heap.c",
+		"/C/Github/MoltarOS/src/kernel/include/mm/alloc.h",
+		"/C/Github/MoltarOS/src/kernel/drivers/kbd.c",
+		"/C/Github/MoltarOS/src/kernel/drivers/rtc.c",
+		"/C/Github/MoltarOS/README.md",
+		"/C/Github/MoltarOS/src/kernel/include/mm/page.h",
+		"/C/Github/MoltarOS/src/kernel/mm/page.c",
+		"/C/Github/MoltarOS/src/kernel/x86/exceptions.c",
+		"/C/Github/MoltarOS/src/kernel/x86/gdt.c",
+		"/C/Github/MoltarOS/src/kernel/x86/idt.c",
+		"/C/Github/MoltarOS/src/kernel/x86/io_port.c",
+		"/C/Github/MoltarOS/src/kernel/Makefile",
+		"/C/Github/MoltarOS/src/libc/stdio/putchar.c",
+		"/C/Github/MoltarOS/src/kernel/include/drivers/kbd_hal.h",
+		"/C/Github/MoltarOS/src/kernel/include/drivers/timer.h",
+		"/C/Github/MoltarOS/src/kernel/drivers/timer.c",
+		"/C/Github/MoltarOS/src/kernel/drivers/vga.c",
+		"/C/Github/MoltarOS/src/libc/string/memset.c",
+		"/C/Github/MoltarOS/src/kernel/include/mm/heap.h",
+		"/C/Github/MoltarOS/src/kernel/include/helpers.h",
 		"/C/Github/MoltarOS/src/kernel/include/kernel/interrupt.h",
 		"/C/Github/MoltarOS/src/kernel/kernel/multiboot.h",
 		"/C/Github/MoltarOS/src/kernel/kernel/interrupt.c",
-		"/C/Github/MoltarOS/src/kernel/Makefile",
 		"/C/Github/MoltarOS/src/kernel/include/kbd_hal.h",
 		"/C/Github/MoltarOS/src/kernel/include/kbd.h",
 		"/C/Github/MoltarOS/src/kernel/include/memory_management.h",
@@ -481,7 +406,6 @@
 		"/C/Github/MoltarOS/src/kernel/kernel/timer.c",
 		"/C/Github/MoltarOS/MoltarOS.sublime-project",
 		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/SublimeLinter/SublimeLinter.sublime-settings",
-		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
 		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/ClangAutoComplete.sublime-settings",
 		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/ClangAutoComplete/ClangAutoComplete.sublime-settings",
 		"/C/Github/MoltarOS/src/kernel/include/bitmap.h",
@@ -505,6 +429,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"tables_addr",
+			"physical_addr",
+			"6",
+			"!\");\n",
 			"last_alloc",
 			"UP",
 			"SPACE",
@@ -531,6 +459,7 @@
 		"regex": true,
 		"replace_history":
 		[
+			"physical_tables",
 			"\\1\\n\\t\\t\\tbreak;",
 			"\\1\\n\\t\\tbreak;\\n",
 			"\\1\\nbreak;\\t\\t\\n",
@@ -554,32 +483,33 @@
 	"groups":
 	[
 		{
-			"selected": 9,
+			"selected": 5,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/kernel/include/kernel/logger.h",
+					"file": "src/kernel/kernel/kernel.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 571,
+						"buffer_size": 1695,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								133,
-								133
+								842,
+								842
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
@@ -587,671 +517,11 @@
 				},
 				{
 					"buffer": 1,
-					"file": "src/kernel/kernel/kernel.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1592,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								513,
-								513
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/build.sh",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 691,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								273,
-								273
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/kernel/include/kernel/multiboot.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2604,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1705,
-								1705
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1164.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/libc/stdio/printf.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2967,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								324,
-								324
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 60.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/kernel/mm/heap.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4830,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								782,
-								782
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/kernel/include/mm/alloc.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 317,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								193,
-								193
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 23,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/kernel/drivers/kbd.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 10018,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								58,
-								58
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 14,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "src/kernel/drivers/rtc.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1146,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								55,
-								55
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 13,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "README.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3832,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2317,
-								2317
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 140.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "src/kernel/include/mm/page.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1446,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1334,
-								1334
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "src/kernel/mm/page.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5232,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								87,
-								87
-							]
-						],
-						"settings":
-						{
-							"auto_name": "#include <include/mm/page.h>",
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 240.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "src/kernel/x86/exceptions.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 30,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								22,
-								22
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 19,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "src/kernel/x86/gdt.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2736,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								22,
-								22
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 18,
-					"type": "text"
-				},
-				{
-					"buffer": 14,
-					"file": "src/kernel/x86/idt.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7585,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								51,
-								51
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 17,
-					"type": "text"
-				},
-				{
-					"buffer": 15,
-					"file": "src/kernel/x86/io_port.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 704,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								347,
-								347
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 16,
-					"file": "src/kernel/Makefile",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2413,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								51,
-								51
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 16,
-					"type": "text"
-				},
-				{
-					"buffer": 17,
-					"file": "src/libc/stdio/putchar.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 209,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								209,
-								209
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 15,
-					"type": "text"
-				},
-				{
-					"buffer": 18,
-					"file": "src/kernel/include/drivers/kbd_hal.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 573,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								110,
-								110
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 21,
-					"type": "text"
-				},
-				{
-					"buffer": 19,
-					"file": "src/kernel/include/drivers/timer.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 364,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								333,
-								333
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
-					"type": "text"
-				},
-				{
-					"buffer": 20,
-					"file": "src/kernel/drivers/timer.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1013,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								190,
-								190
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 20,
-					"type": "text"
-				},
-				{
-					"buffer": 21,
-					"file": "src/kernel/drivers/vga.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3681,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1453,
-								1453
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1920.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 22,
-					"file": "src/libc/string/memset.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 191,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								191,
-								191
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 24,
-					"type": "text"
-				},
-				{
-					"buffer": 23,
-					"file": "src/kernel/include/mm/heap.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1393,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1294,
-								1294
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 22,
-					"type": "text"
-				},
-				{
-					"buffer": 24,
 					"file": "src/kernel/include/helpers.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 863,
+						"buffer_size": 966,
 						"regions":
 						{
 						},
@@ -1270,7 +540,236 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/kernel/include/kernel/logger.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 727,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								496,
+								496
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/kernel/include/mm/alloc.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 257,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								164,
+								164
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
 					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/kernel/mm/alloc.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1102,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								746,
+								746
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/kernel/mm/page.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5643,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4090,
+								4090
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2460.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/kernel/drivers/vga.c",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 3681,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								633,
+								633
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 480.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/kernel/include/mm/page.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1489,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								688,
+								688
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 60.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/kernel/Makefile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2416,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								55,
+								55
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1811,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 60.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
 					"type": "text"
 				}
 			]
@@ -1315,7 +814,7 @@
 	"project": "MoltarOS.sublime-project",
 	"replace":
 	{
-		"height": 52.0
+		"height": 80.0
 	},
 	"save_all_on_build": true,
 	"select_file":

@@ -12,12 +12,12 @@ extern uint32_t PHYSICAL_MEMORY_START;
 extern uint32_t PHYSICAL_MEMORY_END;
 
 void alloc_init() {
-		ALLOC_PHYSICAL_ADDRESS_OFFSET = 0;
+		ALLOC_PHYSICAL_ADDRESS_OFFSET = PHYSICAL_MEMORY_START;
 }
 
 paddr_t alloc(size_t size, uint32_t *phys_addr, bool aligned) {
 	// If we need to align it, we need to ensure the pointer is on a 4KB boundary
-	if (aligned && (ALLOC_PHYSICAL_ADDRESS_OFFSET & PAGE_ALIGNED)) {
+	if (aligned && (ALLOC_PHYSICAL_ADDRESS_OFFSET % 0x1000)) {
 		ALLOC_PHYSICAL_ADDRESS_OFFSET &= PAGE_ALIGNED;
 		ALLOC_PHYSICAL_ADDRESS_OFFSET += 0x1000;
 	}
