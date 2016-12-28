@@ -34,7 +34,7 @@ static void update_cursor();
 	Initializes the buffer's attributes above to their proper values, should be called before kmain().
 */
 void vga_init() {
-	buf = (uint16_t *) 0xB8000;
+	buf = (uint16_t *) 0xC00B8000;
 	x = y = 0;
 	color = make_color(COLOR_LIGHT_GREY, COLOR_BLACK);
 

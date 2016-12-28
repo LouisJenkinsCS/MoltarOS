@@ -202,7 +202,7 @@ static void page_fault_handler(struct registers *r) {
 
 	}
 
-	KPANIC("PAGE FAULT!!! Address: %x, Reason: %s", fault_addr, msg);
+	KPANIC("Segmentation Fault... Exception: \"Page Fault\" Address: %x, Reason: %s", fault_addr, msg);
 }
 
 static inline uint32_t index_of(uint32_t idx) {
