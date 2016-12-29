@@ -12,13 +12,14 @@ The below depicts an early "schedule" or rather a path I will be taking in terms
 - [x] Interrupts (IRQ + ISR)
 - [x] VGA Display Driver
 - [x] Keyboard Driver
-- [ ] Memory Management (Physical + Virtual)
-- [ ] Interactive Shell
+- [x] Memory Management (Physical + Virtual)
+- [x] Higher Half Kernel
 - [ ] File System
+- [ ] Process Creation and Managements
 - [ ] Multitasking and Scheduling
 - [ ] Networking
-- [ ] Process Creation and Managements
 - [ ] ELF Binary Support
+- [ ] Interactive Shell
 - [ ] Graphical User Interfaces
 
 #Progress Update & Changelog
@@ -48,3 +49,10 @@ a significant amount of work and should be pushed to master.
 Lastly, I also added a nice logger macro, `KLOG`, and panic macro, `KPANIC`.
 
 ![Screenshot](/ram_and_kbd.PNG)
+
+
+## Version .002
+
+It is FINALLY here! I have implemented not only memory management (paging and a heap allocator), but even converted to a higher-half kernel approach, which was also easier, surprisingly, than a normal identity-mapped system. I've also fixed up the tests and their output format to better portray the significance of the initialization of the kernel thus far. I am very satisfied with what I have done, but unfortunately, I have to attend to another project for the time being.
+
+![Screenshot](/all_tests_and_heap.PNG)

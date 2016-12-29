@@ -1,4 +1,5 @@
 #include <include/x86/idt.h>
+#include <include/x86/exceptions.h>
 #include <include/x86/io_port.h>
 #include <string.h>
 #include <stdio.h>
@@ -50,6 +51,9 @@ void idt_init() {
 
 	// Update IDT in CPU
 	idt_flush((uint32_t) &ptr);
+
+	// Registers any hardware-raised interrupts
+	exceptions_init();
 }
 
 /*

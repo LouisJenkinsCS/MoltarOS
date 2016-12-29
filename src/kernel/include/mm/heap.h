@@ -32,8 +32,12 @@ struct memheap {
 	memblock_t *head;
 };
 
-void *kmalloc(size_t size);
+void memheap_init(memheap_t *heap);
 
-void kfree(void *ptr);
+void memheap_add_block(memheap_t *heap, uintptr_t addr, uint32_t size, uint32_t block_size);
+
+void *memheap_alloc(memheap_t *heap, uint32_t size);
+
+void memheap_free(memheap_t *heap, void *ptr);
 
 #endif /* endif MOLTAROS_MEMORY_MANAGEMENT_H */

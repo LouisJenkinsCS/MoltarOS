@@ -5,7 +5,7 @@
 // Idenitifies that the bitmap's entry is free to use
 static const uint8_t FREE = 0;
 
-static void memheap_init(memheap_t *heap) {
+void memheap_init(memheap_t *heap) {
 	heap->head = NULL;
 }
 
@@ -27,7 +27,7 @@ static uint8_t generate_identifier(uint8_t x, uint8_t y) {
 	return z;
 }
 
-static void memheap_add_block(memheap_t *heap, uintptr_t addr, uint32_t size, uint32_t block_size) {
+void memheap_add_block(memheap_t *heap, uintptr_t addr, uint32_t size, uint32_t block_size) {
 	// We reserve the first bytes of memory (pointed to by 'addr') for the superblock itself. Since the superblock
 	// takes up space, we must make the appropriate corrections to the size.
 	memblock_t *sblock = (memblock_t *) addr;
@@ -52,7 +52,7 @@ static void memheap_add_block(memheap_t *heap, uintptr_t addr, uint32_t size, ui
 	sblock->used = block_count;
 }
 
-static void *memheap_alloc(memheap_t *heap, uint32_t size) {
+void *memheap_alloc(memheap_t *heap, uint32_t size) {
 	// For each superblock...
 	for (memblock_t *sblock = heap->head; sblock; sblock = sblock->next) {
 		// If this superblock is large enough
@@ -101,7 +101,7 @@ static void *memheap_alloc(memheap_t *heap, uint32_t size) {
 	return NULL;
 }
 
-static void memheap_free(memheap_t *heap, void *ptr) {
+void memheap_free(memheap_t *heap, void *ptr) {
 	// For each superblock...
 	for (memblock_t *sblock = heap->head; sblock; sblock = sblock->next) {
 		// If the pointer is within the superblock

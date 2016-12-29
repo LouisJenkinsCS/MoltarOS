@@ -3,17 +3,13 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
-void *kmalloc(size_t size);
+typedef uint32_t paddr_t;
+typedef uint32_t vaddr_t;
 
-void *kcalloc(size_t size);
+void alloc_init();
 
-void *kmalloc_aligned(size_t size);
-
-void *kcalloc_aligned_phys(size_t size, uint32_t *phys_ptr);
-
-void *kcalloc_aligned(size_t size);
-
-void kfree(void *ptr);
+vaddr_t alloc_block();
 
 #endif

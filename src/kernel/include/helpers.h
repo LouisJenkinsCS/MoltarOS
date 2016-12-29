@@ -4,6 +4,17 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+
+#define MIN(x, y) ((x) > (y) ? (y) : (x))
+
+#define HALT \
+do { \
+	asm volatile ("cli"); \
+	while (true) \
+		asm volatile ("hlt"); \
+} while (0) 
+
 // Ceiling of integer divison.
 #define CEILING(x,y) (((x) + (y) - 1) / (y))
 

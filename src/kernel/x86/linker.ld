@@ -1,7 +1,7 @@
 /*
 	Bootloader will search for _start in boot.s... 
 */
-ENTRY(_start)
+ENTRY(start)
 
 /*
 	Where will the .o files be put?
@@ -9,32 +9,26 @@ ENTRY(_start)
 SECTIONS
 {
 	/*
-		Start at address 1MB
+		Start at address 3GB + 1MB (higher half kernel). Note: This means we need
+		to properly offset all sections below.
 	*/
-	. = 1M;
+	. = 0xC0100000;
 
 	/*
 		Place multiboot header to ensure the bootloader recognizes this file.
 		Then place the text section.
 	*/
-	.text BLOCK(4K) : ALIGN(4K)
+	.text : AT(ADDR(.text) - 0xC0000000)
 	{
 		*(.multiboot)
 		*(.text)
-	}
-
-	/*
-		Now we place the Read-Only data
-	*/
-	.rodata BLOCK(4K) : ALIGN(4K)
-	{
-		*(.rodata)
+		*(.rodata*)
 	}
 
 	/*
 		Then we place the Read-Write data
 	*/
-	.data BLOCK(4K) : ALIGN(4K)
+	.data ALIGN(0x1000) : AT(ADDR(.data) - 0xC0000000)
 	{
 		*(.data)
 	}
@@ -42,14 +36,11 @@ SECTIONS
 	/*
 		Uninitialized Read-Write data and the stack (.bss section)
 	*/
-	.bss BLOCK(4K) : ALIGN(4K)
+	.bss : AT(ADDR(.bss) - 0xC0000000)
 	{
+		_sbss = .;
 		*(COMMON)
 		*(.bss)
-		*(.create_stack)
+		_ebss = .;
 	}
-
-	/*
-		Any compiler-generated sections will be, by default, placed below here.
-	*/
 }

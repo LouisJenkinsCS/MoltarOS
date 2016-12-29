@@ -63,13 +63,12 @@ struct multiboot_mmap {
 
 static bool multiboot_RAM(struct multiboot_info *mbinfo, uint32_t *start, uint32_t *end) {
 	bool found = false;
-	printf("Flags: %d\n", mbinfo->flags);
 	// Check if there is a memory mapping available
 	if (mbinfo->flags & (1 << 6)) {
-		KLOG("MMAP Entries: %d", mbinfo->mmap_length / 24);
-		struct multiboot_mmap *mmap = mbinfo->mmap_addr;
-		while(mmap < mbinfo->mmap_addr + mbinfo->mmap_length) {
-			KLOG("MMAP Entry: {Type: %s, Start: %x, Length: %x}", mmap->type == MULTIBOOT_MMAP_RAM ? "RAM" : "RESERVED", mmap->start_low, mmap->length_low);
+		// KLOG("MMAP Entries: %d", mbinfo->mmap_length / 24);
+		struct multiboot_mmap *mmap = (struct multiboot_mmap *) (0xC0000000 + mbinfo->mmap_addr);
+		while((uint32_t) mmap - 0xC0000000 < (mbinfo->mmap_addr + mbinfo->mmap_length)) {
+			// KLOG("MMAP Entry: {Type: %s, Start: %x, Length: %x}", mmap->type == MULTIBOOT_MMAP_RAM ? "RAM" : "RESERVED", mmap->start_low, mmap->length_low);
 			// Jackpot... (The OS is 32-bit, so there is no upper currently.)
 			if (mmap->type == MULTIBOOT_MMAP_RAM) {
 				*start = mmap->start_low;
