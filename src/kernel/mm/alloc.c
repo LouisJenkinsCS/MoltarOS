@@ -15,7 +15,7 @@ static const uint32_t PAGE_ERR = (uint32_t) -1;
 
 // The current physical memory offset we are allocating in memory. This is a very simple allocator
 // and as such only allocates memory, and never frees it, and so this only ever increases.
-static uint32_t physical_address_offset;
+static uint32_t virtual_addr;
 static uint32_t *page_directory;
 static uint32_t alloc_bitmap[NUM_FRAMES / 32];
 
@@ -60,8 +60,9 @@ static void debug_pd(uint32_t idx) {
 }
 
 void alloc_init() {
-		// Zero necessary fields
-		physical_address_offset = 0;
+		// Initialize necessary fields. We also start after the first page because the address
+		// 0x0 is commonly used for NULL
+		virtual_addr = PAGE_SIZE;
 		memset(alloc_bitmap, 0, index_of(NUM_FRAMES) * sizeof(uint32_t));
 
 		// The kernel directory set in page directory neds to get set
@@ -79,10 +80,10 @@ vaddr_t alloc_block() {
 	// Obtain the first free frame by cycling through all possible frames for one without it's PRESENT bit set.
 	bool found = false;
 	for (int i = 0; i < 1024; i++) {
-		uint32_t idx = (physical_address_offset / PAGE_SIZE) % NUM_FRAMES;
+		uint32_t idx = (virtual_addr / PAGE_SIZE) % NUM_FRAMES;
 		if (!(page_directory[idx] & PRESENT)) {
 			uint32_t frame_idx = first_free_frame();
-			KLOG("Allocation: PDE #%d, Index: %d, Physical Address: %x, Virtual Address: %x", idx, frame_idx, frame_idx * PAGE_SIZE, physical_address_offset);
+			// KLOG("Allocation: PDE #%d, Index: %d, Physical Address: %x, Virtual Address: %x", idx, frame_idx, frame_idx * PAGE_SIZE, virtual_addr);
 			
 			// Out of Memory
 			if (frame_idx == PAGE_ERR) {
@@ -94,16 +95,16 @@ vaddr_t alloc_block() {
 
 			// Mark frame as present and invalidate for TLB
 			page_directory[idx] = (frame_idx * PAGE_SIZE) | PAGE_MB | PRESENT | READ_WRITE;
-			asm volatile ("invlpg (%0)" :: "b" (physical_address_offset) : "memory");
+			asm volatile ("invlpg (%0)" :: "b" (virtual_addr) : "memory");
 
 
-			debug_pd(idx);
+			// debug_pd(idx);
 			// Exit early
 			found = true;
 			break;
 		}
 
-		physical_address_offset += PAGE_SIZE;
+		virtual_addr += PAGE_SIZE;
 	}
 
 	// Out of Memory
@@ -111,8 +112,8 @@ vaddr_t alloc_block() {
 		KPANIC("Could not find a free virtual address!");
 	}
 
-	uint32_t retval = physical_address_offset;
-	physical_address_offset += PAGE_SIZE;
+	uint32_t retval = virtual_addr;
+	virtual_addr += PAGE_SIZE;
 
 	// Clear the memory allocated frame for the user
 	memset((void *) retval, 0, PAGE_SIZE);

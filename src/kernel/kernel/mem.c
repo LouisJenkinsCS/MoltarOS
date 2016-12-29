@@ -13,9 +13,6 @@ void mem_init() {
 	// Initialize modules we depend on
 	memheap_init(&kheap);
 	alloc_init();
-
-	// Allocate the first chunk of memory for the kernel heap
-	more_memory();
 }
 
 void *kmalloc(size_t sz) {
@@ -31,9 +28,15 @@ void *kmalloc(size_t sz) {
 		data = memheap_alloc(&kheap, sz);
 	}
 
+	if (!data) {
+		KPANIC("Heap Allocation Failed!");
+	}
+
 	return data;
 }
 
 void kfree(void *ptr) {
-	memheap_free(&kheap, ptr);
+	if (ptr) {
+		memheap_free(&kheap, ptr);
+	}
 }

@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+
+#define MIN(x, y) ((x) > (y) ? (y) : (x))
+
 #define HALT \
 do { \
 	asm volatile ("cli"); \
