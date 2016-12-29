@@ -24,18 +24,11 @@ The below depicts an early "schedule" or rather a path I will be taking in terms
 
 #Progress Update & Changelog
 
-## Version .001a
+## Version .002
 
-Implemented the GDT, IDT (and IRQs and ISRs), reprogrammed the PIC's (Master and Slave), and created an interrupt handler for the PIT. Unfortunately, right now it uses the PIT to call the RTC rather than handling RTc separately, but that will come next, kind of busy right now.
+It is FINALLY here! I have implemented not only memory management (paging and a heap allocator), but even converted to a higher-half kernel approach, which was also easier, surprisingly, than a normal identity-mapped system. I've also fixed up the tests and their output format to better portray the significance of the initialization of the kernel thus far. I am very satisfied with what I have done, but unfortunately, I have to attend to another project for the time being.
 
-![Screenshot](/os_progress.PNG)
-
-## Version .001b
-
-Implemented the keyboard driver, but it won't be able to communicate with other components (such as an interactive shell) until memory management is implemented... perhaps, not even until processes and scheduling is implemented. That is the next thing I will be releasing. Currently, when you execute
-the OS, it will have a blank screen, until you use the keyboard. When executing the keyboard, it will display what key has been pressed and what has been released... but only one at a time unfortunaately, no multi-key press events are supported.
-
-![Screenshot](/kbd_input.PNG)
+![Screenshot](/all_tests_and_heap.PNG)
 
 ## Version .001c
 
@@ -50,9 +43,15 @@ Lastly, I also added a nice logger macro, `KLOG`, and panic macro, `KPANIC`.
 
 ![Screenshot](/ram_and_kbd.PNG)
 
+## Version .001b
 
-## Version .002
+Implemented the keyboard driver, but it won't be able to communicate with other components (such as an interactive shell) until memory management is implemented... perhaps, not even until processes and scheduling is implemented. That is the next thing I will be releasing. Currently, when you execute
+the OS, it will have a blank screen, until you use the keyboard. When executing the keyboard, it will display what key has been pressed and what has been released... but only one at a time unfortunaately, no multi-key press events are supported.
 
-It is FINALLY here! I have implemented not only memory management (paging and a heap allocator), but even converted to a higher-half kernel approach, which was also easier, surprisingly, than a normal identity-mapped system. I've also fixed up the tests and their output format to better portray the significance of the initialization of the kernel thus far. I am very satisfied with what I have done, but unfortunately, I have to attend to another project for the time being.
+![Screenshot](/kbd_input.PNG)
 
-![Screenshot](/all_tests_and_heap.PNG)
+## Version .001a
+
+Implemented the GDT, IDT (and IRQs and ISRs), reprogrammed the PIC's (Master and Slave), and created an interrupt handler for the PIT. Unfortunately, right now it uses the PIT to call the RTC rather than handling RTc separately, but that will come next, kind of busy right now.
+
+![Screenshot](/os_progress.PNG)
