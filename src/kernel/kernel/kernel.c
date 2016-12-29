@@ -14,6 +14,7 @@
 #include <include/kernel/multiboot.h>
 #include <include/kernel/logger.h>
 #include <include/mm/page.h>
+#include <include/kernel/mem.h>
 #include <include/helpers.h>
 
 uint32_t PHYSICAL_MEMORY_END;
@@ -81,8 +82,16 @@ static void kernel_keyboard_test() {
 void kernel_main(void) {
 	// KLOG("Initializing Keyboard...");
 	// keyboard_init();
-	kernel_clock_test();
+	// kernel_clock_test();
 	// KLOG("Initiating Keyboard Test...");
 	// kernel_keyboard_test();
-
+	KLOG("Initializing Heap...");
+	mem_init();
+	KLOG("Allocating memory...");
+	char *str = kmalloc(3);
+	KLOG("Writing to memory...");
+	str[0] = 'H';
+	str[1] = 'i';
+	str[2] = '\0';
+	KLOG("String: %s", str);
 }

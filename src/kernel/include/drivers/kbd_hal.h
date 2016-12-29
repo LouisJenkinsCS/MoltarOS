@@ -22,7 +22,7 @@ static struct {
     // Note: All the above is packed into 1 byte. :)
 
     // Bit array of currently pressed keys
-    uint8_t pressed[BIT_ARRAY_SZ(256)];
+    uint8_t pressed[BITMAP_SIZE(256)];
 } KBD_STATE;
 
 #endif /* endif MOLTAROS_KBD_HAL_H */

@@ -84,10 +84,17 @@ global _start
 
 	; Setting up the stack and finally passing control back to our preferred language (C)
 	__start:
+		; Unmap the identity mapping established above of 0 - 4MBs, as we no longer require it.
+		; At this point, our instruction pointer no points into 0xC0000000+ area.
+		mov dword [bootstrap_page_directory], 0
+		invlpg [0]
+
 		; Setup the stack pointer to point to the stack allocated above
 		mov esp, stack_top
 
 		; EBX contains a pointer to the multiboot info structure that we should save for later
+		; Since it is the physical address, we need to convert it to it's virtual address
+		add ebx, VIRTUAL_ADDRESS_START
 		push ebx
 
 		; Zero EBP which is used to signify the end of a stack trace

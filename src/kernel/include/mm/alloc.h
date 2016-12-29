@@ -10,6 +10,6 @@ typedef uint32_t vaddr_t;
 
 void alloc_init();
 
-paddr_t alloc(size_t size, uint32_t *phys_addr, bool aligned);
+vaddr_t alloc_block();
 
 #endif
