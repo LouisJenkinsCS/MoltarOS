@@ -4,8 +4,112 @@
 		"selected_items":
 		[
 			[
+				"tmp",
+				"tmpx"
+			],
+			[
+				"total",
+				"total_memory"
+			],
+			[
+				"PHYS",
+				"PHYSICAL_MEMORY_START"
+			],
+			[
+				"timer_",
+				"timer_done"
+			],
+			[
+				"vga",
+				"vga_set_y"
+			],
+			[
+				"vga_get",
+				"vga_get_y"
+			],
+			[
+				"PHY",
+				"PHYSICAL_MEMORY_START"
+			],
+			[
+				"alloc",
+				"alloc_size"
+			],
+			[
+				"vga_se",
+				"vga_set_x"
+			],
+			[
+				"all",
+				"alloc_size"
+			],
+			[
+				"allocat",
+				"allocated_data"
+			],
+			[
+				"new",
+				"new_data"
+			],
+			[
+				"vga_set",
+				"vga_set_y"
+			],
+			[
+				"vga_",
+				"vga_get_x"
+			],
+			[
+				"PH",
+				"PHYSICAL_MEMORY_START"
+			],
+			[
+				"frame",
+				"frame_idx"
+			],
+			[
+				"un",
+				"uint32_t"
+			],
+			[
+				"PAGE",
+				"PAGE_SIZE"
+			],
+			[
+				"0x",
+				"0xC0000000"
+			],
+			[
+				"PA",
+				"PAGE_SIZE"
+			],
+			[
+				"fir",
+				"first_free_frame"
+			],
+			[
+				"inc",
+				"include"
+			],
+			[
+				"fo",
+				"found"
+			],
+			[
+				"phys",
+				"physical_address_offset"
+			],
+			[
 				"page",
-				"page_fault_handler"
+				"page_directory"
+			],
+			[
+				"add",
+				"address"
+			],
+			[
+				"Boot",
+				"bootstrap_page_directory"
 			],
 			[
 				"boot",
@@ -48,10 +152,6 @@
 				"switch_directory"
 			],
 			[
-				"PH",
-				"PHYSICAL_MEMORY_END"
-			],
-			[
 				"PHYSI",
 				"PHYSICAL_MEMORY_END"
 			],
@@ -72,27 +172,7 @@
 				"__FUNCTION__"
 			],
 			[
-				"frame",
-				"frame_addr"
-			],
-			[
-				"PAGE",
-				"PAGE_ALIGNED"
-			],
-			[
-				"PHY",
-				"PHYSICAL_MEMORY_START"
-			],
-			[
-				"PHYS",
-				"PHYSICAL_MEMORY_END"
-			],
-			[
 				"pl",
-				"physical_displacement"
-			],
-			[
-				"phys",
 				"physical_displacement"
 			],
 			[
@@ -240,47 +320,53 @@
 	"buffers":
 	[
 		{
-			"file": "src/kernel/kernel/kernel.c",
-			"settings":
-			{
-				"buffer_size": 1862,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/include/helpers.h",
-			"settings":
-			{
-				"buffer_size": 966,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/include/kernel/logger.h",
-			"settings":
-			{
-				"buffer_size": 731,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/include/mm/alloc.h",
-			"settings":
-			{
-				"buffer_size": 257,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "src/kernel/mm/alloc.c",
 			"settings":
 			{
-				"buffer_size": 1189,
+				"buffer_size": 3583,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/kernel/kernel/kernel.c",
+			"settings":
+			{
+				"buffer_size": 4731,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "README.md",
+			"settings":
+			{
+				"buffer_size": 4393,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/Markdown.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 3263,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/kernel/drivers/timer.c",
+			"settings":
+			{
+				"buffer_size": 1013,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/kernel/include/kernel/multiboot.h",
+			"settings":
+			{
+				"buffer_size": 2638,
 				"line_ending": "Windows"
 			}
 		},
@@ -288,120 +374,103 @@
 			"file": "src/kernel/x86/boot.asm",
 			"settings":
 			{
-				"buffer_size": 4334,
-				"encoding": "UTF-8",
+				"buffer_size": 4673,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/x86/linker.ld",
+			"contents": "# File Systems\n\nThere are a few questions I have on a variety of topics that relate to File Systems. They cover the topics of the VFS and their models, the actual need for 'initrd' (or initial ramdisk) and how I would make use of it, and lastly considering WHEN I should go about doing this (I.E: Before implementing Process Management and after Memory Management? Or after both?)\n\n## Virtual File System\n\nI do understand what a VFS is for, I'll say that, in that it provides a higher-level abstraction to reading and writing files that don't depend on the file system itself. The issue is that there are 3 models that are listed on OSDev's [article](http://wiki.osdev.org/VFS#VFS_Models) on it, and what I would like to know is... does the model effect compatibility with the file system drivers?\n\nFor example, I've never created a graph (and I am very willing and eager to try it out) but I feel as if it would be the best for this, so I want to create a [Node Graph](http://wiki.osdev.org/VFS#Node_Graph). For example, a Graph G(V,E) would make it extremely easy to manage things like subdirectories and symbolic links by checking if there are edges between each vertice (node). Going back one directory would be as simple as traveling along the incoming edge to it's parent. Obtaining all entries in a directory would be as easy as checking all outgoing edges. Etc.\n\nThe confusion stems from the fact that UNIX file systems use the term \"mount point\" very often, so it feels as if choosing anything but a [Mount Point List](http://wiki.osdev.org/VFS#Mount_Point_List). Would it not be possible (or feasible) to implement the other models and just keep track of the \"mount point\" of each file system?\n\n## Initrd\n\nI've always been confused about the whole reasoning behind using it. It doesn't allow me to store persistent data, why would I use it? Also for modules, how does this actually work for kernel drivers and whatnot? I understand for monolithic kernels, but lets say that I plan on making a hybrid kernel but at the moment I don't have to worry about userspace yet. Would it be worth it to create initrd? I kind of do because I want to test out the virtual file system relatively soon, where as waiting for a long time to implement ext2 (and after process management) will take quite a while.\n\nAgain, would it be worth it? As well, what about the amount of space allocated for it? Apparently initrd is supposed to be loaded alongside the kernel as a module with GRUB, but it makes no mention of the size of the memory mapping, or how to specify that size. \n\n\n## Summary\n\nThings I want to know...\n\n1. Do I need to choose a Mount Point List to satisfy the UNIX standard for \"mount points\"? Can I choose any VFS model and maintain compatibility.\n2. Is there a point of implementing initrd if I don't have userspace yet or plan on having userspace drivers for a long time?\n3. If it is worth it, how do I know how much memory is set aside for initrd's file system, and how can I specify how much it gets?",
+			"file": "/C/Users/Louis/OneDrive/Documents/tmp.mdown",
+			"file_size": 2782,
+			"file_write_time": 131276932179165313,
 			"settings":
 			{
-				"buffer_size": 733,
-				"encoding": "UTF-8",
+				"buffer_size": 3011,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "Package Control Messages\n========================\n\nMarkdownEditing\n---------------\n\n  # MarkdownEditing\n  \n  Markdown plugin for Sublime Text. Provides a decent Markdown color scheme (light and dark) with more __robust__ syntax highlighting and useful Markdown editing features for Sublime Text. 3 flavors are supported: Standard Markdown, __GitHub flavored Markdown__, MultiMarkdown.\n  \n  ![MarkdownEditing][github]\n  \n  [Dark][github 2] and [yellow][github 3] theme available ([additional](#additional-color-themes)).\n  \n  ## Overview\n  \n  * [Installation](#installation)\n  * [Features](#features)\n  * [Key Bindings](#key-bindings)\n  * [GFM Specific Features](#gfm-specific-features)\n  * [Commands for Command Palette](#commands-for-command-palette)\n  * [Configuration](#configuration)\n  * [Tips](#tips)\n  * [Similar Plugins](#similar-plugins)\n  * [Known Bugs](#known-bugs)\n  * [Contributing](#contributing)\n  * [Credits](#credits)\n  * [Donation](#donation)\n  * [License](#license)   \n  \n  ## Installation\n  \n  > __Important Note About Installation__\n  > \n  > Are you getting this error after installation: _**Error loading syntax file** \"Packages/Markdown/Markdown.tmLanguage\": Unable to open Packages/Markdown/Markdown.tmLanguage_? This is caused by open markdown files at the install time. You have to __manually change their syntax to your newly installed Markdown syntax__. Read the below paragraph for more details on this.\n  \n  _Note_: Sublime text has a native tiny package for Markdown. However, when MarkdownEditing is enabled, native package causes some conflicts. For this reason, MarkdownEditing will automatically disable it. Since it doesn't bring anything new over MarkdownEditing, this is not a loss. But remember, when you disable MarkdownEditing, you have to reenable the native one manually (if you want).\n  \n  If you are using Sublime Text 2, you have to disable the native package _manually_. To do that, add `Markdown` to your `ignored_packages` list in ST user settings:\n  \n      \"ignored_packages\": [..., \"Markdown\"],\n  \n  ### Package Control\n  \n  The preferred method of installation is via [Sublime Package Control][wbond].\n  \n  1. [Install Sublime Package Control][wbond 2]\n  2. From inside Sublime Text, open Package Control's Command Pallet: <kbd>CTRL</kbd> <kbd>SHIFT</kbd> <kbd>P</kbd> (Windows, Linux) or <kbd>CMD</kbd> <kbd>SHIFT</kbd> <kbd>P</kbd> on Mac.\n  3. Type `install package` and hit Return. A list of available packages will be displayed.\n  4. Type `MarkdownEditing` and hit Return. The package will be downloaded to the appropriate directory.\n  5. Restart Sublime Text to complete installation. Open a Markdown file and this custom theme. The features listed above should now be available.\n  \n  ### Manual Installation\n  \n  1. Download or clone this repository to a directory `MarkdownEditing` in the Sublime Text Packages directory for your platform:\n      * Mac: `git clone https://github.com/SublimeText-Markdown/MarkdownEditing.git ~/Library/Application\\ Support/Sublime\\ Text\\ 2/Packages/MarkdownEditing`\n      * Windows: `git clone https://github.com/SublimeText-Markdown/MarkdownEditing.git %APPDATA%\\Sublime/ Text/ 2/\\MarkdownEditing`\n      * Linux: `git clone https://github.com/SublimeText-Markdown/MarkdownEditing.git ~/.Sublime\\ Text\\ 2/Packages/MarkdownEditing`\n  2. Restart Sublime Text to complete installation. Open a Markdown file and this custom theme. The features listed above should now be available.\n  \n  ## Features\n  \n  * Asterisks and underscores are autopaired and will wrap selected text\n      - If you start an empty pair and hit backspace, both elements are deleted\n      - If you start an empty pair and hit space, the right element is deleted\n  * Backticks are paired\n  * At the end of a list item, pressing <kbd>Enter</kbd> will automatically insert the new list item bullet.\n      - Pressing <kbd>Tab</kbd> on the blank list item will indent it and switch the list bullet to another one (Order is `*`, `-`, `+` in a cycle).\n      - Pressing <kbd>Shift</kbd> <kbd>Tab</kbd> on the blank list item will unindent it in the same way as above.\n      - Sequential <kbd>Tab</kbd> s or <kbd>Shift</kbd> <kbd>Tab</kbd> s are supported.\n      - You can disable automatic bullet switching or choose which bullets to be used, in your settings file.\n      - If a list item contains a [GFM task][GFM], pressing <kbd>Enter</kbd> at the end of the line will continue with a new blank task.\n  * At the end of a blockquote line, pressing <kbd>Enter</kbd> will automatically extend blockquote.\n  * Selecting some text and pressing <kbd>&gt;</kbd> will convert it to blockquote. The first and the last line don't have to be fully selected; partial select works, too.\n  * Left bracket pairing is modified to eliminate the selection and leave the cursor at a point where you can insert a `[]` or `()` pair for a link\n  * Displays Markdown headers in the Project Symbol List (<kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>R</kbd>). They will start with `#`, so you will know they belong to markdown files at a glance. Also they will be on top of the list because of the presedence of `#`.\n  * <kbd>~</kbd> wraps selected text with `~~` (strikethrough).\n  * Typing `#` when there's a selection will surround it with `#` to make it a headline. Multiple presses add additional hashes, increasing the level of the header. Once you hit 6 hashes, it will reset to 0 on the next press. The `mde.match_header_hashes` will determine if the `#` are mirrored on both sides or just at the beginning of the line.\n  * Typing return at the end of a line that begins with hashmarks will insert closing hashmarks on the headline. They're not required for Markdown, it's just aesthetics, and you can change the `mde.match_header_hashes` option in your settings to disable.\n  * Setext-style headers can be completed with `Tab`. That is, typing `Tab` on a line containing only `=` or `-` characters will add or remove enough characters to it to match the length of the line above.\n  * New documents will be named automatically based on the first header.\n  \n  ## Key Bindings\n  \n  | OS X | Windows/Linux | Description |\n  |------|---------------|-------------|\n  | <kbd>⌘</kbd><kbd>⌥</kbd><kbd>V</kbd> | <kbd>Ctrl</kbd><kbd>Win</kbd><kbd>V</kbd> | Creates or pastes the contents of the clipboard as an inline link on selected text.\n  | <kbd>⌘</kbd><kbd>⌥</kbd><kbd>R</kbd> | <kbd>Ctrl</kbd><kbd>Win</kbd><kbd>R</kbd> | Creates or pastes the contents of the clipboard as a reference link.\n  | <kbd>⌘</kbd><kbd>⇧</kbd><kbd>K</kbd> | <kbd>Shift</kbd><kbd>Win</kbd><kbd>K</kbd> | Creates or pastes the contents of the clipboard as an inline image on selected text.\n  | <kbd>⌘</kbd><kbd>⌥</kbd><kbd>B</kbd> <kbd>⌘</kbd><kbd>⌥</kbd><kbd>I</kbd> | <kbd>Alt</kbd><kbd>B</kbd> <kbd>Alt</kbd><kbd>I</kbd> | These are bound to bold and italic. They work both with and without selections. If there is no selection, they will just transform the word under the cursor. These keybindings will unbold/unitalicize selection if it is already bold/italic.\n  | <kbd>⌘</kbd><kbd>^</kbd><kbd>1...6</kbd> | <kbd>Ctrl</kbd><kbd>1...6</kbd> | These will add the corresponding number of hashmarks for headlines. Works on blank lines and selected text in tandem with the above headline tools. If you select an entire existing headline, the current hashmarks will be removed and replaced with the header level you requested. This command respects the `mde.match_header_hashes` preference setting.\n  | <kbd>⌥</kbd><kbd>⇧</kbd><kbd>6</kbd> | <kbd>Alt</kbd><kbd>Shift</kbd><kbd>6</kbd> | Inserts a footnote.\n  \n  ## GFM Specific Features\n  \n  Underscores in words doesn't mess with bold or italic style:\n  \n  ![underscore-in-words][github 5]\n  \n  Fenced code blocks gets syntax highlighting inside:\n  \n  ![fenced-code-block][github 6]\n  \n  Keyboard shortcuts gets highlighted like in GitHub:\n  \n  ![keyboard-shortcut][github 7]\n  \n  Strikethrough is supported:\n  \n  ![strikethrough][github 8]\n  \n  ## Commands for Command Palette\n  \n  ### Fix Underlined Headers\n  \n  Adjusts every setext-style header to add or remove `=` or `-` characters as needed to match the lengths of their header text.\n  \n  ### Convert Underlined Headers to ATX\n  \n  Converts every setext-style header into an ATX style header. If something is selected only the headers in the selections will be converted, otherwise the conversion will be applied to the whole view.\n  \n  ### Add Missing Link Labels\n  \n  Scans document for referenced link usages (`[some link][some_ref]` and `[some link][]`) and checks if they are all defined. If there are undefined link references, command will automatically create their definition snippet at the bottom of the file.\n  \n  ### Markdown Lint\n  \n  Performs lint on current Markdown file. See [lint rules](lint_docs/RULES.md). Some of the linting rules are customizable via user settings file.\n  \n  ### Switch List Bullet Type\n  \n  Switches the highlighted list between numbered and bulleted style.\n  \n  ### Magic Footnotes Command\n  \n  Adds a footnote after the word under cursor. If cursor is already on a footnote, jumps to its definition or reference.\n  \n  ### Gather Missing Footnotes\n  \n  Add definition stubs (if there is none) for all footnotes references.\n  \n  ### Jump Reference\n  \n  Jumps cursor between definitions and references.\n  \n  ### New Reference\n  \n  Adds a new link under cursor.\n  \n  ### New Inline Link\n  \n  Adds a new inline link under cursor.\n  \n  ### New Inline Image\n  \n  Adds a new inline image under cursor.\n  \n  ### New Image\n  \n  Adds a new image under cursor.\n  \n  ### New Footnote\n  \n  Adds a footnote under cursor.\n  \n  ### Delete Reference\n  \n  Deletes the definition and references of a link.\n  \n  ### Organize References\n  \n  Sorts and gives a report on current link references usage.\n  \n  ## Configuration\n  \n  The plugin contains 3 different Markdown flavors: Standard Markdown, GitHub flavored Markdown, MultiMarkdown. Default is GitHub flavored Markdown. If you want to set another one as default, open a Markdown file and select your flavor from the menu: `View > Syntax > Open all with current extension as`. You're done.\n  \n  You may want to have a look at the default settings files. They are located at:\n  \n      Packages/MarkdownEditing/Markdown.sublime-settings         [GitHub flavored Markdown]\n      Packages/MarkdownEditing/Markdown (Standard).sublime-settings\n      Packages/MarkdownEditing/MultiMarkdown.sublime-settings\n  \n  If you want to override any of the default settings, you can open the appropriate user settings file using the `Preferences > Package Settings > Markdown Editing` menu. Each flavor has a different settings file.\n  \n  Bold and italic markers are configurable through ST shell variables. You can use `Preferences > Package Settings > Markdown Editing` menu to see the default settings file. In order to override it, copy & paste its content into the user settings file (`Packages/User/Bold and Italic Markers.tmPreferences`) from the menu and make your edits. It is pretty straightforward.\n  \n  In order to activate the dark or the yellow theme, put one of these lines to your user settings file of the flavor (`Packages/User/[flavor].sublime-settings`):\n  \n      \"color_scheme\": \"Packages/MarkdownEditing/MarkdownEditor-Dark.tmTheme\",\n      \"color_scheme\": \"Packages/MarkdownEditing/MarkdownEditor-Yellow.tmTheme\",\n  \n  If you want to go with your already existing theme, you can reenable it with the same method as above. Keep in mind that, that theme may not cover all the parts of the Markdown syntax that this plugin defines.\n  \n  ### Additional color themes:\n  \n  - [Blackboard theme][linkBlackboardTheme] by [@mdesantis][mdesantis]\n  \n  By default, when you install the plugin, files with these extensions will be assigned to Markdown syntax: \"md\", \"txt\", \"mdown\", \"markdown\", \"markdn\". If you want to prevent any of these extensions to be opened as Markdown, follow these steps:\n  \n  1. Click on the language menu at bottom right\n  2. Select \"Open all with current extension as\"\n  3. Choose your preferred syntax for that extension\n  \n  ## Tips\n  \n  We are maintaining a [tips section][tips] in our [Wiki][]. Jump there to learn from others or share your experiences with others.\n  \n  ## Similar Plugins\n  \n  * [Knockdown][]\n  \n       Knockdown offers useful Markdown features and a custom Markdown theme. All of its unique features except its theme are ported to MarkdownEditing and some of them are actually improved further in MarkdownEditing.\n  * [Sublime Markdown Extended][]\n  * [SmartMarkdown][]\n  \n  ## Known Bugs\n  \n  * Setext-style headers (`===` and `---`) do not show up in the symbol list. This is due to a Sublime Text limitation (see [#158][]). However, we are able to put a placeholder to indicate the existence of the header. We encourage you to use Atx-style headers (`#`).\n  \n  * Installing for the first time while having markdown files opened may cause MarkdownEditing to behave unexpectedly on those files. Close and reopen those files to fix it.\n  \n  ## Contributing\n  \n  See `CONTRIBUTING.md` file.\n  \n  ## Credits\n  \n  MarkdownEditing was originally created by [Brett Terpstra][brettterpstra] and has become a community project with the goal of consolidating the best features from the varied collection of Markdown packages for Sublime Text. Current development is headed up by [Ali Ayas][github 9] and [Felix Hao][github 10].\n  \n  Related blog posts from Brett:\n  * http://brettterpstra.com/2012/05/17/markdown-editing-for-sublime-text-2-humble-beginnings/\n  * http://brettterpstra.com/2013/11/23/markdownediting-for-sublime-text-updates/\n  \n  This plugin contains portions of code from [Knockdown][].\n  \n  Footnote commands were submitted by [J. Nicholas Geist][github 4] and originated at [geekabouttown][geekabouttown].\n  \n  ## Donation\n  \n  You can support [contributors](https://github.com/SublimeText-Markdown/MarkdownEditing/graphs/contributors) of this project individually. Every contributor is welcomed to add his/her line below with any content. Ordering shall be alphabetically by GitHub username.\n  \n  * [@felixhao28][github 10]: <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9QV2RFV2J8UZS\"><img src=\"https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif\" alt=\"[paypal]\" /></a>\n  * [@maliayas][github 9]: <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=W2NXRPD43YSCU&amp;lc=TR&amp;item_name=open-source&amp;item_number=markdown-editing&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted\"><img src=\"https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif\" alt=\"[paypal]\" /></a> ![donation received](http://maliayas.com/business/donation/badge.php?project=markdown_editing)\n  \n  ## License\n  \n  MarkdownEditing is released under the [MIT License][opensource].\n  \n  [TableEditor]:                 https://github.com/vkocubinsky/SublimeTableEditor\n  [Knockdown]:                   https://github.com/aziz/knockdown/\n  [Sublime Markdown Extended]:   https://github.com/jonschlinkert/sublime-markdown-extended\n  [SmartMarkdown]:               https://github.com/demon386/SmartMarkdown\n  [Typewriter]:                  https://github.com/alehandrof/Typewriter\n  [OpenUrl]:                     https://github.com/noahcoad/open-url\n  [brettterpstra]: http://brettterpstra.com\n  [geekabouttown]: http://geekabouttown.com/posts/sublime-text-2-markdown-footnote-goodness\n  [github]: https://raw.github.com/SublimeText-Markdown/MarkdownEditing/master/screenshots/light.png\n  [github 2]: https://raw.github.com/SublimeText-Markdown/MarkdownEditing/master/screenshots/dark.png\n  [github 3]: https://raw.github.com/SublimeText-Markdown/MarkdownEditing/master/screenshots/yellow.png\n  [github 4]: https://github.com/jngeist\n  [github 5]: https://raw.github.com/SublimeText-Markdown/MarkdownEditing/master/screenshots/underscore-in-words.png\n  [github 6]: https://raw.github.com/SublimeText-Markdown/MarkdownEditing/master/screenshots/fenced-code-block.png\n  [github 7]: https://raw.github.com/SublimeText-Markdown/MarkdownEditing/master/screenshots/keyboard-shortcut.png\n  [github 8]: https://raw.github.com/SublimeText-Markdown/MarkdownEditing/master/screenshots/strikethrough.png\n  [github 9]: https://github.com/maliayas\n  [github 10]: https://github.com/felixhao28\n  [opensource]: http://www.opensource.org/licenses/MIT\n  [wbond]: http://wbond.net/sublime_packages/package_control\n  [wbond 2]: http://wbond.net/sublime_packages/package_control/installation\n  [FullScreenStatus]: https://github.com/maliayas/SublimeText_FullScreenStatus\n  [macstories]: http://www.macstories.net/roundups/sublime-text-2-and-markdown-tips-tricks-and-links/\n  [tips]: https://github.com/SublimeText-Markdown/MarkdownEditing/wiki/Tips\n  [Wiki]: https://github.com/SublimeText-Markdown/MarkdownEditing/wiki\n  [GFM]: https://help.github.com/articles/github-flavored-markdown\n  [#158]: https://github.com/SublimeText-Markdown/MarkdownEditing/issues/158\n  [linkBlackboardTheme]: https://github.com/mdesantis/MarkdownEditing/blob/blackboard-theme/MarkdownEditor-Blackboard.tmTheme\n  [mdesantis]: https://github.com/mdesantis\n",
+			"contents": "'LANG_NAME' => 'C',\n'COMMENT_SINGLE' => array(1 => '//', 2 => '#'),\n'COMMENT_MULTI' => array('/*' => '*/'),\n'COMMENT_REGEXP' => array(\n    //Multiline-continued single-line comments\n    1 => '/\\/\\/(?:\\\\\\\\\\\\\\\\|\\\\\\\\\\\\n|.)*$/m',\n    //Multiline-continued preprocessor define\n    2 => '/#(?:\\\\\\\\\\\\\\\\|\\\\\\\\\\\\n|.)*$/m'\n    ),\n'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,\n'QUOTEMARKS' => array(\"'\", '\"'),\n'ESCAPE_CHAR' => '',\n'ESCAPE_REGEXP' => array(\n    //Simple Single Char Escapes\n    1 => \"#\\\\\\\\[\\\\\\\\abfnrtv\\'\\\"?\\n]#i\",\n    //Hexadecimal Char Specs\n    2 => \"#\\\\\\\\x[\\da-fA-F]{2}#\",\n    //Hexadecimal Char Specs\n    3 => \"#\\\\\\\\u[\\da-fA-F]{4}#\",\n    //Hexadecimal Char Specs\n    4 => \"#\\\\\\\\U[\\da-fA-F]{8}#\",\n    //Octal Char Specs\n    5 => \"#\\\\\\\\[0-7]{1,3}#\"\n    ),\n'NUMBERS' =>\n    GESHI_NUMBER_INT_BASIC | GESHI_NUMBER_INT_CSTYLE | GESHI_NUMBER_BIN_PREFIX_0B |\n    GESHI_NUMBER_OCT_PREFIX | GESHI_NUMBER_HEX_PREFIX | GESHI_NUMBER_FLT_NONSCI |\n    GESHI_NUMBER_FLT_NONSCI_F | GESHI_NUMBER_FLT_SCI_SHORT | GESHI_NUMBER_FLT_SCI_ZERO,\n'KEYWORDS' => array(\n    1 => array(\n        'if', 'return', 'while', 'case', 'continue', 'default',\n        'do', 'else', 'for', 'switch', 'goto'\n        ),\n    2 => array(\n        'null', 'false', 'break', 'true', 'function', 'enum', 'extern', 'inline'\n        ),\n    3 => array(\n        // assert.h\n        'assert',\n\n        //complex.h\n        'cabs', 'cacos', 'cacosh', 'carg', 'casin', 'casinh', 'catan',\n        'catanh', 'ccos', 'ccosh', 'cexp', 'cimag', 'cis', 'clog', 'conj',\n        'cpow', 'cproj', 'creal', 'csin', 'csinh', 'csqrt', 'ctan', 'ctanh',\n\n        //ctype.h\n        'digittoint', 'isalnum', 'isalpha', 'isascii', 'isblank', 'iscntrl',\n        'isdigit', 'isgraph', 'islower', 'isprint', 'ispunct', 'isspace',\n        'isupper', 'isxdigit', 'toascii', 'tolower', 'toupper',\n\n        //inttypes.h\n        'imaxabs', 'imaxdiv', 'strtoimax', 'strtoumax', 'wcstoimax',\n        'wcstoumax',\n\n        //locale.h\n        'localeconv', 'setlocale',\n\n        //math.h\n        'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh', 'exp',\n        'fabs', 'floor', 'frexp', 'ldexp', 'log', 'log10', 'modf', 'pow',\n        'sin', 'sinh', 'sqrt', 'tan', 'tanh',\n\n        //setjmp.h\n        'longjmp', 'setjmp',\n\n        //signal.h\n        'raise',\n\n        //stdarg.h\n        'va_arg', 'va_copy', 'va_end', 'va_start',\n\n        //stddef.h\n        'offsetof',\n\n        //stdio.h\n        'clearerr', 'fclose', 'fdopen', 'feof', 'ferror', 'fflush', 'fgetc',\n        'fgetpos', 'fgets', 'fopen', 'fprintf', 'fputc', 'fputchar',\n        'fputs', 'fread', 'freopen', 'fscanf', 'fseek', 'fsetpos', 'ftell',\n        'fwrite', 'getc', 'getch', 'getchar', 'gets', 'perror', 'printf',\n        'putc', 'putchar', 'puts', 'remove', 'rename', 'rewind', 'scanf',\n        'setbuf', 'setvbuf', 'snprintf', 'sprintf', 'sscanf', 'tmpfile',\n        'tmpnam', 'ungetc', 'vfprintf', 'vfscanf', 'vprintf', 'vscanf',\n        'vsprintf', 'vsscanf',\n\n        //stdlib.h\n        'abort', 'abs', 'atexit', 'atof', 'atoi', 'atol', 'bsearch',\n        'calloc', 'div', 'exit', 'free', 'getenv', 'itoa', 'labs', 'ldiv',\n        'ltoa', 'malloc', 'qsort', 'rand', 'realloc', 'srand', 'strtod',\n        'strtol', 'strtoul', 'system',\n\n        //string.h\n        'memchr', 'memcmp', 'memcpy', 'memmove', 'memset', 'strcat',\n        'strchr', 'strcmp', 'strcoll', 'strcpy', 'strcspn', 'strerror',\n        'strlen', 'strncat', 'strncmp', 'strncpy', 'strpbrk', 'strrchr',\n        'strspn', 'strstr', 'strtok', 'strxfrm',\n\n        //time.h\n        'asctime', 'clock', 'ctime', 'difftime', 'gmtime', 'localtime',\n        'mktime', 'strftime', 'time',\n\n        //wchar.h\n        'btowc', 'fgetwc', 'fgetws', 'fputwc', 'fputws', 'fwide',\n        'fwprintf', 'fwscanf', 'getwc', 'getwchar', 'mbrlen', 'mbrtowc',\n        'mbsinit', 'mbsrtowcs', 'putwc', 'putwchar', 'swprintf', 'swscanf',\n        'ungetwc', 'vfwprintf', 'vswprintf', 'vwprintf', 'wcrtomb',\n        'wcscat', 'wcschr', 'wcscmp', 'wcscoll', 'wcscpy', 'wcscspn',\n        'wcsftime', 'wcslen', 'wcsncat', 'wcsncmp', 'wcsncpy', 'wcspbrk',\n        'wcsrchr', 'wcsrtombs', 'wcsspn', 'wcsstr', 'wcstod', 'wcstok',\n        'wcstol', 'wcstoul', 'wcsxfrm', 'wctob', 'wmemchr', 'wmemcmp',\n        'wmemcpy', 'wmemmove', 'wmemset', 'wprintf', 'wscanf',\n\n        //wctype.h\n        'iswalnum', 'iswalpha', 'iswcntrl', 'iswctype', 'iswdigit',\n        'iswgraph', 'iswlower', 'iswprint', 'iswpunct', 'iswspace',\n        'iswupper', 'iswxdigit', 'towctrans', 'towlower', 'towupper',\n        'wctrans', 'wctype'\n        ),\n    4 => array(\n        'auto', 'char', 'const', 'double',  'float', 'int', 'long',\n        'register', 'short', 'signed', 'sizeof', 'static', 'struct',\n        'typedef', 'union', 'unsigned', 'void', 'volatile', 'wchar_t',\n\n        'int8', 'int16', 'int32', 'int64',\n        'uint8', 'uint16', 'uint32', 'uint64',\n\n        'int_fast8_t', 'int_fast16_t', 'int_fast32_t', 'int_fast64_t',\n        'uint_fast8_t', 'uint_fast16_t', 'uint_fast32_t', 'uint_fast64_t',\n\n        'int_least8_t', 'int_least16_t', 'int_least32_t', 'int_least64_t',\n        'uint_least8_t', 'uint_least16_t', 'uint_least32_t', 'uint_least64_t',\n\n        'int8_t', 'int16_t', 'int32_t', 'int64_t',\n        'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t',\n\n        'intmax_t', 'uintmax_t', 'intptr_t', 'uintptr_t',\n        'size_t', 'off_t'\n        ),\n    ),\n'SYMBOLS' => array(\n    '(', ')', '{', '}', '[', ']',\n    '+', '-', '*', '/', '%',\n    '=', '<', '>',\n    '!', '^', '&', '|',\n    '?', ':',\n    ';', ','\n    ),\n'CASE_SENSITIVE' => array(\n    GESHI_COMMENTS => false,\n    1 => true,\n    2 => true,\n    3 => true,\n    4 => true,\n    ),\n'STYLES' => array(\n    'KEYWORDS' => array(\n        1 => 'color: #b1b100;',\n        2 => 'color: #000000; font-weight: bold;',\n        3 => 'color: #000066;',\n        4 => 'color: #993333;'\n        ),\n    'COMMENTS' => array(\n        1 => 'color: #666666; font-style: italic;',\n        2 => 'color: #339933;',\n        'MULTI' => 'color: #808080; font-style: italic;'\n        ),\n    'ESCAPE_CHAR' => array(\n        0 => 'color: #000099; font-weight: bold;',\n        1 => 'color: #000099; font-weight: bold;',\n        2 => 'color: #660099; font-weight: bold;',\n        3 => 'color: #660099; font-weight: bold;',\n        4 => 'color: #660099; font-weight: bold;',\n        5 => 'color: #006699; font-weight: bold;',\n        'HARD' => '',\n        ),\n    'BRACKETS' => array(\n        0 => 'color: #009900;'\n        ),\n    'STRINGS' => array(\n        0 => 'color: #ff0000;'\n        ),\n    'NUMBERS' => array(\n        0 => 'color: #0000dd;',\n        GESHI_NUMBER_BIN_PREFIX_0B => 'color: #208080;',\n        GESHI_NUMBER_OCT_PREFIX => 'color: #208080;',\n        GESHI_NUMBER_HEX_PREFIX => 'color: #208080;',\n        GESHI_NUMBER_FLT_SCI_SHORT => 'color:#800080;',\n        GESHI_NUMBER_FLT_SCI_ZERO => 'color:#800080;',\n        GESHI_NUMBER_FLT_NONSCI_F => 'color:#800080;',\n        GESHI_NUMBER_FLT_NONSCI => 'color:#800080;'\n        ),\n    'METHODS' => array(\n        1 => 'color: #202020;',\n        2 => 'color: #202020;'\n        ),\n    'SYMBOLS' => array(\n        0 => 'color: #339933;'\n        ),\n    'REGEXPS' => array(\n        ),\n    'SCRIPT' => array(\n        )\n    ),\n'URLS' => array(\n    1 => '',\n    2 => '',\n    3 => 'http://www.opengroup.org/onlinepubs/009695399/functions/{FNAMEL}.html',\n    4 => ''\n    ),\n'OOLANG' => true,\n'OBJECT_SPLITTERS' => array(\n    1 => '.',\n    2 => '::'\n    ),\n'REGEXPS' => array(\n    ),\n'STRICT_MODE_APPLIES' => GESHI_NEVER,\n'SCRIPT_DELIMITERS' => array(\n    ),\n'HIGHLIGHT_STRICT_BLOCK' => array(\n    ),\n'TAB_WIDTH' => 4",
 			"settings":
 			{
-				"buffer_size": 17215,
+				"buffer_size": 7627,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Github/Code-Glosser/CodeGlosser/log.txt",
+			"settings":
+			{
+				"buffer_size": 3313,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Github/Code-Glosser/CodeGlosser/dist/log.txt",
+			"settings":
+			{
+				"buffer_size": 40784,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "{ \n    \"number-mapping\" : [\n        { \"NUMBER_INT_BASIC\" : \"(?:(?<![0-9a-z_\\.%$@])|(?<=\\.\\.))(?<![\\d\\.]e[+\\-])([1-9]\\d*?|0)(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_INT_CSTYLE\" : \"(?<![0-9a-z_\\.%])(?<![\\d\\.]e[+\\-])([1-9]\\d*?|0)l(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_BIN_SUFFIX\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])[01]+?[bB](?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_BIN_PREFIX_PERCENT\" : \"(?<![0-9a-z_\\.%])(?<![\\d\\.]e[+\\-])%[01]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_BIN_PREFIX_0B\" : \"(?<![0-9a-z_\\.%])(?<![\\d\\.]e[+\\-])0b[01]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_OCT_PREFIX\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])0[0-7]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_OCT_PREFIX_0O\" : \"(?<![0-9a-z_\\.%])(?<![\\d\\.]e[+\\-])0o[0-7]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_OCT_PREFIX_AT\" : \"(?<![0-9a-z_\\.%])(?<![\\d\\.]e[+\\-])\\@[0-7]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_OCT_SUFFIX\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])[0-7]+?o(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_HEX_PREFIX\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])0x[0-9a-fA-F]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_HEX_PREFIX_DOLLAR\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])\\$[0-9a-fA-F]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_HEX_SUFFIX\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])\\d[0-9a-fA-F]*?[hH](?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_FLT_NONSCI\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])\\d+?\\.\\d+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_FLT_NONSCI_F\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])(?:\\d+?(?:\\.\\d*?)?|\\.\\d+?)f(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_FLT_SCI_SHORT\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])\\.\\d+?(?:e[+\\-]?\\d+?)?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_FLT_SCI_ZERO\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])(?:\\d+?(?:\\.\\d*?)?|\\.\\d+?)(?:e[+\\-]?\\d+?)?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" }\n    ]\n}",
+			"file": "/C/Github/Code-Glosser/CodeGlosser/src/edu/bloomu/codeglosser/HTML/numbers.json",
+			"file_size": 1989,
+			"file_write_time": 131282032936573646,
+			"settings":
+			{
+				"buffer_size": 1970,
 				"line_ending": "Windows",
-				"name": "Package Control Messages",
-				"read_only": true,
-				"scratch": true
+				"name": "{ \"NUMBER_INT_BASIC\" : \"(?:(?<![0-9a-z_\\.%$@])|(?<"
 			}
 		},
 		{
-			"file": "src/kernel/mm/page.c",
+			"file": "src/kernel/include/helpers.h",
 			"settings":
 			{
-				"buffer_size": 6256,
-				"encoding": "UTF-8",
+				"buffer_size": 1052,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/x86/exceptions.c",
+			"file": "src/kernel/include/mm/alloc.h",
 			"settings":
 			{
-				"buffer_size": 1565,
-				"encoding": "UTF-8",
+				"buffer_size": 217,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/x86/idt.c",
+			"file": "src/kernel/include/mm/heap.h",
 			"settings":
 			{
-				"buffer_size": 7687,
-				"encoding": "UTF-8",
+				"buffer_size": 1624,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/include/x86/exceptions.h",
+			"file": "src/kernel/include/kernel/mem.h",
 			"settings":
 			{
-				"buffer_size": 126,
-				"encoding": "UTF-8",
+				"buffer_size": 218,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/drivers/vga.c",
+			"file": "src/kernel/kernel/mem.c",
 			"settings":
 			{
-				"buffer_size": 3684,
-				"encoding": "UTF-8",
+				"buffer_size": 795,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/kernel2.sym",
+			"file": "src/kernel/mm/heap.c",
 			"settings":
 			{
-				"buffer_size": 3764,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "00102d75 _start\n00102d8b _start.hang\n00000001 ALIGN_ON_PAGE\n00102670 alloc\n00102660 alloc_init\n00105018 ALLOC_PHYSICAL_ADDRESS_OFFSET\n00101ca0 as_binary\n00105c44 buf\ne4524ffb CHECKSUM\n00102410 clear_line\n00105c50 color\n001021b0 color_char\n0010543c entries\n00105022 entries\n00101a90 escaped_to_string\n00102c90 first_free_frame\n00000003 FLAGS\n00105c54 frames\n00102d50 gdt_flush\n00102d6c gdt_flush.flush\n00100200 gdt_init\n00100310 gdt_set_gate\n00102580 get_index\n001029d0 get_page\n0010503c handlers\n00102d6d idt_flush\n001004e0 idt_handler\n00100410 idt_init\n00100ed0 idt_set_gate\n00102e9b idt_setup\n00101370 inb\n001028a0 index_of\n00100f60 init_irq\n00100760 init_isr\n001005f0 init_pic\n001013c0 inl\n00102f90 int_to_str\n00102ec7 interrupt_request_0\n00102ece interrupt_request_1\n00102f0d interrupt_request_10\n00102f14 interrupt_request_11\n00102f1b interrupt_request_12\n00102f22 interrupt_request_13\n00102f29 interrupt_request_14\n00102f30 interrupt_request_15\n00102ed5 interrupt_request_2\n00102edc interrupt_request_3\n00102ee3 interrupt_request_4\n00102eea interrupt_request_5\n00102ef1 interrupt_request_6\n00102ef8 interrupt_request_7\n00102eff interrupt_request_8\n00102f06 interrupt_request_9\n00102d90 interrupt_service_request_0\n00102d9a interrupt_service_request_1\n00102df2 interrupt_service_request_10\n00102dfa interrupt_service_request_11\n00102e02 interrupt_service_request_12\n00102e0a interrupt_service_request_13\n00102e12 interrupt_service_request_14\n00102e1a interrupt_service_request_15\n00102e21 interrupt_service_request_16\n00102e28 interrupt_service_request_17\n00102e2f interrupt_service_request_18\n00102e36 interrupt_service_request_19\n00102da4 interrupt_service_request_2\n00102e3d interrupt_service_request_20\n00102e44 interrupt_service_request_21\n00102e4b interrupt_service_request_22\n00102e52 interrupt_service_request_23\n00102e59 interrupt_service_request_24\n00102e60 interrupt_service_request_25\n00102e91 interrupt_service_request_255\n00102e67 interrupt_service_request_26\n00102e6e interrupt_service_request_27\n00102e75 interrupt_service_request_28\n00102e7c interrupt_service_request_29\n00102dae interrupt_service_request_3\n00102e83 interrupt_service_request_30\n00102e8a interrupt_service_request_31\n00102db8 interrupt_service_request_4\n00102dc2 interrupt_service_request_5\n00102dcc interrupt_service_request_6\n00102dd6 interrupt_service_request_7\n00102de0 interrupt_service_request_8\n00102de8 interrupt_service_request_9\n00101390 inw\n00100540 irq_handler\n00102f37 irq_setup\n00104218 KBD_ESCAPED_SCAN_TABLE\n00104198 KBD_SCAN_TABLE\n00100010 kernel_init\n001001f0 kernel_keyboard_test\n001001e0 kernel_main\n001013f0 keyboard_init\n00101420 keyboard_irq_handler\n1badb002 MAGIC\n00102180 make_color\n00103230 memset\n001000a0 multiboot_RAM\n001012e0 outb\n00101340 outl\n00101310 outw\n001028c0 page_alloc\n00102ae0 page_fault_handler\n00102c30 page_free\n00102720 page_init\n00105004 PHYSICAL_MEMORY_END\n00105010 PHYSICAL_MEMORY_START\n00103050 printf\n00105c3c ptr\n0010501c ptr\n00103210 putchar\n001004b0 register_interrupt_handler\n00101d90 rtc_get_day\n00101d30 rtc_get_hour\n00101cd0 rtc_get_minute\n00101df0 rtc_get_month\n00101c50 rtc_get_second\n00101e50 rtc_get_year\n00101c40 rtc_init\n00101eb0 rtc_print\n00105c64 stack_bottom\n00109c64 stack_top\n00105c42 state\n00103260 strlen\n00102f70 switch_directory\n00102f88 switch_directory.label\n00105000 ticks_x\n00105008 ticks_y\n0010500c time_x\n00105014 time_y\n00101fe0 timer_default_irq\n00101fb0 timer_init\n00101ff0 timer_set_handler\n00101560 to_string\n001025a0 update_cursor\n00000002 USE_MMAP\n001023d0 vga_clear\n00102560 vga_get_x\n00102570 vga_get_y\n00104298 vga_height\n001020c0 vga_init\n001022a0 vga_print\n001022e0 vga_putc\n00102470 vga_scroll_down\n001021f0 vga_set_color\n00102500 vga_set_x\n00102530 vga_set_y\n0010429c vga_width\n00105c4c x\n00105c48 y\n",
-			"file": "src/kernel/kernel_sym.txt",
-			"file_size": 3781,
-			"file_write_time": 131273285881936187,
-			"settings":
-			{
-				"buffer_size": 3781,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/tmp/bochsout.txt",
-			"settings":
-			{
-				"buffer_size": 13873,
+				"buffer_size": 4802,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/include/mm/page.h",
-			"settings":
-			{
-				"buffer_size": 1489,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
-			"settings":
-			{
-				"buffer_size": 1811,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
 			}
 		}
 	],
@@ -478,44 +547,50 @@
 		"/C/Github/MoltarOS/src/kernel/kernel",
 		"/C/Github/MoltarOS/src/kernel/mm",
 		"/C/Github/MoltarOS/src/kernel/x86",
-		"/C/Github/MoltarOS/src/libc",
-		"/C/Github/MoltarOS/src/libc/stdio",
-		"/C/Github/MoltarOS/src/libc/stdlib",
 		"/C/Github/MoltarOS/src/tmp"
 	],
 	"file_history":
 	[
-		"/C/Users/Louis/OneDrive/Documents/tmp.mdown",
+		"/C/Github/Code-Glosser/CodeGlosser/log.txt",
+		"/C/Github/Code-Glosser/CodeGlosser/src/edu/bloomu/codeglosser/HTML/languages.json",
+		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/MarkdownEditing/Markdown.sublime-settings",
+		"/C/Github/MoltarOS/README.md",
+		"/C/Github/MoltarOS/src/libc/string/memcpy.c",
+		"/C/Github/MoltarOS/src/kernel/mm/page.c",
+		"/C/Github/MoltarOS/src/kernel/kernel/kernel.c",
+		"/C/Github/MoltarOS/src/kernel/include/kernel/multiboot.h",
+		"/C/Github/MoltarOS/src/kernel/include/drivers/kbd_hal.h",
+		"/C/Github/MoltarOS/src/kernel/include/helpers.h",
+		"/C/Github/MoltarOS/src/kernel/include/kernel/logger.h",
+		"/C/Github/MoltarOS/src/kernel/include/mm/alloc.h",
 		"/C/Github/MoltarOS/src/kernel/x86/boot.asm",
+		"/C/Github/MoltarOS/src/kernel/x86/linker.ld",
+		"/C/Github/MoltarOS/src/kernel/x86/exceptions.c",
+		"/C/Github/MoltarOS/src/kernel/x86/idt.c",
+		"/C/Github/MoltarOS/src/kernel/include/x86/exceptions.h",
+		"/C/Github/MoltarOS/src/kernel/drivers/vga.c",
+		"/C/Github/MoltarOS/src/kernel/kernel2.sym",
+		"/C/Github/MoltarOS/src/kernel/kernel_sym.txt",
+		"/C/Github/MoltarOS/src/tmp/bochsout.txt",
+		"/C/Github/MoltarOS/src/kernel/include/mm/page.h",
+		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+		"/C/Users/Louis/OneDrive/Documents/tmp.mdown",
 		"/C/Github/MoltarOS/src/kernel/x86/page.asm",
 		"/C/Github/MoltarOS/src/kernel/kernel.sym",
 		"/C/Github/MoltarOS/src/kernel/Makefile",
 		"/C/Github/MoltarOS/src/libc/Makefile",
-		"/C/Github/MoltarOS/src/kernel/include/kernel/multiboot.h",
-		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
 		"/C/Github/MoltarOS/src/build.sh",
-		"/C/Github/MoltarOS/src/kernel/include/kernel/logger.h",
-		"/C/Github/MoltarOS/src/kernel/kernel/kernel.c",
 		"/C/Github/MoltarOS/src/libc/stdio/printf.c",
 		"/C/Github/MoltarOS/src/kernel/mm/heap.c",
-		"/C/Github/MoltarOS/src/kernel/include/mm/alloc.h",
 		"/C/Github/MoltarOS/src/kernel/drivers/kbd.c",
 		"/C/Github/MoltarOS/src/kernel/drivers/rtc.c",
-		"/C/Github/MoltarOS/README.md",
-		"/C/Github/MoltarOS/src/kernel/include/mm/page.h",
-		"/C/Github/MoltarOS/src/kernel/mm/page.c",
-		"/C/Github/MoltarOS/src/kernel/x86/exceptions.c",
 		"/C/Github/MoltarOS/src/kernel/x86/gdt.c",
-		"/C/Github/MoltarOS/src/kernel/x86/idt.c",
 		"/C/Github/MoltarOS/src/kernel/x86/io_port.c",
 		"/C/Github/MoltarOS/src/libc/stdio/putchar.c",
-		"/C/Github/MoltarOS/src/kernel/include/drivers/kbd_hal.h",
 		"/C/Github/MoltarOS/src/kernel/include/drivers/timer.h",
 		"/C/Github/MoltarOS/src/kernel/drivers/timer.c",
-		"/C/Github/MoltarOS/src/kernel/drivers/vga.c",
 		"/C/Github/MoltarOS/src/libc/string/memset.c",
 		"/C/Github/MoltarOS/src/kernel/include/mm/heap.h",
-		"/C/Github/MoltarOS/src/kernel/include/helpers.h",
 		"/C/Github/MoltarOS/src/kernel/include/kernel/interrupt.h",
 		"/C/Github/MoltarOS/src/kernel/kernel/multiboot.h",
 		"/C/Github/MoltarOS/src/kernel/kernel/interrupt.c",
@@ -549,6 +624,31 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"(GESHI_.*\\w)\\s*",
+			"(GESHI_.*\\w)",
+			"(GESHI_.*)(?,)",
+			"\\|",
+			"\\)",
+			"array\\(",
+			"=>",
+			"'",
+			"//.*",
+			"GESHI_",
+			"\\\\",
+			"\\",
+			"(\".*\") :.*(\".*\"),",
+			"{ ",
+			"'\\(",
+			"',",
+			"GESHI_",
+			"(GESHI.*) :",
+			"=>\\n",
+			"}",
+			"(\".*\") => array\\((.*)\\),",
+			"'",
+			"Testing",
+			"physical_address_offset",
+			"const",
 			"c60",
 			"560",
 			" \\w ",
@@ -587,6 +687,25 @@
 		"regex": true,
 		"replace_history":
 		[
+			",",
+			"]",
+			"[",
+			":",
+			"\"",
+			"",
+			"\\\\\\",
+			"\\\\",
+			"{ $1 : $2 },",
+			"\"(",
+			"\",",
+			"",
+			"\"$1\" :",
+			":",
+			"},",
+			"{ $1 : [$2] }",
+			"$1 : [$2]",
+			"\"",
+			"virtual_addr",
 			" ",
 			"",
 			" ",
@@ -615,24 +734,52 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 10,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/kernel/kernel/kernel.c",
+					"file": "src/kernel/mm/alloc.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1862,
+						"buffer_size": 3583,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1332,
-								1332
+								2137,
+								2137
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1560.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/kernel/kernel/kernel.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4731,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2671,
+								2671
 							]
 						],
 						"settings":
@@ -641,55 +788,317 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 720.0,
+						"translation.y": 1700.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "src/kernel/include/helpers.h",
+					"buffer": 2,
+					"file": "README.md",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 966,
+						"buffer_size": 4393,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								576,
-								576
+								1709,
+								1709
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
+							"color_scheme": "Packages/MarkdownEditing/MarkdownEditor-Dark.tmTheme",
+							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 720.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/Markdown.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3263,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								162,
+								162
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/kernel/drivers/timer.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1013,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								342,
+								342
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/kernel/include/kernel/multiboot.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2638,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2464,
+								2464
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 528.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/kernel/x86/boot.asm",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 4673,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2933,
+								2933
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/MasmAssembly/MasmAssembly.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1380.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "src/kernel/include/kernel/logger.h",
+					"buffer": 7,
+					"file": "/C/Users/Louis/OneDrive/Documents/tmp.mdown",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 731,
+						"buffer_size": 3011,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								301,
-								301
+								1292,
+								1292
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/MarkdownEditing/MarkdownEditor-Dark.tmTheme",
+							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 154.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7627,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5543,
+								5543
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2160.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/C/Github/Code-Glosser/CodeGlosser/log.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3313,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2176,
+								2176
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 144.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/C/Github/Code-Glosser/CodeGlosser/dist/log.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 40784,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12009,
+								12009
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1320.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "/C/Github/Code-Glosser/CodeGlosser/src/edu/bloomu/codeglosser/HTML/numbers.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1970,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1968,
+								7
+							]
+						],
+						"settings":
+						{
+							"auto_name": "{ \"NUMBER_INT_BASIC\" : \"(?:(?<![0-9a-z_\\.%$@])|(?<",
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "src/kernel/include/helpers.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1052,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								179,
+								179
 							]
 						],
 						"settings":
@@ -700,16 +1109,16 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 13,
 					"file": "src/kernel/include/mm/alloc.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 257,
+						"buffer_size": 217,
 						"regions":
 						{
 						},
@@ -728,226 +1137,53 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "src/kernel/mm/alloc.c",
+					"buffer": 14,
+					"file": "src/kernel/include/mm/heap.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1189,
+						"buffer_size": 1624,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								443,
-								443
+								144,
+								144
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 60.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/kernel/x86/boot.asm",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4334,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2253,
-								2253
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MasmAssembly/MasmAssembly.tmLanguage",
+							"syntax": "Packages/C++/C++.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2140.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/kernel/x86/linker.ld",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 733,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								225,
-								225
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 17215,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								17215,
-								17215
-							]
-						],
-						"settings":
-						{
-							"auto_indent": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"tab_width": 2,
-							"word_wrap": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "src/kernel/mm/page.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6256,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4823,
-								4823
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2880.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "src/kernel/x86/exceptions.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1565,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								961,
-								961
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "src/kernel/x86/idt.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7687,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1297,
-								1312
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 524.0,
+						"translation.y": 180.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
-					"file": "src/kernel/include/x86/exceptions.h",
+					"buffer": 15,
+					"file": "src/kernel/include/kernel/mem.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 126,
+						"buffer_size": 218,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								76,
-								76
+								22,
+								22
 							]
 						],
 						"settings":
@@ -958,24 +1194,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
-					"file": "src/kernel/drivers/vga.c",
+					"buffer": 16,
+					"file": "src/kernel/kernel/mem.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3684,
+						"buffer_size": 795,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								633,
-								633
+								667,
+								667
 							]
 						],
 						"settings":
@@ -987,150 +1223,36 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "src/kernel/kernel2.sym",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3764,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3212,
-								3214
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 2105.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 16,
-					"type": "text"
-				},
-				{
-					"buffer": 14,
-					"file": "src/kernel/kernel_sym.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3781,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3172,
-								3172
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 1965.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 15,
-					"type": "text"
-				},
-				{
-					"buffer": 15,
-					"file": "src/tmp/bochsout.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 13873,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 2760.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 14,
-					"type": "text"
-				},
-				{
-					"buffer": 16,
-					"file": "src/kernel/include/mm/page.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1489,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								118,
-								118
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 240.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
 					"buffer": 17,
-					"file": "/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+					"file": "src/kernel/mm/heap.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1811,
+						"buffer_size": 4802,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1519,
+								1519
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 900.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 16,
 					"type": "text"
 				}
 			]

@@ -63,7 +63,7 @@ struct __attribute__((packed)) idt_ptr {
 	Structure of which the CPU will align and push each register on the stack. The stack pointer (esp)
 	is converted into this structure to allow easier access to the registers directly.
 */
-struct registers {
+typedef struct registers {
 	// Index of the current data segment
 	uint32_t ds;
 
@@ -88,7 +88,7 @@ struct registers {
 	uint32_t eflags;
 	uint32_t useresp;
 	uint32_t ss;
-};
+} regs_t;
 
 typedef void (*interrupt_handler)(struct registers *);
 
