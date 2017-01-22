@@ -7,7 +7,8 @@
 typedef void (*task_fp)(void *);
 
 typedef struct process {
-	regs_t regs;
+	uint32_t eip;
+	uint32_t *page_directory;
 	size_t id;
 	struct process *next;
 } proc_t;

@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"switch",
+				"switch_task"
+			],
+			[
 				"tmp",
 				"tmpx"
 			],
@@ -320,156 +324,37 @@
 	"buffers":
 	[
 		{
-			"file": "src/kernel/mm/alloc.c",
+			"file": "src/kernel/include/sched/process.h",
 			"settings":
 			{
-				"buffer_size": 3583,
+				"buffer_size": 293,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/kernel/kernel.c",
+			"file": "src/kernel/sched/process.c",
 			"settings":
 			{
-				"buffer_size": 4731,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "README.md",
-			"settings":
-			{
-				"buffer_size": 4393,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/Markdown.sublime-settings",
-			"settings":
-			{
-				"buffer_size": 3263,
+				"buffer_size": 1242,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/drivers/timer.c",
+			"file": "src/kernel/sched/process.asm",
 			"settings":
 			{
-				"buffer_size": 1013,
+				"buffer_size": 228,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/include/kernel/multiboot.h",
+			"file": "src/kernel/include/x86/idt.h",
 			"settings":
 			{
-				"buffer_size": 2638,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/x86/boot.asm",
-			"settings":
-			{
-				"buffer_size": 4673,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "# File Systems\n\nThere are a few questions I have on a variety of topics that relate to File Systems. They cover the topics of the VFS and their models, the actual need for 'initrd' (or initial ramdisk) and how I would make use of it, and lastly considering WHEN I should go about doing this (I.E: Before implementing Process Management and after Memory Management? Or after both?)\n\n## Virtual File System\n\nI do understand what a VFS is for, I'll say that, in that it provides a higher-level abstraction to reading and writing files that don't depend on the file system itself. The issue is that there are 3 models that are listed on OSDev's [article](http://wiki.osdev.org/VFS#VFS_Models) on it, and what I would like to know is... does the model effect compatibility with the file system drivers?\n\nFor example, I've never created a graph (and I am very willing and eager to try it out) but I feel as if it would be the best for this, so I want to create a [Node Graph](http://wiki.osdev.org/VFS#Node_Graph). For example, a Graph G(V,E) would make it extremely easy to manage things like subdirectories and symbolic links by checking if there are edges between each vertice (node). Going back one directory would be as simple as traveling along the incoming edge to it's parent. Obtaining all entries in a directory would be as easy as checking all outgoing edges. Etc.\n\nThe confusion stems from the fact that UNIX file systems use the term \"mount point\" very often, so it feels as if choosing anything but a [Mount Point List](http://wiki.osdev.org/VFS#Mount_Point_List). Would it not be possible (or feasible) to implement the other models and just keep track of the \"mount point\" of each file system?\n\n## Initrd\n\nI've always been confused about the whole reasoning behind using it. It doesn't allow me to store persistent data, why would I use it? Also for modules, how does this actually work for kernel drivers and whatnot? I understand for monolithic kernels, but lets say that I plan on making a hybrid kernel but at the moment I don't have to worry about userspace yet. Would it be worth it to create initrd? I kind of do because I want to test out the virtual file system relatively soon, where as waiting for a long time to implement ext2 (and after process management) will take quite a while.\n\nAgain, would it be worth it? As well, what about the amount of space allocated for it? Apparently initrd is supposed to be loaded alongside the kernel as a module with GRUB, but it makes no mention of the size of the memory mapping, or how to specify that size. \n\n\n## Summary\n\nThings I want to know...\n\n1. Do I need to choose a Mount Point List to satisfy the UNIX standard for \"mount points\"? Can I choose any VFS model and maintain compatibility.\n2. Is there a point of implementing initrd if I don't have userspace yet or plan on having userspace drivers for a long time?\n3. If it is worth it, how do I know how much memory is set aside for initrd's file system, and how can I specify how much it gets?",
-			"file": "/C/Users/Louis/OneDrive/Documents/tmp.mdown",
-			"file_size": 2782,
-			"file_write_time": 131276932179165313,
-			"settings":
-			{
-				"buffer_size": 3011,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "'LANG_NAME' => 'C',\n'COMMENT_SINGLE' => array(1 => '//', 2 => '#'),\n'COMMENT_MULTI' => array('/*' => '*/'),\n'COMMENT_REGEXP' => array(\n    //Multiline-continued single-line comments\n    1 => '/\\/\\/(?:\\\\\\\\\\\\\\\\|\\\\\\\\\\\\n|.)*$/m',\n    //Multiline-continued preprocessor define\n    2 => '/#(?:\\\\\\\\\\\\\\\\|\\\\\\\\\\\\n|.)*$/m'\n    ),\n'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,\n'QUOTEMARKS' => array(\"'\", '\"'),\n'ESCAPE_CHAR' => '',\n'ESCAPE_REGEXP' => array(\n    //Simple Single Char Escapes\n    1 => \"#\\\\\\\\[\\\\\\\\abfnrtv\\'\\\"?\\n]#i\",\n    //Hexadecimal Char Specs\n    2 => \"#\\\\\\\\x[\\da-fA-F]{2}#\",\n    //Hexadecimal Char Specs\n    3 => \"#\\\\\\\\u[\\da-fA-F]{4}#\",\n    //Hexadecimal Char Specs\n    4 => \"#\\\\\\\\U[\\da-fA-F]{8}#\",\n    //Octal Char Specs\n    5 => \"#\\\\\\\\[0-7]{1,3}#\"\n    ),\n'NUMBERS' =>\n    GESHI_NUMBER_INT_BASIC | GESHI_NUMBER_INT_CSTYLE | GESHI_NUMBER_BIN_PREFIX_0B |\n    GESHI_NUMBER_OCT_PREFIX | GESHI_NUMBER_HEX_PREFIX | GESHI_NUMBER_FLT_NONSCI |\n    GESHI_NUMBER_FLT_NONSCI_F | GESHI_NUMBER_FLT_SCI_SHORT | GESHI_NUMBER_FLT_SCI_ZERO,\n'KEYWORDS' => array(\n    1 => array(\n        'if', 'return', 'while', 'case', 'continue', 'default',\n        'do', 'else', 'for', 'switch', 'goto'\n        ),\n    2 => array(\n        'null', 'false', 'break', 'true', 'function', 'enum', 'extern', 'inline'\n        ),\n    3 => array(\n        // assert.h\n        'assert',\n\n        //complex.h\n        'cabs', 'cacos', 'cacosh', 'carg', 'casin', 'casinh', 'catan',\n        'catanh', 'ccos', 'ccosh', 'cexp', 'cimag', 'cis', 'clog', 'conj',\n        'cpow', 'cproj', 'creal', 'csin', 'csinh', 'csqrt', 'ctan', 'ctanh',\n\n        //ctype.h\n        'digittoint', 'isalnum', 'isalpha', 'isascii', 'isblank', 'iscntrl',\n        'isdigit', 'isgraph', 'islower', 'isprint', 'ispunct', 'isspace',\n        'isupper', 'isxdigit', 'toascii', 'tolower', 'toupper',\n\n        //inttypes.h\n        'imaxabs', 'imaxdiv', 'strtoimax', 'strtoumax', 'wcstoimax',\n        'wcstoumax',\n\n        //locale.h\n        'localeconv', 'setlocale',\n\n        //math.h\n        'acos', 'asin', 'atan', 'atan2', 'ceil', 'cos', 'cosh', 'exp',\n        'fabs', 'floor', 'frexp', 'ldexp', 'log', 'log10', 'modf', 'pow',\n        'sin', 'sinh', 'sqrt', 'tan', 'tanh',\n\n        //setjmp.h\n        'longjmp', 'setjmp',\n\n        //signal.h\n        'raise',\n\n        //stdarg.h\n        'va_arg', 'va_copy', 'va_end', 'va_start',\n\n        //stddef.h\n        'offsetof',\n\n        //stdio.h\n        'clearerr', 'fclose', 'fdopen', 'feof', 'ferror', 'fflush', 'fgetc',\n        'fgetpos', 'fgets', 'fopen', 'fprintf', 'fputc', 'fputchar',\n        'fputs', 'fread', 'freopen', 'fscanf', 'fseek', 'fsetpos', 'ftell',\n        'fwrite', 'getc', 'getch', 'getchar', 'gets', 'perror', 'printf',\n        'putc', 'putchar', 'puts', 'remove', 'rename', 'rewind', 'scanf',\n        'setbuf', 'setvbuf', 'snprintf', 'sprintf', 'sscanf', 'tmpfile',\n        'tmpnam', 'ungetc', 'vfprintf', 'vfscanf', 'vprintf', 'vscanf',\n        'vsprintf', 'vsscanf',\n\n        //stdlib.h\n        'abort', 'abs', 'atexit', 'atof', 'atoi', 'atol', 'bsearch',\n        'calloc', 'div', 'exit', 'free', 'getenv', 'itoa', 'labs', 'ldiv',\n        'ltoa', 'malloc', 'qsort', 'rand', 'realloc', 'srand', 'strtod',\n        'strtol', 'strtoul', 'system',\n\n        //string.h\n        'memchr', 'memcmp', 'memcpy', 'memmove', 'memset', 'strcat',\n        'strchr', 'strcmp', 'strcoll', 'strcpy', 'strcspn', 'strerror',\n        'strlen', 'strncat', 'strncmp', 'strncpy', 'strpbrk', 'strrchr',\n        'strspn', 'strstr', 'strtok', 'strxfrm',\n\n        //time.h\n        'asctime', 'clock', 'ctime', 'difftime', 'gmtime', 'localtime',\n        'mktime', 'strftime', 'time',\n\n        //wchar.h\n        'btowc', 'fgetwc', 'fgetws', 'fputwc', 'fputws', 'fwide',\n        'fwprintf', 'fwscanf', 'getwc', 'getwchar', 'mbrlen', 'mbrtowc',\n        'mbsinit', 'mbsrtowcs', 'putwc', 'putwchar', 'swprintf', 'swscanf',\n        'ungetwc', 'vfwprintf', 'vswprintf', 'vwprintf', 'wcrtomb',\n        'wcscat', 'wcschr', 'wcscmp', 'wcscoll', 'wcscpy', 'wcscspn',\n        'wcsftime', 'wcslen', 'wcsncat', 'wcsncmp', 'wcsncpy', 'wcspbrk',\n        'wcsrchr', 'wcsrtombs', 'wcsspn', 'wcsstr', 'wcstod', 'wcstok',\n        'wcstol', 'wcstoul', 'wcsxfrm', 'wctob', 'wmemchr', 'wmemcmp',\n        'wmemcpy', 'wmemmove', 'wmemset', 'wprintf', 'wscanf',\n\n        //wctype.h\n        'iswalnum', 'iswalpha', 'iswcntrl', 'iswctype', 'iswdigit',\n        'iswgraph', 'iswlower', 'iswprint', 'iswpunct', 'iswspace',\n        'iswupper', 'iswxdigit', 'towctrans', 'towlower', 'towupper',\n        'wctrans', 'wctype'\n        ),\n    4 => array(\n        'auto', 'char', 'const', 'double',  'float', 'int', 'long',\n        'register', 'short', 'signed', 'sizeof', 'static', 'struct',\n        'typedef', 'union', 'unsigned', 'void', 'volatile', 'wchar_t',\n\n        'int8', 'int16', 'int32', 'int64',\n        'uint8', 'uint16', 'uint32', 'uint64',\n\n        'int_fast8_t', 'int_fast16_t', 'int_fast32_t', 'int_fast64_t',\n        'uint_fast8_t', 'uint_fast16_t', 'uint_fast32_t', 'uint_fast64_t',\n\n        'int_least8_t', 'int_least16_t', 'int_least32_t', 'int_least64_t',\n        'uint_least8_t', 'uint_least16_t', 'uint_least32_t', 'uint_least64_t',\n\n        'int8_t', 'int16_t', 'int32_t', 'int64_t',\n        'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t',\n\n        'intmax_t', 'uintmax_t', 'intptr_t', 'uintptr_t',\n        'size_t', 'off_t'\n        ),\n    ),\n'SYMBOLS' => array(\n    '(', ')', '{', '}', '[', ']',\n    '+', '-', '*', '/', '%',\n    '=', '<', '>',\n    '!', '^', '&', '|',\n    '?', ':',\n    ';', ','\n    ),\n'CASE_SENSITIVE' => array(\n    GESHI_COMMENTS => false,\n    1 => true,\n    2 => true,\n    3 => true,\n    4 => true,\n    ),\n'STYLES' => array(\n    'KEYWORDS' => array(\n        1 => 'color: #b1b100;',\n        2 => 'color: #000000; font-weight: bold;',\n        3 => 'color: #000066;',\n        4 => 'color: #993333;'\n        ),\n    'COMMENTS' => array(\n        1 => 'color: #666666; font-style: italic;',\n        2 => 'color: #339933;',\n        'MULTI' => 'color: #808080; font-style: italic;'\n        ),\n    'ESCAPE_CHAR' => array(\n        0 => 'color: #000099; font-weight: bold;',\n        1 => 'color: #000099; font-weight: bold;',\n        2 => 'color: #660099; font-weight: bold;',\n        3 => 'color: #660099; font-weight: bold;',\n        4 => 'color: #660099; font-weight: bold;',\n        5 => 'color: #006699; font-weight: bold;',\n        'HARD' => '',\n        ),\n    'BRACKETS' => array(\n        0 => 'color: #009900;'\n        ),\n    'STRINGS' => array(\n        0 => 'color: #ff0000;'\n        ),\n    'NUMBERS' => array(\n        0 => 'color: #0000dd;',\n        GESHI_NUMBER_BIN_PREFIX_0B => 'color: #208080;',\n        GESHI_NUMBER_OCT_PREFIX => 'color: #208080;',\n        GESHI_NUMBER_HEX_PREFIX => 'color: #208080;',\n        GESHI_NUMBER_FLT_SCI_SHORT => 'color:#800080;',\n        GESHI_NUMBER_FLT_SCI_ZERO => 'color:#800080;',\n        GESHI_NUMBER_FLT_NONSCI_F => 'color:#800080;',\n        GESHI_NUMBER_FLT_NONSCI => 'color:#800080;'\n        ),\n    'METHODS' => array(\n        1 => 'color: #202020;',\n        2 => 'color: #202020;'\n        ),\n    'SYMBOLS' => array(\n        0 => 'color: #339933;'\n        ),\n    'REGEXPS' => array(\n        ),\n    'SCRIPT' => array(\n        )\n    ),\n'URLS' => array(\n    1 => '',\n    2 => '',\n    3 => 'http://www.opengroup.org/onlinepubs/009695399/functions/{FNAMEL}.html',\n    4 => ''\n    ),\n'OOLANG' => true,\n'OBJECT_SPLITTERS' => array(\n    1 => '.',\n    2 => '::'\n    ),\n'REGEXPS' => array(\n    ),\n'STRICT_MODE_APPLIES' => GESHI_NEVER,\n'SCRIPT_DELIMITERS' => array(\n    ),\n'HIGHLIGHT_STRICT_BLOCK' => array(\n    ),\n'TAB_WIDTH' => 4",
-			"settings":
-			{
-				"buffer_size": 7627,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Github/Code-Glosser/CodeGlosser/log.txt",
-			"settings":
-			{
-				"buffer_size": 3313,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Github/Code-Glosser/CodeGlosser/dist/log.txt",
-			"settings":
-			{
-				"buffer_size": 40784,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "{ \n    \"number-mapping\" : [\n        { \"NUMBER_INT_BASIC\" : \"(?:(?<![0-9a-z_\\.%$@])|(?<=\\.\\.))(?<![\\d\\.]e[+\\-])([1-9]\\d*?|0)(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_INT_CSTYLE\" : \"(?<![0-9a-z_\\.%])(?<![\\d\\.]e[+\\-])([1-9]\\d*?|0)l(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_BIN_SUFFIX\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])[01]+?[bB](?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_BIN_PREFIX_PERCENT\" : \"(?<![0-9a-z_\\.%])(?<![\\d\\.]e[+\\-])%[01]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_BIN_PREFIX_0B\" : \"(?<![0-9a-z_\\.%])(?<![\\d\\.]e[+\\-])0b[01]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_OCT_PREFIX\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])0[0-7]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_OCT_PREFIX_0O\" : \"(?<![0-9a-z_\\.%])(?<![\\d\\.]e[+\\-])0o[0-7]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_OCT_PREFIX_AT\" : \"(?<![0-9a-z_\\.%])(?<![\\d\\.]e[+\\-])\\@[0-7]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_OCT_SUFFIX\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])[0-7]+?o(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_HEX_PREFIX\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])0x[0-9a-fA-F]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_HEX_PREFIX_DOLLAR\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])\\$[0-9a-fA-F]+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_HEX_SUFFIX\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])\\d[0-9a-fA-F]*?[hH](?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_FLT_NONSCI\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])\\d+?\\.\\d+?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_FLT_NONSCI_F\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])(?:\\d+?(?:\\.\\d*?)?|\\.\\d+?)f(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_FLT_SCI_SHORT\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])\\.\\d+?(?:e[+\\-]?\\d+?)?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" },\n        { \"NUMBER_FLT_SCI_ZERO\" : \"(?<![0-9a-z_\\.])(?<![\\d\\.]e[+\\-])(?:\\d+?(?:\\.\\d*?)?|\\.\\d+?)(?:e[+\\-]?\\d+?)?(?![0-9a-z]|\\.(?:[eE][+\\-]?)?\\d)\" }\n    ]\n}",
-			"file": "/C/Github/Code-Glosser/CodeGlosser/src/edu/bloomu/codeglosser/HTML/numbers.json",
-			"file_size": 1989,
-			"file_write_time": 131282032936573646,
-			"settings":
-			{
-				"buffer_size": 1970,
-				"line_ending": "Windows",
-				"name": "{ \"NUMBER_INT_BASIC\" : \"(?:(?<![0-9a-z_\\.%$@])|(?<"
-			}
-		},
-		{
-			"file": "src/kernel/include/helpers.h",
-			"settings":
-			{
-				"buffer_size": 1052,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/include/mm/alloc.h",
-			"settings":
-			{
-				"buffer_size": 217,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/include/mm/heap.h",
-			"settings":
-			{
-				"buffer_size": 1624,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/include/kernel/mem.h",
-			"settings":
-			{
-				"buffer_size": 218,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/kernel/mem.c",
-			"settings":
-			{
-				"buffer_size": 795,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/mm/heap.c",
-			"settings":
-			{
-				"buffer_size": 4802,
+				"buffer_size": 4642,
 				"line_ending": "Windows"
 			}
 		}
@@ -540,29 +425,37 @@
 		"/C/Github/MoltarOS/src/kernel",
 		"/C/Github/MoltarOS/src/kernel/drivers",
 		"/C/Github/MoltarOS/src/kernel/include",
-		"/C/Github/MoltarOS/src/kernel/include/drivers",
-		"/C/Github/MoltarOS/src/kernel/include/kernel",
-		"/C/Github/MoltarOS/src/kernel/include/mm",
 		"/C/Github/MoltarOS/src/kernel/include/x86",
 		"/C/Github/MoltarOS/src/kernel/kernel",
-		"/C/Github/MoltarOS/src/kernel/mm",
+		"/C/Github/MoltarOS/src/kernel/sched",
 		"/C/Github/MoltarOS/src/kernel/x86",
 		"/C/Github/MoltarOS/src/tmp"
 	],
 	"file_history":
 	[
+		"/C/Github/MoltarOS/src/kernel/kernel/kernel.c",
+		"/C/Github/MoltarOS/src/kernel/mm/alloc.c",
+		"/C/Github/MoltarOS/src/kernel/include/x86/idt.h",
+		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/Markdown.sublime-settings",
+		"/C/Github/MoltarOS/src/kernel/drivers/timer.c",
+		"/C/Github/MoltarOS/src/kernel/include/kernel/multiboot.h",
 		"/C/Github/Code-Glosser/CodeGlosser/log.txt",
+		"/C/Github/Code-Glosser/CodeGlosser/src/edu/bloomu/codeglosser/HTML/numbers.json",
+		"/C/Github/MoltarOS/src/kernel/include/helpers.h",
+		"/C/Github/MoltarOS/src/kernel/include/mm/alloc.h",
+		"/C/Github/MoltarOS/src/kernel/include/mm/heap.h",
+		"/C/Github/MoltarOS/src/kernel/include/kernel/mem.h",
+		"/C/Github/MoltarOS/src/kernel/kernel/mem.c",
+		"/C/Github/MoltarOS/src/kernel/mm/heap.c",
+		"/C/Github/MoltarOS/README.md",
+		"/C/Users/Louis/OneDrive/Documents/tmp.mdown",
+		"/C/Github/Code-Glosser/CodeGlosser/dist/log.txt",
 		"/C/Github/Code-Glosser/CodeGlosser/src/edu/bloomu/codeglosser/HTML/languages.json",
 		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/MarkdownEditing/Markdown.sublime-settings",
-		"/C/Github/MoltarOS/README.md",
 		"/C/Github/MoltarOS/src/libc/string/memcpy.c",
 		"/C/Github/MoltarOS/src/kernel/mm/page.c",
-		"/C/Github/MoltarOS/src/kernel/kernel/kernel.c",
-		"/C/Github/MoltarOS/src/kernel/include/kernel/multiboot.h",
 		"/C/Github/MoltarOS/src/kernel/include/drivers/kbd_hal.h",
-		"/C/Github/MoltarOS/src/kernel/include/helpers.h",
 		"/C/Github/MoltarOS/src/kernel/include/kernel/logger.h",
-		"/C/Github/MoltarOS/src/kernel/include/mm/alloc.h",
 		"/C/Github/MoltarOS/src/kernel/x86/boot.asm",
 		"/C/Github/MoltarOS/src/kernel/x86/linker.ld",
 		"/C/Github/MoltarOS/src/kernel/x86/exceptions.c",
@@ -574,23 +467,19 @@
 		"/C/Github/MoltarOS/src/tmp/bochsout.txt",
 		"/C/Github/MoltarOS/src/kernel/include/mm/page.h",
 		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
-		"/C/Users/Louis/OneDrive/Documents/tmp.mdown",
 		"/C/Github/MoltarOS/src/kernel/x86/page.asm",
 		"/C/Github/MoltarOS/src/kernel/kernel.sym",
 		"/C/Github/MoltarOS/src/kernel/Makefile",
 		"/C/Github/MoltarOS/src/libc/Makefile",
 		"/C/Github/MoltarOS/src/build.sh",
 		"/C/Github/MoltarOS/src/libc/stdio/printf.c",
-		"/C/Github/MoltarOS/src/kernel/mm/heap.c",
 		"/C/Github/MoltarOS/src/kernel/drivers/kbd.c",
 		"/C/Github/MoltarOS/src/kernel/drivers/rtc.c",
 		"/C/Github/MoltarOS/src/kernel/x86/gdt.c",
 		"/C/Github/MoltarOS/src/kernel/x86/io_port.c",
 		"/C/Github/MoltarOS/src/libc/stdio/putchar.c",
 		"/C/Github/MoltarOS/src/kernel/include/drivers/timer.h",
-		"/C/Github/MoltarOS/src/kernel/drivers/timer.c",
 		"/C/Github/MoltarOS/src/libc/string/memset.c",
-		"/C/Github/MoltarOS/src/kernel/include/mm/heap.h",
 		"/C/Github/MoltarOS/src/kernel/include/kernel/interrupt.h",
 		"/C/Github/MoltarOS/src/kernel/kernel/multiboot.h",
 		"/C/Github/MoltarOS/src/kernel/kernel/interrupt.c",
@@ -734,24 +623,52 @@
 	"groups":
 	[
 		{
-			"selected": 10,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/kernel/mm/alloc.c",
+					"file": "src/kernel/include/sched/process.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3583,
+						"buffer_size": 293,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2137,
-								2137
+								242,
+								242
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/kernel/sched/process.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1242,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								808,
+								808
 							]
 						],
 						"settings":
@@ -759,402 +676,55 @@
 							"syntax": "Packages/C++/C.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1560.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/kernel/kernel/kernel.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4731,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2671,
-								2671
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1700.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "README.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4393,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1709,
-								1709
-							]
-						],
-						"settings":
-						{
-							"color_scheme": "Packages/MarkdownEditing/MarkdownEditor-Dark.tmTheme",
-							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 720.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/Markdown.sublime-settings",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3263,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								162,
-								162
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/kernel/drivers/timer.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1013,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								342,
-								342
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/kernel/include/kernel/multiboot.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2638,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2464,
-								2464
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 528.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/kernel/x86/boot.asm",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 4673,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2933,
-								2933
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MasmAssembly/MasmAssembly.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1380.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/C/Users/Louis/OneDrive/Documents/tmp.mdown",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3011,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1292,
-								1292
-							]
-						],
-						"settings":
-						{
-							"color_scheme": "Packages/MarkdownEditing/MarkdownEditor-Dark.tmTheme",
-							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 154.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7627,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5543,
-								5543
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2160.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "/C/Github/Code-Glosser/CodeGlosser/log.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3313,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2176,
-								2176
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 144.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "/C/Github/Code-Glosser/CodeGlosser/dist/log.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 40784,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								12009,
-								12009
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 1320.0,
+						"translation.y": 264.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
-					"file": "/C/Github/Code-Glosser/CodeGlosser/src/edu/bloomu/codeglosser/HTML/numbers.json",
+					"buffer": 2,
+					"file": "src/kernel/sched/process.asm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1970,
+						"buffer_size": 228,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1968,
-								7
+								228,
+								228
 							]
 						],
 						"settings":
 						{
-							"auto_name": "{ \"NUMBER_INT_BASIC\" : \"(?:(?<![0-9a-z_\\.%$@])|(?<",
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/MasmAssembly/MasmAssembly.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
-					"file": "src/kernel/include/helpers.h",
-					"semi_transient": false,
+					"buffer": 3,
+					"file": "src/kernel/include/x86/idt.h",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 1052,
+						"buffer_size": 4642,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								179,
-								179
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 15,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "src/kernel/include/mm/alloc.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 217,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								164,
-								164
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 17,
-					"type": "text"
-				},
-				{
-					"buffer": 14,
-					"file": "src/kernel/include/mm/heap.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1624,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								144,
-								144
+								2149,
+								2149
 							]
 						],
 						"settings":
@@ -1163,96 +733,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 180.0,
+						"translation.y": 1260.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 15,
-					"file": "src/kernel/include/kernel/mem.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 218,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								22,
-								22
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 14,
-					"type": "text"
-				},
-				{
-					"buffer": 16,
-					"file": "src/kernel/kernel/mem.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 795,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								667,
-								667
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 13,
-					"type": "text"
-				},
-				{
-					"buffer": 17,
-					"file": "src/kernel/mm/heap.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4802,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1519,
-								1519
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 900.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 16,
+					"stack_index": 2,
 					"type": "text"
 				}
 			]

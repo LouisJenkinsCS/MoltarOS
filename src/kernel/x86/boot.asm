@@ -37,13 +37,17 @@ section .data
 
 	; This is the Page Directory that we use to bootstrap.
 	bootstrap_page_directory:
-		; Because we are remapping our kernel to KERNEL_START, our current
+		; Because we are remapping our kernel to VIRTUAL_ADDRESS_START our current
 		; instruction pointer will cause us to page fault (and then double fault and
 		; then triple fault) and trigger a hardware reset. Hence before we enable paging
 		; we must identity map each virtual address to it's respective physical address.
 		dd PDE_DEFAULT
+		; The second page is reserved for identity mapping 4KB chunks to dole out for creating
+		; new page directories (for task switching). To clarify, this page maps virtual addresses
+		; 4MB - 8MB to physical addresses 4MB - 8MB respectively
+		dd 0x00400083
 		; All pages besides the kernel's are not present in memory
-		times (KERNEL_INDEX - 1) dd 0
+		times (KERNEL_INDEX - 2) dd 0
 		; Kernel Entry
 		dd PDE_DEFAULT
 		; Pages after the kernel

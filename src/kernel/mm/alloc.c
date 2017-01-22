@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 const uint32_t PAGE_SIZE = 4 * 1024 * 1024;
+const uint32_t CHUNK_SIZE = 4 * 1024;
 const uint32_t NUM_FRAMES = 1024;
 static const uint32_t PRESENT = 0x1;
 static const uint32_t READ_WRITE = 0x2;
@@ -18,6 +19,7 @@ static const uint32_t PAGE_ERR = (uint32_t) -1;
 static uint32_t virtual_addr;
 static uint32_t *page_directory;
 static uint32_t alloc_bitmap[NUM_FRAMES / 32];
+static uint32_t dir_bitmap[NUM_FRAMES / 32];
 
 extern uint32_t PHYSICAL_MEMORY_START;
 extern uint32_t PHYSICAL_MEMORY_END;
@@ -26,16 +28,16 @@ static uint32_t index_of(uint32_t frame) {
 	return frame / 32;
 }
 
-static uint32_t first_free_frame() {
+static uint32_t first_free_frame(uint32_t *bitmap) {
 	// For each bitmapped frame entry
 	for(uint32_t i = 0; i < index_of(NUM_FRAMES); i++) {
 		// If all bits are set, then there is nothing here for us
-		if (alloc_bitmap[i] != 0xFFFFFFFF) {
+		if (bitmap[i] != 0xFFFFFFFF) {
 			// We know that at least one bit is free, find it
 			for (uint32_t j = 0; j < 32; j++) {
 				uint32_t bit = 0x1 << j;
 				// If the bit to test for is unset, we found our entry
-				if (!(alloc_bitmap[i] & bit)) {
+				if (!(bitmap[i] & bit)) {
 					return i * 32 + j;
 				}
 			}
@@ -61,12 +63,14 @@ static void debug_pd(uint32_t idx) {
 
 void alloc_init() {
 		// Initialize necessary fields. We also start after the first page because the address
-		// 0x0 is commonly used for NULL
-		virtual_addr = PAGE_SIZE;
+		// 0x0 is commonly used for NULL, and after the second because it was reserved for us.
+		virtual_addr = PAGE_SIZE * 2;
 		memset(alloc_bitmap, 0, index_of(NUM_FRAMES) * sizeof(uint32_t));
 
-		// The kernel directory set in page directory neds to get set
+		// The kernel directory and the reserved memory for our usage are the first two
+		// pages in memory, so we need to also reserve them for our bitmap.
 		BITMAP_SET(alloc_bitmap, 0);
+		BITMAP_SET(alloc_bitmap, 1);
 
 		
 		// Obtain the bootstrap page directory stored in CR3 register.
@@ -76,13 +80,33 @@ void alloc_init() {
 		KLOG("Address of Page Directory: %x", cr3);
 }
 
+// Allocates a page directory, using one of the free identity mapped reserved 4KB frames
+vaddr_t alloc_page_directory() {
+	// Obtain the first free 4KB sized and aligned chunk to be used as the page directory
+	uint32_t dir_idx = first_free_frame(dir_bitmap);
+
+	// Out of Memory
+	if (dir_idx == PAGE_ERR) {
+		KPANIC("Could not find a free chunk for page directory!");
+	}
+
+	// Claim the frame
+	BITMAP_SET(dir_bitmap, dir_idx);
+
+	// Obtain and clear the chunk for use
+	vaddr_t dir = PAGE_SIZE + (dir_idx * CHUNK_SIZE);
+	memset((uint8_t *) dir, 0, CHUNK_SIZE);
+
+	return dir;
+}
+
 vaddr_t alloc_block() {
 	// Obtain the first free frame by cycling through all possible frames for one without it's PRESENT bit set.
 	bool found = false;
 	for (int i = 0; i < 1024; i++) {
 		uint32_t idx = (virtual_addr / PAGE_SIZE) % NUM_FRAMES;
 		if (!(page_directory[idx] & PRESENT)) {
-			uint32_t frame_idx = first_free_frame();
+			uint32_t frame_idx = first_free_frame(alloc_bitmap);
 			// KLOG("Allocation: PDE #%d, Index: %d, Physical Address: %x, Virtual Address: %x", idx, frame_idx, frame_idx * PAGE_SIZE, virtual_addr);
 			
 			// Out of Memory
