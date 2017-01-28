@@ -56,7 +56,9 @@ static void task_switch(regs_t *regs) {
     curr->esp = esp;
     curr->ebp = ebp;
 
-    KLOG("Task Switch: %d -> %d", curr->id, current->id);
+    // Bugged? Need to initiate a function call or else a page fault occurs
+   	printf("");
+    // KLOG("Task Switch: %d -> %d", curr->id, current->id);
     // KLOG("Jumping to new process... eip: %x, esp: %x, ebp: %x", current->eip, current->esp, current->ebp);
 
 	// Jump to other task. The task's stack pointer and base pointer will accurately point to the
