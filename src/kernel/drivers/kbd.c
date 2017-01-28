@@ -471,11 +471,11 @@ static void keyboard_irq_handler(struct registers *UNUSED(regs)) {
 	switch (state) {
 		// Waiting for first byte
 		case 0:
-			printf("%s", to_string(KBD_SCAN_TABLE[scancode]));
+			printf("%s\n", to_string(KBD_SCAN_TABLE[scancode]));
 			return;
 		// Waiting for second byte of multibyte sequence
 		case 1:
-			printf("%s", escaped_to_string(KBD_ESCAPED_SCAN_TABLE[scancode]));
+			printf("%s\n", escaped_to_string(KBD_ESCAPED_SCAN_TABLE[scancode]));
 			state = 0;
 	}
 }

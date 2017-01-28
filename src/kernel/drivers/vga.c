@@ -1,7 +1,9 @@
 #include <stdint.h>
+#include <string.h>
 
 #include <include/drivers/vga.h>
 #include <include/x86/io_port.h>
+#include <include/helpers.h>
 
 /* X and Y coordinates for current position in VGA buffer */
 static size_t x, y;
@@ -61,6 +63,15 @@ void vga_set_color(enum vga_color foreground, enum vga_color background) {
 void vga_print(const char *str) {
 	while(*str)
 		vga_putc(*str++);
+}
+
+void vga_print_reserved(const char *str, int type) {
+	vga_set_x(60);
+	vga_set_y(type);
+	
+	size_t len = MIN(strlen(str), 20);
+	memcpy(buf + type * vga_width + 60, str, len);
+	memset(buf + type * vga_width + 60 + len, 0, 20 - len);
 }
 
 void vga_putc(const char c) {

@@ -25,6 +25,9 @@ enum vga_color {
 extern const size_t vga_width;
 extern const size_t vga_height;
 
+#define VGA_RESERVED_KBD 1
+#define VGA_RESERVED_TICK 2
+
 void vga_init();
 
 /*
@@ -33,6 +36,8 @@ void vga_init();
 void vga_set_color(enum vga_color foreground, enum vga_color background);
 
 void vga_print(const char *str);
+
+void vga_print_reserved(const char *str, int type);
 
 void vga_putc(const char c);
 

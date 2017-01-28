@@ -64,7 +64,7 @@ static void debug_pd(uint32_t idx) {
 void alloc_init() {
 		// Initialize necessary fields. We also start after the first page because the address
 		// 0x0 is commonly used for NULL, and after the second because it was reserved for us.
-		virtual_addr = PAGE_SIZE * 2;
+		virtual_addr = PAGE_SIZE;
 		memset(alloc_bitmap, 0, index_of(NUM_FRAMES) * sizeof(uint32_t));
 
 		// The kernel directory and the reserved memory for our usage are the first two

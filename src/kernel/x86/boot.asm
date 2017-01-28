@@ -16,9 +16,13 @@ section .multiboot
 ; Setup stack pointer register (esp), as its contents are currently undefined. Allocate 16KBs
 section .create_stack nobits
 
+global STACK_SIZE
+
+STACK_SIZE equ 4 * 1024
+
 	align 4
 		stack_bottom:
-			resb 16 * 1024
+			resb STACK_SIZE
 		stack_top:
 
 ; Below we setup paging (virtual memory) and move our kernel to the higher half
@@ -31,6 +35,9 @@ KERNEL_INDEX equ (VIRTUAL_ADDRESS_START >> 22)
 ; respectively.
 PDE_DEFAULT equ 0x00000083
 
+global STACK_START
+STACK_START equ stack_top
+
 ; Setup the paging structures needed to bootstrap our kernel
 section .data
 	align 0x1000
@@ -42,12 +49,8 @@ section .data
 		; then triple fault) and trigger a hardware reset. Hence before we enable paging
 		; we must identity map each virtual address to it's respective physical address.
 		dd PDE_DEFAULT
-		; The second page is reserved for identity mapping 4KB chunks to dole out for creating
-		; new page directories (for task switching). To clarify, this page maps virtual addresses
-		; 4MB - 8MB to physical addresses 4MB - 8MB respectively
-		dd 0x00400083
 		; All pages besides the kernel's are not present in memory
-		times (KERNEL_INDEX - 2) dd 0
+		times (KERNEL_INDEX - 1) dd 0
 		; Kernel Entry
 		dd PDE_DEFAULT
 		; Pages after the kernel

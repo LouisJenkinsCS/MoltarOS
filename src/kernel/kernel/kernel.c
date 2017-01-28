@@ -15,6 +15,7 @@
 #include <include/kernel/multiboot.h>
 #include <include/kernel/logger.h>
 #include <include/kernel/mem.h>
+#include <include/sched/process.h>
 #include <include/helpers.h>
 
 uint32_t PHYSICAL_MEMORY_END;
@@ -147,31 +148,61 @@ void kernel_main(void) {
 	// kernel_clock_test();
 	// KLOG("Initiating Keyboard Test...");
 	// kernel_keyboard_test();
-	printf("Memory Test (%d Bytes): ", (PHYSICAL_MEMORY_END - PHYSICAL_MEMORY_START) / 4);
-	uint32_t x = vga_get_x();
-	uint32_t y = vga_get_y();
-	printf("START\n");
-	memtest();
-	uint32_t tmpx = vga_get_x();
-	uint32_t tmpy = vga_get_y();
-	vga_set_x(x);
-	vga_set_y(y);
-	KLOG("SUCCESS!");
-	vga_set_x(tmpx);
-	vga_set_y(tmpy);
+	// printf("Memory Test (%d Bytes): ", (PHYSICAL_MEMORY_END - PHYSICAL_MEMORY_START) / 4);
+	// uint32_t x = vga_get_x();
+	// uint32_t y = vga_get_y();
+	// printf("START\n");
+	// memtest();
+	// uint32_t tmpx = vga_get_x();
+	// uint32_t tmpy = vga_get_y();
+	// vga_set_x(x);
+	// vga_set_y(y);
+	// KLOG("SUCCESS!");
+	// vga_set_x(tmpx);
+	// vga_set_y(tmpy);
 
-	printf("SysTimer Test (1KHz): ");
-	x = vga_get_x();
-	y = vga_get_y();
-	printf("START\n");
-	timer_test();
-	tmpx = vga_get_x();
-	tmpy = vga_get_y();
-	vga_set_x(x);
-	vga_set_y(y);
-	KLOG("SUCCESS!");
-	vga_set_x(tmpx);
-	vga_set_y(tmpy);
+	// printf("SysTimer Test (1KHz): ");
+	// x = vga_get_x();
+	// y = vga_get_y();
+	// printf("START\n");
+	// timer_test();
+	// tmpx = vga_get_x();
+	// tmpy = vga_get_y();
+	// vga_set_x(x);
+	// vga_set_y(y);
+	// KLOG("SUCCESS!");
+	// vga_set_x(tmpx);
+	// vga_set_y(tmpy);
+
+	KLOG("Initializing Multitasking...");
+	proc_init();
+	int pid = fork();
+	KLOG("PID: %d", pid);
+	if (pid) {
+		KLOG("Back in Parent... Child ID: %d", pid);
+	} else {
+		KLOG("Fork Successful: PID %d", pid);
+		// for (;;) asm volatile ("nop");
+		
+		
+
+		uint32_t cycles = 0;
+		
+		
+		for (;;) {
+			asm volatile ("cli");
+			
+			uint32_t x = vga_get_x();
+			uint32_t y = vga_get_y();
+			vga_set_x(70);
+			vga_set_y(0);
+			printf("%d", cycles++);
+			vga_set_x(x);
+			vga_set_y(y);
+
+			asm volatile ("sti");
+		}
+	}
 
 	KLOG("Tests Complete!");
 	keyboard_init();
