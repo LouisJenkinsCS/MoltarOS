@@ -13,7 +13,6 @@ typedef struct process {
 	uint32_t ebp;
 	uint32_t stack_start;
 	size_t id;
-	struct process *next;
 } proc_t;
 
 void proc_init();

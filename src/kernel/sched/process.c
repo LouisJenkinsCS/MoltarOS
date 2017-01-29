@@ -1,16 +1,17 @@
 #include <include/sched/process.h>
 #include <include/x86/idt.h>
 #include <include/mm/alloc.h>
+#include <include/helpers.h>
 #include <include/drivers/timer.h>
 #include <include/kernel/mem.h>
 #include <include/kernel/logger.h>
+#include <include/ds/list.h>
 #include <string.h>
 
 #define DUMMY_EIP_STR "0x12345"
 #define DUMMY_EIP 0x12345
 
-static proc_t *head;
-static proc_t *current;
+static list_t *procs;
 
 extern uint32_t read_eip();
 
@@ -19,10 +20,10 @@ extern int STACK_SIZE;
 
 // Makes use of an interrupt handler trick, where we manipulate the registers pushed
 // on the stack to trick the CPU into jumping into the next process.
-static void task_switch(regs_t *regs) {
+static void task_switch(regs_t *UNUSED(regs)) {
 	// KLOG("Preparing to task switch");
 	
-	proc_t *curr = current;
+	proc_t *curr = list_current(procs);
 
 	// Ensure we preserve our current state so we return here later.
     // Information needing to be saved are the registers esp, ebp, and eip
@@ -46,12 +47,12 @@ static void task_switch(regs_t *regs) {
     }
 
 	// Select the next process
-	if (!current->next) {
-		current = head;
-	} else {
-		current = current->next;
+	proc_t *next = list_next(procs);
+	if (!next) {
+		next = list_head(procs);
 	}
 
+	// Preserve the current task's progress.
     curr->eip = eip;
     curr->esp = esp;
     curr->ebp = ebp;
@@ -69,7 +70,7 @@ static void task_switch(regs_t *regs) {
         "mov %2, %%ebp;\n"
         "mov $" DUMMY_EIP_STR ", %%eax;\n"
         "jmp *%%ecx" 
-        : : "r" (current->eip), "r" (current->esp), "r" (current->ebp)
+        : : "r" (next->eip), "r" (next->esp), "r" (next->ebp)
     );
 }
 
@@ -111,13 +112,16 @@ static void clone_page_directory(uint32_t *parent_dir, uint32_t *child_dir) {
 }
 
 void proc_init() {
+	procs = list_create();
 	// Create process of ourselves
 	proc_t *proc = kmalloc(sizeof(proc_t));
 	proc->id = 0;
+	proc->eip = 0;
+	proc->esp = 0;
+	proc->ebp = 0;
 	proc->stack_start = 0xC0000000 + STACK_START;
-	proc->next = NULL;
-	current = proc;
-	head = proc;
+	list_append(procs, proc);
+
 	KLOG("Stack Start: %x", proc->stack_start);
 
 	// Obtain our current page directory
@@ -144,7 +148,7 @@ int fork() {
 
 	// Allocate a new process
     proc_t *child = proc_new();
-    proc_t *parent = current;
+    proc_t *parent = list_current(procs);
     child->id = parent->id + 1;
     
     // Copy from parent
@@ -158,14 +162,13 @@ int fork() {
     // }
     
     // Append to queue
-    child->next = parent->next;
-    parent->next = child;
+    list_front(procs, child);
     KLOG("Added child to queue...");
     
     uint32_t eip = read_eip();
     
     // If we are the parent, setup esp/ebp/eip for child
-    if (current == parent) {
+    if (list_current(procs) == parent) {
     	KLOG("Parent setting up child...");
         uint32_t esp, ebp;
         asm volatile ("mov %%esp, %0" : "=r" (esp));

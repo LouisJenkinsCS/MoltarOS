@@ -46,6 +46,11 @@ void vga_init() {
 			buf[(i * vga_width) + j] = color_char(' ');
 }
 
+// Initializes rest of components to support scrolling.
+void vga_dynamic_init() {
+
+}
+
 
 
 void vga_set_color(enum vga_color foreground, enum vga_color background) {
