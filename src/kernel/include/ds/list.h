@@ -32,6 +32,8 @@ void list_append(list_t *list, void *elem);
 
 void list_prepend(list_t * list, void *elem);
 
+void list_remove(list_t *list, void (*del)(void *));
+
 void *list_head(list_t *list);
 
 void *list_tail(list_t *list);

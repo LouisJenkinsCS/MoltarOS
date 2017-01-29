@@ -462,22 +462,36 @@ static void keyboard_irq_handler(struct registers *UNUSED(regs)) {
 	bool released = scancode & 0x80;
 	scancode &= ~0x80;
 
-	// On each key press, we write prettily to the same line.
-	vga_clear();
-	vga_set_x(0);
-	printf("Scancode: %x, You %s: ", scancode, released ? "Released" : "Pressed");
-
 	// State-Based machine, which determines which scan table to decode from.
 	switch (state) {
 		// Waiting for first byte
 		case 0:
 			printf("%s", to_string(KBD_SCAN_TABLE[scancode]));
+			// On each key press, we write prettily to the same line.
+			vga_clear_line();
+			vga_set_x(0);
+			printf("Scancode: %x, You %s: ", scancode, released ? "Released" : "Pressed");
 			return;
 		// Waiting for second byte of multibyte sequence
 		case 1:
-			printf("%s", escaped_to_string(KBD_ESCAPED_SCAN_TABLE[scancode]));
+			switch (KBD_ESCAPED_SCAN_TABLE[scancode]) {
+				case KBD_KEY_DOWN:
+					vga_scroll_down();
+					break;
+				case KBD_KEY_UP:
+					vga_scroll_up();
+					break;
+				default:
+					// On each key press, we write prettily to the same line.
+					vga_clear_line();
+					vga_set_x(0);
+					printf("Scancode: %x, You %s: ", scancode, released ? "Released" : "Pressed");
+					printf("%s", escaped_to_string(KBD_ESCAPED_SCAN_TABLE[scancode]));
+			}
 			state = 0;
 	}
+
+
 }
 
 // Simple initializer that registers IRQ handler

@@ -30,6 +30,8 @@ extern const size_t vga_height;
 
 void vga_init();
 
+void vga_dynamic_init();
+
 /*
 	Sets the VGA buffer's background and foreground color.
 */
@@ -42,6 +44,8 @@ void vga_print_reserved(const char *str, int type);
 void vga_putc(const char c);
 
 void vga_clear();
+
+void vga_clear_line();
 
 void vga_scroll_down();
 

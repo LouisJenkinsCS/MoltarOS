@@ -107,6 +107,42 @@ void *list_prev(list_t *list) {
 	return list->current ? list->current->data : NULL;
 }
 
+void list_remove(list_t *list, void (*del)(void *)) {
+	if (list->current) {
+
+		if (list->head == list->tail) {
+			list->head = list->tail = NULL;
+		} else if (list->current == list->head) {
+			list->head = list->head->next;
+			if (list->head) {
+				list->head->prev = NULL;
+			}
+		} else if (list->current == list->tail) {
+			list->tail = list->tail->prev;
+			if (list->tail) {
+				list->tail->next = NULL;
+			}
+		} else {
+			node_t *next = list->current->next;
+			node_t *prev = list->current->prev;
+
+			if (next) {
+				next->prev = prev;
+			}
+
+			if (prev) {
+				prev->next = next;
+			}
+		}
+
+		if (del) {
+			del(list->current->data);
+		}
+		kfree(list->current);
+		list->current = list->head;
+	}
+}
+
 void *list_current(list_t *list) {
 	return list->current ? list->current->data : NULL;
 }

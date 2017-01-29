@@ -40,6 +40,7 @@ void kernel_init(struct multiboot_info *info) {
 	KLOG("Detected => RAM {Start: %d, End: %d, Total: %d}", PHYSICAL_MEMORY_START, PHYSICAL_MEMORY_END, PHYSICAL_MEMORY_END - PHYSICAL_MEMORY_START);
 	mem_init();
 	KLOG("Memory Heap and Allocators (kmalloc & kfree) Initialized...");
+	vga_dynamic_init();
 }
 
 // Memory test that purposefully performs allocation-heavy allocations to test the state of the heap and virtual memory
