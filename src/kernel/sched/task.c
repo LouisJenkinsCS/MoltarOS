@@ -58,7 +58,7 @@ static void task_switch(regs_t *UNUSED(regs)) {
     curr->ebp = ebp;
 
     // Bugged? Need to initiate a function call or else a page fault occurs
-   	printf("");
+   	// printf("");
     // KLOG_INFO("Task Switch: %d -> %d", curr->id, current->id);
     // KLOG_INFO("Jumping to new process... eip: %x, esp: %x, ebp: %x", current->eip, current->esp, current->ebp);
 
@@ -79,15 +79,13 @@ static void task_switch(regs_t *UNUSED(regs)) {
 static void copy_stack(task_t *child, task_t *parent) {
 	KLOG_INFO("Copying stack of %d into %d...", parent->id, child->id);
 
-	uint32_t esp;  asm volatile ("mov %%esp, %0" : "=r" (esp));
-	uint32_t ebp;  asm volatile ("mov %%ebp, %0" : "=r" (ebp));
 	KLOG_INFO("Allocating new stack for child...");
     // Allocate a new page for the child's stack.
     uint32_t new_stack = alloc_block();
     KLOG_INFO("Allocated new stack: %x", new_stack);
     child->stack_start = new_stack;
     KLOG_INFO("Copying stack %x -> %x, %x Bytes", parent->stack_start, child->stack_start, 4 * 1024 * 1024);
-    memcpy((uint32_t *) child->stack_start, (uint32_t *) parent->stack_start, 4 * 1024 * 1024);
+    memcpy(child->stack_start, parent->stack_start, 4 * 1024 * 1024);
     KLOG_INFO("Copied stack...");
     
     // Any pointers to what is on the parent's stack is invalid, so offset it by the difference between

@@ -91,7 +91,7 @@ vaddr_t alloc_block() {
 				KPANIC("Could not find a free physical address!");
 			}
 
-			KLOG_INFO("Physical Address %x taken for Virtual Address %x", frame_idx * PAGE_SIZE, (char *) virtual_addr);
+			KLOG_INFO("Idx: %x, Physical Address %x taken for Virtual Address %x", idx, frame_idx * PAGE_SIZE, (char *) virtual_addr);
 
 			// Claim the frame
 			BITMAP_SET(frame_bitmap, frame_idx);
@@ -116,6 +116,15 @@ vaddr_t alloc_block() {
 
 	uint32_t retval = virtual_addr;
 	virtual_addr += PAGE_SIZE;
+
+	if (retval == 2 * PAGE_SIZE) { 
+		for (uint32_t i = 0; i < 1024; i++) {
+			uint32_t pde = page_directory[i];
+			if (pde & PRESENT) {
+				debug_pd(i);
+			}
+	}
+	}
 
 	// Clear the memory allocated frame for the user
 	KLOG_INFO("Clearing chunk %x for user...", retval);

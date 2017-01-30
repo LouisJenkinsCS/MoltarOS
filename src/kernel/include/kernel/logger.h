@@ -39,7 +39,7 @@
 // Kernel Panic which will just print error message and spin
 #define KPANIC(format, ...) \
 do { \
-	printf("\n[%s:%s:%s] PANIC: \"" format "\"\n", __FILE__, __FUNCTION__, STRINGIFY(__LINE__),  ##__VA_ARGS__); \
+	KLOG("PANIC", COLOR_RED, format, ##__VA_ARGS__); \
 	asm volatile ("cli"); \
 	while (true) \
 		asm volatile ("hlt"); \

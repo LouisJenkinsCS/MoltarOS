@@ -33,7 +33,7 @@ COMPILER_WARNINGS := \
 	-Wnested-externs -Wwrite-strings -Wredundant-decls  -Winline -Wconversion
 
 CFLAGS := -g -std=gnu11 $(COMPILER_WARNINGS) -fbuiltin -fno-omit-frame-pointer -Iinclude -D__IS_MOLTAROS
-LINKER_FLAGS := -ffreestanding -O2 -nostdlib -lgcc $(COMPILER_WARNINGS) -fbuiltin -D__IS_MOLTAROS
+LINKER_FLAGS := -ffreestanding -O1 -nostdlib -lgcc $(COMPILER_WARNINGS) -fbuiltin -D__IS_MOLTAROS
 LIBC := ../libc/libk.a
 
 -include $(DEPENDENCIES)

@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <include/kernel/logger.h>
 #include <include/ds/list.h>
 #include <include/drivers/vga.h>
 #include <include/x86/io_port.h>
@@ -96,8 +97,9 @@ void vga_putc(const char c) {
 			x++;
 		}
 	} else {
+		char ch = (c == '\t') ? ' ' : c;
 		size_t idx = get_index();
-		buf[idx] = color_char(c);
+		buf[idx] = color_char(ch);
 	}
 
 	/*
@@ -241,6 +243,13 @@ static uint16_t color_char(const char c) {
 }
 
 static inline size_t get_index() {
+	if (y > vga_height || x > vga_width) {
+		size_t oldX = x;
+		size_t oldY = y;
+		y = 0;
+		x = 0;
+		KPANIC("Bad VGA Coordinates: x=%d, y=%d", oldX, oldY);
+	}
 	return (y * vga_width) + x;
 }
 
