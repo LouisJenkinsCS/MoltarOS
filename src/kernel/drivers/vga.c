@@ -131,7 +131,7 @@ void vga_clear_line() {
 void vga_scroll_down() {
 	// Preserve the old line's value.
 	uint16_t *line = kmalloc(2 * vga_width);
-	for (size_t i = 0; i < vga_width - 12; i++) {
+	for (size_t i = 0; i < vga_width - 10; i++) {
 		line[i] = buf[i];
 	}
 	list_back(above_lines, line);
@@ -176,7 +176,7 @@ void vga_scroll_up() {
 
 	for(size_t i = vga_height - 2; i < vga_height; i--) {
 		for(size_t j = 0; j < vga_width; j++) {
-			if (i == 0 && j == vga_width - 12) {
+			if (i == 0 && j == vga_width - 10) {
 				break;
 			}
 			// Previous and current line indexes

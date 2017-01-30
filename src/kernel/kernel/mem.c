@@ -6,7 +6,9 @@
 static memheap_t kheap = {0};
 
 static void more_memory() {
-	memheap_add_block(&kheap, alloc_block(), PAGE_SIZE, 16);
+	uint32_t mem = alloc_block();
+	KLOG_INFO("Added %d chunk at addr %x to heap...", PAGE_SIZE, mem);
+	memheap_add_block(&kheap, mem, PAGE_SIZE, 16);
 }
 
 void mem_init() {

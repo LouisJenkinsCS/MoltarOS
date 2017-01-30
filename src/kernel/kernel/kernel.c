@@ -154,7 +154,7 @@ static void thread_task(void *UNUSED(args)) {
 		
 			uint32_t x = vga_get_x();
 			uint32_t y = vga_get_y();
-			vga_set_x(68);
+			vga_set_x(70);
 			vga_set_y(0);
 			rtc_print();
 			vga_set_x(x);

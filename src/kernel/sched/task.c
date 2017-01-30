@@ -81,11 +81,12 @@ static void copy_stack(task_t *child, task_t *parent) {
 
 	uint32_t esp;  asm volatile ("mov %%esp, %0" : "=r" (esp));
 	uint32_t ebp;  asm volatile ("mov %%ebp, %0" : "=r" (ebp));
+	KLOG_INFO("Allocating new stack for child...");
     // Allocate a new page for the child's stack.
     uint32_t new_stack = alloc_block();
-    child->stack_start = new_stack;
     KLOG_INFO("Allocated new stack: %x", new_stack);
-    KLOG_INFO("Copying stack %x -> %x, %x Bytes", parent->stack_start, child->stack_start, 0x1000);
+    child->stack_start = new_stack;
+    KLOG_INFO("Copying stack %x -> %x, %x Bytes", parent->stack_start, child->stack_start, 4 * 1024 * 1024);
     memcpy((uint32_t *) child->stack_start, (uint32_t *) parent->stack_start, 4 * 1024 * 1024);
     KLOG_INFO("Copied stack...");
     
