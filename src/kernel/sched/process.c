@@ -141,7 +141,7 @@ static proc_t *proc_new() {
 	return proc;
 }
 
-int fork() {
+void thread_create(void (*task)(void *args), void *args) {
 	KLOG("Forking...");
 	// Ensure we are not interrupted
 	asm volatile("cli");
@@ -183,20 +183,12 @@ int fork() {
         KLOG("Child Process Configured: eip: %x, esp: %x, ebp: %x", child->eip, child->esp, child->ebp);
         
         asm volatile ("sti");
-
-        return child->id;
     } else {
-    	
+    	// Inside of child, so execute the thread. If we exit early, it is an error as we do not have a way to handle this.
+    	task(args);
 
-    	// asm volatile ("cli");
-    	// for (uint32_t i = current->ebp & ~0x1000; i <= current->ebp; i += 4) {
-	    //     uint32_t addr = *(uint32_t *) i;
-	    //     KLOG("%x: %x", i, addr);
-	    // }
-
+    	KPANIC("Thread returned early! Currently no implemented way to return allocated stack!");
 	    // KLOG("Child returning... pid: %d, eip: %x, esp: %x, ebp: %x", current->id, current->eip, current->esp, current->ebp);
-    	asm volatile ("sti");
-        return 0;
     }
 
 }

@@ -143,6 +143,28 @@ static void kernel_keyboard_test() {
 	}
 }
 
+static void thread_task(void *UNUSED(args)) {
+	uint32_t cycles = 0;
+	uint32_t ticks = 0;
+
+	for (;;) {
+		if (ticks++ == 1000) {
+			ticks = 0;
+			asm volatile ("cli");
+		
+			uint32_t x = vga_get_x();
+			uint32_t y = vga_get_y();
+			vga_set_x(68);
+			vga_set_y(0);
+			rtc_print();
+			vga_set_x(x);
+			vga_set_y(y);
+
+			asm volatile ("sti");
+		}
+	}
+}
+
 void kernel_main(void) {
 	// KLOG("Initializing Keyboard...");
 	// keyboard_init();
@@ -177,33 +199,7 @@ void kernel_main(void) {
 
 	KLOG("Initializing Multitasking...");
 	proc_init();
-	int pid = fork();
-	KLOG("PID: %d", pid);
-	if (pid) {
-		KLOG("Back in Parent... Child ID: %d", pid);
-	} else {
-		KLOG("Fork Successful: PID %d", pid);
-		// for (;;) asm volatile ("nop");
-		
-		
-
-		uint32_t cycles = 0;
-		
-		
-		for (;;) {
-			asm volatile ("cli");
-			
-			uint32_t x = vga_get_x();
-			uint32_t y = vga_get_y();
-			vga_set_x(70);
-			vga_set_y(0);
-			printf("%d", cycles++);
-			vga_set_x(x);
-			vga_set_y(y);
-
-			asm volatile ("sti");
-		}
-	}
+	thread_create(thread_task, NULL);
 
 	KLOG("Tests Complete!");
 	keyboard_init();

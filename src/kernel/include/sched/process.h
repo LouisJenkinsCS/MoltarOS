@@ -17,6 +17,6 @@ typedef struct process {
 
 void proc_init();
 
-int fork();
+void thread_create(void (*task)(void *args), void *args);
 
 #endif /* endif MOLTAROS_PROCESS_H */

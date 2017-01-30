@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"below",
+				"below_lines"
+			],
+			[
+				"scan",
+				"scancode"
+			],
+			[
+				"all",
+				"alloc_line"
+			],
+			[
 				"vga",
 				"vga_get_x"
 			],
@@ -66,10 +78,6 @@
 			[
 				"vga_se",
 				"vga_set_x"
-			],
-			[
-				"all",
-				"alloc_size"
 			],
 			[
 				"allocat",
@@ -347,7 +355,7 @@
 			"file": "src/kernel/include/sched/process.h",
 			"settings":
 			{
-				"buffer_size": 374,
+				"buffer_size": 351,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -356,7 +364,7 @@
 			"file": "src/kernel/drivers/kbd.c",
 			"settings":
 			{
-				"buffer_size": 10018,
+				"buffer_size": 10402,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -365,34 +373,42 @@
 			"file": "src/kernel/sched/process.c",
 			"settings":
 			{
-				"buffer_size": 6611,
+				"buffer_size": 6741,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/drivers/vga.c",
+			"file": "src/kernel/sched/task.asm",
 			"settings":
 			{
-				"buffer_size": 3966,
+				"buffer_size": 228,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/kernel/Makefile",
+			"settings":
+			{
+				"buffer_size": 2449,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/include/drivers/vga.h",
+			"file": "src/kernel/include/ds/list.h",
 			"settings":
 			{
-				"buffer_size": 1006,
+				"buffer_size": 761,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/include/kernel/logger.h",
+			"file": "src/kernel/ds/list.c",
 			"settings":
 			{
-				"buffer_size": 1375,
+				"buffer_size": 3584,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -401,34 +417,25 @@
 			"file": "src/kernel/kernel/kernel.c",
 			"settings":
 			{
-				"buffer_size": 5344,
+				"buffer_size": 5365,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/Makefile",
+			"file": "src/kernel/include/drivers/vga.h",
 			"settings":
 			{
-				"buffer_size": 2446,
+				"buffer_size": 1056,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/kernel/x86/boot.asm",
+			"file": "src/kernel/drivers/vga.c",
 			"settings":
 			{
-				"buffer_size": 4772,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/include/mm/alloc.h",
-			"settings":
-			{
-				"buffer_size": 311,
+				"buffer_size": 5771,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -438,43 +445,6 @@
 			"settings":
 			{
 				"buffer_size": 4429,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/kernel/mem.c",
-			"settings":
-			{
-				"buffer_size": 795,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/include/mm/zone.h",
-			"settings":
-			{
-				"buffer_size": 128,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "#include <include/mm/zone.h>\n\nextern uint32_t PHYSICAL_MEMORY_START;\nextern uint32_t PHYSICAL_MEMORY_END;\n\nuint32_t \n\nvoid zone_init() {\n\t// The page frame at 4MBs was reserved for us. We need to chunk it into 4KB aligned\n\t// and sized chunks.\n}",
-			"file": "src/kernel/mm/zone.c",
-			"file_size": 242,
-			"file_write_time": 131295821116788033,
-			"settings":
-			{
-				"buffer_size": 245,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/sched/task.asm",
-			"settings":
-			{
-				"buffer_size": 228,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -545,8 +515,10 @@
 		"/C/Github/MoltarOS/src",
 		"/C/Github/MoltarOS/src/kernel",
 		"/C/Github/MoltarOS/src/kernel/drivers",
+		"/C/Github/MoltarOS/src/kernel/ds",
 		"/C/Github/MoltarOS/src/kernel/include",
 		"/C/Github/MoltarOS/src/kernel/include/drivers",
+		"/C/Github/MoltarOS/src/kernel/include/ds",
 		"/C/Github/MoltarOS/src/kernel/include/kernel",
 		"/C/Github/MoltarOS/src/kernel/include/mm",
 		"/C/Github/MoltarOS/src/kernel/include/sched",
@@ -559,10 +531,30 @@
 	],
 	"file_history":
 	[
+		"/C/Github/MoltarOS/src/C_Utils/memory/ref_count.h",
+		"/C/Github/MoltarOS/src/C_Utils/memory/ref_count.c",
+		"/C/Github/MoltarOS/src/C_Utils/misc/alloc_check.c",
+		"/C/Github/MoltarOS/src/kernel/drivers/vga.c",
+		"/C/Github/MoltarOS/src/kernel/include/drivers/vga.h",
+		"/C/Github/MoltarOS/src/kernel/include/kernel/logger.h",
+		"/C/Github/MoltarOS/src/kernel/kernel/kernel.c",
+		"/C/Github/MoltarOS/src/kernel/Makefile",
+		"/C/Github/MoltarOS/src/kernel/x86/boot.asm",
+		"/C/Github/MoltarOS/src/kernel/include/mm/alloc.h",
+		"/C/Github/MoltarOS/src/kernel/mm/alloc.c",
+		"/C/Github/MoltarOS/src/kernel/include/mm/zone.h",
+		"/C/Github/MoltarOS/src/kernel/mm/zone.c",
+		"/C/Github/MoltarOS/src/kernel/sched/task.asm",
+		"/C/Github/MoltarOS/src/C_Utils/data_structures/helpers.h",
+		"/C/Github/MoltarOS/src/C_Utils/data_structures/list.h",
+		"/C/Github/MoltarOS/src/C_Utils/misc/argument_check.h",
+		"/C/Github/MoltarOS/src/C_Utils/misc/alloc_check.h",
+		"/C/Github/MoltarOS/src/C_Utils/misc/argument_check.c",
+		"/C/Github/MoltarOS/src/C_Utils/data_structures/list.c",
+		"/C/Github/MoltarOS/src/kernel/ds/list.c",
+		"/C/Github/MoltarOS/src/kernel/include/ds/list.h",
 		"/C/Program Files/Apache Software Foundation/Tomcat 8.5/logs/catalina.2017-01-27.log",
 		"/C/Users/Louis/OneDrive/Documents/example.md",
-		"/C/Github/MoltarOS/src/kernel/kernel/kernel.c",
-		"/C/Github/MoltarOS/src/kernel/mm/alloc.c",
 		"/C/Github/MoltarOS/src/kernel/include/x86/idt.h",
 		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/Markdown.sublime-settings",
 		"/C/Github/MoltarOS/src/kernel/drivers/timer.c",
@@ -570,7 +562,6 @@
 		"/C/Github/Code-Glosser/CodeGlosser/log.txt",
 		"/C/Github/Code-Glosser/CodeGlosser/src/edu/bloomu/codeglosser/HTML/numbers.json",
 		"/C/Github/MoltarOS/src/kernel/include/helpers.h",
-		"/C/Github/MoltarOS/src/kernel/include/mm/alloc.h",
 		"/C/Github/MoltarOS/src/kernel/include/mm/heap.h",
 		"/C/Github/MoltarOS/src/kernel/include/kernel/mem.h",
 		"/C/Github/MoltarOS/src/kernel/kernel/mem.c",
@@ -583,13 +574,10 @@
 		"/C/Github/MoltarOS/src/libc/string/memcpy.c",
 		"/C/Github/MoltarOS/src/kernel/mm/page.c",
 		"/C/Github/MoltarOS/src/kernel/include/drivers/kbd_hal.h",
-		"/C/Github/MoltarOS/src/kernel/include/kernel/logger.h",
-		"/C/Github/MoltarOS/src/kernel/x86/boot.asm",
 		"/C/Github/MoltarOS/src/kernel/x86/linker.ld",
 		"/C/Github/MoltarOS/src/kernel/x86/exceptions.c",
 		"/C/Github/MoltarOS/src/kernel/x86/idt.c",
 		"/C/Github/MoltarOS/src/kernel/include/x86/exceptions.h",
-		"/C/Github/MoltarOS/src/kernel/drivers/vga.c",
 		"/C/Github/MoltarOS/src/kernel/kernel2.sym",
 		"/C/Github/MoltarOS/src/kernel/kernel_sym.txt",
 		"/C/Github/MoltarOS/src/tmp/bochsout.txt",
@@ -597,7 +585,6 @@
 		"/C/Users/Louis/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
 		"/C/Github/MoltarOS/src/kernel/x86/page.asm",
 		"/C/Github/MoltarOS/src/kernel/kernel.sym",
-		"/C/Github/MoltarOS/src/kernel/Makefile",
 		"/C/Github/MoltarOS/src/libc/Makefile",
 		"/C/Github/MoltarOS/src/build.sh",
 		"/C/Github/MoltarOS/src/libc/stdio/printf.c",
@@ -641,6 +628,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"\n#",
 			"first_free_frame",
 			"(GESHI_.*\\w)\\s*",
 			"(GESHI_.*\\w)",
@@ -752,7 +740,7 @@
 	"groups":
 	[
 		{
-			"selected": 10,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -761,15 +749,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 374,
+						"buffer_size": 351,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								303,
-								303
+								235,
+								235
 							]
 						],
 						"settings":
@@ -780,7 +768,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -789,15 +777,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10018,
+						"buffer_size": 10402,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9685,
-								9685
+								9637,
+								9637
 							]
 						],
 						"settings":
@@ -805,7 +793,7 @@
 							"syntax": "Packages/C++/C.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 8664.0,
+						"translation.y": 8788.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -817,15 +805,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6611,
+						"buffer_size": 6741,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2375,
-								2375
+								5179,
+								5179
 							]
 						],
 						"settings":
@@ -833,56 +821,83 @@
 							"syntax": "Packages/C++/C.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 520.0,
+						"translation.y": 2940.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "src/kernel/drivers/vga.c",
-					"semi_transient": false,
+					"file": "src/kernel/sched/task.asm",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 3966,
+						"buffer_size": 228,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2815,
-								2815
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/MasmAssembly/MasmAssembly.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1860.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "src/kernel/include/drivers/vga.h",
+					"file": "src/kernel/Makefile",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1006,
+						"buffer_size": 2449,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								783,
-								783
+								570,
+								570
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/kernel/include/ds/list.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 761,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								274,
+								274
 							]
 						],
 						"settings":
@@ -894,52 +909,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/kernel/include/kernel/logger.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1375,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								731,
-								731
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 360.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 10,
 					"type": "text"
 				},
 				{
 					"buffer": 6,
-					"file": "src/kernel/kernel/kernel.c",
+					"file": "src/kernel/ds/list.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5344,
+						"buffer_size": 3584,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4919,
-								4919
+								1096,
+								1096
 							]
 						],
 						"settings":
@@ -948,7 +935,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1484.0,
+						"translation.y": 900.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 6,
@@ -956,27 +943,28 @@
 				},
 				{
 					"buffer": 7,
-					"file": "src/kernel/Makefile",
+					"file": "src/kernel/kernel/kernel.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2446,
+						"buffer_size": 5365,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1039,
-								1039
+								5088,
+								5088
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 3240.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
@@ -984,59 +972,60 @@
 				},
 				{
 					"buffer": 8,
-					"file": "src/kernel/x86/boot.asm",
+					"file": "src/kernel/include/drivers/vga.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4772,
+						"buffer_size": 1056,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								918,
-								918
+								882,
+								882
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/MasmAssembly/MasmAssembly.tmLanguage",
+							"syntax": "Packages/C++/C++.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 600.0,
+						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
 					"buffer": 9,
-					"file": "src/kernel/include/mm/alloc.h",
+					"file": "src/kernel/drivers/vga.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 311,
+						"buffer_size": 5771,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								302,
-								302
+								3935,
+								3935
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1440.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1052,8 +1041,8 @@
 						"selection":
 						[
 							[
-								2393,
-								2393
+								1640,
+								1640
 							]
 						],
 						"settings":
@@ -1062,123 +1051,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1140.0,
+						"translation.y": 660.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "src/kernel/kernel/mem.c",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 795,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								484,
-								484
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "src/kernel/include/mm/zone.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 128,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								87,
-								87
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 14,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "src/kernel/mm/zone.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 245,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								116,
-								116
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 13,
-					"type": "text"
-				},
-				{
-					"buffer": 14,
-					"file": "src/kernel/sched/task.asm",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 228,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								228,
-								228
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MasmAssembly/MasmAssembly.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
