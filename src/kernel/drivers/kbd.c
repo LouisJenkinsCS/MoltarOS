@@ -466,11 +466,11 @@ static void keyboard_irq_handler(struct registers *UNUSED(regs)) {
 	switch (state) {
 		// Waiting for first byte
 		case 0:
-			printf("%s", to_string(KBD_SCAN_TABLE[scancode]));
 			// On each key press, we write prettily to the same line.
 			vga_clear_line();
 			vga_set_x(0);
 			printf("Scancode: %x, You %s: ", scancode, released ? "Released" : "Pressed");
+			printf("%s", to_string(KBD_SCAN_TABLE[scancode]));
 			return;
 		// Waiting for second byte of multibyte sequence
 		case 1:

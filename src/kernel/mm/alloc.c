@@ -58,7 +58,7 @@ static void debug_pd(uint32_t idx) {
 	bool rw = pde & READ_WRITE;
 	bool sz = pde & PAGE_MB;
 
-	KLOG("PDE #%d: addr:%x,present:%d,rw:%d,sz:%d", idx, frame_addr, present, rw, sz);
+	KLOG_INFO("PDE #%d: addr:%x,present:%d,rw:%d,sz:%d", idx, frame_addr, present, rw, sz);
 }
 
 void alloc_init() {
@@ -77,7 +77,7 @@ void alloc_init() {
 		uint32_t cr3;
 		asm volatile ("mov %%cr3, %0" : "=r" (cr3));
 		page_directory = (uint32_t *) (cr3 + 0xC0000000);
-		KLOG("Address of Page Directory: %x", cr3);
+		KLOG_INFO("Address of Page Directory: %x", cr3);
 }
 
 // Allocates a page directory, using one of the free identity mapped reserved 4KB frames
@@ -107,7 +107,7 @@ vaddr_t alloc_block() {
 		uint32_t idx = (virtual_addr / PAGE_SIZE) % NUM_FRAMES;
 		if (!(page_directory[idx] & PRESENT)) {
 			uint32_t frame_idx = first_free_frame(alloc_bitmap);
-			// KLOG("Allocation: PDE #%d, Index: %d, Physical Address: %x, Virtual Address: %x", idx, frame_idx, frame_idx * PAGE_SIZE, virtual_addr);
+			// KLOG_INFO("Allocation: PDE #%d, Index: %d, Physical Address: %x, Virtual Address: %x", idx, frame_idx, frame_idx * PAGE_SIZE, virtual_addr);
 			
 			// Out of Memory
 			if (frame_idx == PAGE_ERR) {

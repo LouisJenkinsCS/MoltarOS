@@ -1,45 +1,40 @@
 #ifndef MOLTAROS_LOGGER_H
 #define MOLTAROS_LOGGER_H
 
+#include <include/drivers/vga.h>
 #include <stdio.h>
 #include <stdint.h>
 
+// Our log levels
+#define LEVEL_ALL 0
+#define LEVEL_VERBOSE 1
+#define LEVEL_DEBUG 2
+#define LEVEL_INFO 3
+#define LEVEL_WARNING 4
+#define LEVEL_SEVERE 5
+
+// Current log level. Any below this are filtered
+#define LOG_LEVEL LEVEL_INFO
+
 #ifndef NDEBUG
-	#define KLOG(format, ...) printf(format "\n", ##__VA_ARGS__)
+	#define KLOG(level, color, format, ...) \
+		do { \
+			asm volatile ("cli"); \
+			vga_print("["); \
+			vga_print_color(color, level); \
+			vga_print("] "); \
+			printf(format "\n", ##__VA_ARGS__); \
+			asm volatile ("sti"); \
+		} while (0)
 #else
-	#define KLOG(format, ...)
+	#define KLOG(level, color, format, ...)
 #endif
 
-#define KSTACK(nFrames, firstParam) \
-do { \
-	uin32_t *ebp = &firstParam - 2; \
-	KLOG("Stack Trace:"); \
-	for (uin32_t frame = 0; frame < nFrames; frame++) { \
-		uin32_t eip = ebp[1]; \
-		if (!eip) { \
-			break; \
-		} \
-		\
-		ebp = (uin32_t *) ebp[0]; \
-		uin32_t *args = &ebp[2]; \
-		LOG("eip: %x", eip); \
-	} \
-}
-
-static void debug_stack(uint32_t nFrames) {
-	uint32_t *ebp = &nFrames - 2;
-	KLOG("Stack Trace:");
-	for (uint32_t frame = 0; frame < nFrames; frame++) {
-		uint32_t eip = ebp[1];
-		if (!eip) {
-			break;
-		}
-		KLOG("eip: %x, ebp: %x", eip, ebp);
-		ebp = (uint32_t *) ebp[0];	
-	}
-	KLOG("End Stack Trace...");
-}
-
+#if LOG_LEVEL <= LEVEL_INFO
+	#define KLOG_INFO(format, ...) KLOG("INFO", COLOR_GREEN, format, ##__VA_ARGS__)
+#else
+	#define KLOG_INFO(format, ...) printf("")
+#endif
 
 // Kernel Panic which will just print error message and spin
 #define KPANIC(format, ...) \

@@ -15,7 +15,7 @@
 #include <include/kernel/multiboot.h>
 #include <include/kernel/logger.h>
 #include <include/kernel/mem.h>
-#include <include/sched/process.h>
+#include <include/sched/task.h>
 #include <include/helpers.h>
 
 uint32_t PHYSICAL_MEMORY_END;
@@ -26,20 +26,20 @@ static bool timer_done = false;
 
 void kernel_init(struct multiboot_info *info) {
 	vga_init();
-	KLOG("Virtual Memory (Paging) Initialized...");
-	KLOG("Video Graphics Array (VGA) Initialized...");
+	KLOG_INFO("Virtual Memory (Paging) Initialized...");
+	KLOG_INFO("Video Graphics Array (VGA) Initialized...");
 	gdt_init();
-	KLOG("Global Descriptor Table (GDT) Initialized...");
+	KLOG_INFO("Global Descriptor Table (GDT) Initialized...");
 	idt_init();
-	KLOG("Interrupt Descriptor Table (IDT) Initialized...");
+	KLOG_INFO("Interrupt Descriptor Table (IDT) Initialized...");
 	timer_init();
-	KLOG("System Timer (PIT) Initialized...");
+	KLOG_INFO("System Timer (PIT) Initialized...");
 	if (!multiboot_RAM(info, &PHYSICAL_MEMORY_START, &PHYSICAL_MEMORY_END)) {
 		KPANIC("Failed to detect physical memory (RAM)!!!");
 	}
-	KLOG("Detected => RAM {Start: %d, End: %d, Total: %d}", PHYSICAL_MEMORY_START, PHYSICAL_MEMORY_END, PHYSICAL_MEMORY_END - PHYSICAL_MEMORY_START);
+	KLOG_INFO("Detected => RAM {Start: %d, End: %d, Total: %d}", PHYSICAL_MEMORY_START, PHYSICAL_MEMORY_END, PHYSICAL_MEMORY_END - PHYSICAL_MEMORY_START);
 	mem_init();
-	KLOG("Memory Heap and Allocators (kmalloc & kfree) Initialized...");
+	KLOG_INFO("Memory Heap and Allocators (kmalloc & kfree) Initialized...");
 	vga_dynamic_init();
 }
 
@@ -166,10 +166,10 @@ static void thread_task(void *UNUSED(args)) {
 }
 
 void kernel_main(void) {
-	// KLOG("Initializing Keyboard...");
+	// KLOG_INFO("Initializing Keyboard...");
 	// keyboard_init();
 	// kernel_clock_test();
-	// KLOG("Initiating Keyboard Test...");
+	// KLOG_INFO("Initiating Keyboard Test...");
 	// kernel_keyboard_test();
 	// printf("Memory Test (%d Bytes): ", (PHYSICAL_MEMORY_END - PHYSICAL_MEMORY_START) / 4);
 	// uint32_t x = vga_get_x();
@@ -180,7 +180,7 @@ void kernel_main(void) {
 	// uint32_t tmpy = vga_get_y();
 	// vga_set_x(x);
 	// vga_set_y(y);
-	// KLOG("SUCCESS!");
+	// KLOG_INFO("SUCCESS!");
 	// vga_set_x(tmpx);
 	// vga_set_y(tmpy);
 
@@ -193,17 +193,17 @@ void kernel_main(void) {
 	// tmpy = vga_get_y();
 	// vga_set_x(x);
 	// vga_set_y(y);
-	// KLOG("SUCCESS!");
+	// KLOG_INFO("SUCCESS!");
 	// vga_set_x(tmpx);
 	// vga_set_y(tmpy);
 
-	KLOG("Initializing Multitasking...");
-	proc_init();
+	KLOG_INFO("Initializing Multitasking...");
+	task_init();
 	thread_create(thread_task, NULL);
 
-	KLOG("Tests Complete!");
+	KLOG_INFO("Tests Complete!");
 	keyboard_init();
-	KLOG("Keyboard Initialized... Press any Button...");
+	KLOG_INFO("Keyboard Initialized... Press any Button...");
 
 	// Loop infinitely
 	while (true) {

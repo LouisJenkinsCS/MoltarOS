@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"rtc_ge",
+				"rtc_get_second"
+			],
+			[
+				"thread",
+				"thread_task"
+			],
+			[
 				"below",
 				"below_lines"
 			],
@@ -355,7 +363,7 @@
 			"file": "src/kernel/include/sched/process.h",
 			"settings":
 			{
-				"buffer_size": 351,
+				"buffer_size": 397,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -373,16 +381,8 @@
 			"file": "src/kernel/sched/process.c",
 			"settings":
 			{
-				"buffer_size": 6741,
+				"buffer_size": 6740,
 				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/kernel/sched/task.asm",
-			"settings":
-			{
-				"buffer_size": 228,
 				"line_ending": "Windows"
 			}
 		},
@@ -417,8 +417,25 @@
 			"file": "src/kernel/kernel/kernel.c",
 			"settings":
 			{
-				"buffer_size": 5365,
+				"buffer_size": 5296,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/kernel/drivers/rtc.c",
+			"settings":
+			{
+				"buffer_size": 1232,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/kernel/include/drivers/rtc.h",
+			"settings":
+			{
+				"buffer_size": 410,
 				"line_ending": "Windows"
 			}
 		},
@@ -740,7 +757,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -749,15 +766,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 351,
+						"buffer_size": 397,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								235,
-								235
+								299,
+								299
 							]
 						],
 						"settings":
@@ -768,7 +785,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -784,8 +801,8 @@
 						"selection":
 						[
 							[
-								9637,
-								9637
+								9222,
+								9222
 							]
 						],
 						"settings":
@@ -796,7 +813,7 @@
 						"translation.y": 8788.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -805,15 +822,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6741,
+						"buffer_size": 6740,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5179,
-								5179
+								4984,
+								4984
 							]
 						],
 						"settings":
@@ -821,42 +838,14 @@
 							"syntax": "Packages/C++/C.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2940.0,
+						"translation.y": 2620.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "src/kernel/sched/task.asm",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 228,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MasmAssembly/MasmAssembly.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
 					"file": "src/kernel/Makefile",
 					"semi_transient": false,
 					"settings":
@@ -884,7 +873,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 4,
 					"file": "src/kernel/include/ds/list.h",
 					"semi_transient": false,
 					"settings":
@@ -909,11 +898,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 5,
 					"file": "src/kernel/ds/list.c",
 					"semi_transient": false,
 					"settings":
@@ -942,20 +931,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 6,
 					"file": "src/kernel/kernel/kernel.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5365,
+						"buffer_size": 5296,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5088,
-								5088
+								4416,
+								4416
 							]
 						],
 						"settings":
@@ -964,14 +953,71 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3240.0,
+						"translation.y": 3060.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/kernel/drivers/rtc.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1232,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1137,
+								1137
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 420.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 8,
+					"file": "src/kernel/include/drivers/rtc.h",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 410,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								268,
+								268
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
 					"file": "src/kernel/include/drivers/vga.h",
 					"semi_transient": false,
 					"settings":
@@ -993,14 +1039,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 360.0,
+						"translation.y": 68.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": "src/kernel/drivers/vga.c",
 					"semi_transient": false,
 					"settings":
@@ -1012,8 +1058,8 @@
 						"selection":
 						[
 							[
-								3935,
-								3935
+								3067,
+								3067
 							]
 						],
 						"settings":
@@ -1022,14 +1068,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1440.0,
+						"translation.y": 2340.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "src/kernel/mm/alloc.c",
 					"semi_transient": false,
 					"settings":
@@ -1054,7 +1100,7 @@
 						"translation.y": 660.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 11,
 					"type": "text"
 				}
 			]

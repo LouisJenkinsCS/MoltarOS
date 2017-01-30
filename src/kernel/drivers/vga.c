@@ -54,7 +54,12 @@ void vga_dynamic_init() {
 	above_lines = list_create();
 }
 
-
+void vga_print_color(enum vga_color new_color,const char *str) {
+	uint8_t old_color = color;
+	color = make_color(new_color, COLOR_BLACK);
+	vga_print(str);
+	color = old_color;
+}
 
 void vga_set_color(enum vga_color foreground, enum vga_color background) {
 	color = make_color(foreground, background);
