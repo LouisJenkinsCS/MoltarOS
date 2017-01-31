@@ -35,9 +35,6 @@ KERNEL_INDEX equ (VIRTUAL_ADDRESS_START >> 22)
 ; respectively.
 PDE_DEFAULT equ 0x00000083
 
-global STACK_START
-STACK_START equ stack_top
-
 ; Setup the paging structures needed to bootstrap our kernel
 section .data
 	align 0x1000
@@ -53,8 +50,10 @@ section .data
 		times (KERNEL_INDEX - 1) dd 0
 		; Kernel Entry
 		dd PDE_DEFAULT
+		; Kernel Stack (4MB)
+		dd 0x00400083
 		; Pages after the kernel
-		times (1024 - KERNEL_INDEX - 1) dd 0
+		times (1024 - KERNEL_INDEX - 2) dd 0
 
 section .text
 
@@ -96,8 +95,10 @@ global _start
 		mov dword [bootstrap_page_directory], 0
 		invlpg [0]
 
-		; Setup the stack pointer to point to the stack allocated above
+		; Setup the stack pointer to point to the stack allocated above. The stack pointer is also
+		; useful later on for when we move to a larger one.
 		mov esp, stack_top
+		push esp
 
 		; EBX contains a pointer to the multiboot info structure that we should save for later
 		; Since it is the physical address, we need to convert it to it's virtual address
@@ -112,7 +113,7 @@ global _start
 		call kernel_init
 
 		; Clean up stack frame
-		add esp, 4
+		add esp, 8
 
 		; Zero EBP again since kernel_init will have changed it
 		mov ebp, 0

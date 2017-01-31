@@ -21,11 +21,15 @@
 uint32_t PHYSICAL_MEMORY_END;
 uint32_t PHYSICAL_MEMORY_START;
 
+uint32_t STACK_START;
+
 size_t ticks_x, ticks_y, time_x, time_y;
 static bool timer_done = false;
 
-void kernel_init(struct multiboot_info *info) {
+void kernel_init(struct multiboot_info *info, uint32_t esp) {
+	STACK_START = esp;
 	vga_init();
+	KLOG_INFO("Stack Start: %x", esp);
 	KLOG_INFO("Virtual Memory (Paging) Initialized...");
 	KLOG_INFO("Video Graphics Array (VGA) Initialized...");
 	gdt_init();

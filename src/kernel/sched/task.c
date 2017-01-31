@@ -15,8 +15,8 @@ static list_t *tasks;
 
 extern uint32_t read_eip();
 
-extern int STACK_START;
-extern int STACK_SIZE;
+extern uint32_t STACK_START;
+static uint32_t STACK_SIZE = 0x1000;
 
 // Makes use of an interrupt handler trick, where we manipulate the registers pushed
 // on the stack to trick the CPU into jumping into the next process.
@@ -79,25 +79,25 @@ static void task_switch(regs_t *UNUSED(regs)) {
 static void copy_stack(task_t *child, task_t *parent) {
 	KLOG_INFO("Copying stack of %d into %d...", parent->id, child->id);
 
-	KLOG_INFO("Allocating new stack for child...");
     // Allocate a new page for the child's stack.
     uint32_t new_stack = alloc_block();
-    KLOG_INFO("Allocated new stack: %x", new_stack);
-    child->stack_start = new_stack;
-    KLOG_INFO("Copying stack %x -> %x, %x Bytes", parent->stack_start, child->stack_start, 4 * 1024 * 1024);
-    memcpy(child->stack_start, parent->stack_start, 4 * 1024 * 1024);
-    KLOG_INFO("Copied stack...");
-    
-    // Any pointers to what is on the parent's stack is invalid, so offset it by the difference between
-    // between the parent and child.
-    KLOG_INFO("Redirecting pointers to other stack...");
-    for (uint32_t i = child->stack_start; i < child->stack_start + 0x1000; i += 4) {
-        uint32_t addr = *(uint32_t *) i;
-        if (addr > parent->stack_start && addr < (parent->stack_start + 0x1000)) {
-        	KLOG_INFO("Redirecting Pointer %x -> %x", addr, addr + (child->stack_start - parent->stack_start));
-            *(uint32_t *) i = addr + (child->stack_start - parent->stack_start); 
+    KLOG_INFO("Allocated block: %x", new_stack);
+    KLOG_INFO("Copying stack from %x -> %x", parent->stack_start, new_stack);
+    uint32_t esp;  asm volatile ("mov %%esp, %0" : "=r" (esp));
+    uint32_t offset = new_stack;
+    for (uint32_t addr = parent->stack_start; addr < parent->stack_start + PAGE_SIZE; addr += 4, offset += 4) {
+        uint32_t *word = (uint32_t *) addr;
+        if (*word < parent->stack_start + PAGE_SIZE && *word > parent->stack_start) {
+            uint32_t diff = *word - parent->stack_start;
+            KLOG_INFO("Redirecting Pointer %x -> %x", *word, new_stack + diff);
+            * (uint32_t *) offset = new_stack + diff; 
+        } else {
+            * (uint32_t *) offset = *word;
         }
     }
+
+    KLOG_INFO("Finished copying stack of %d", child->id);
+    child->stack_start = new_stack;
 }
 
 static void clone_page_directory(uint32_t *parent_dir, uint32_t *child_dir) {
@@ -110,7 +110,53 @@ static void clone_page_directory(uint32_t *parent_dir, uint32_t *child_dir) {
 	// Copy other contents by allocating new page frame by virtual address
 }
 
+static uint32_t move_stack() {
+    // The stack reserved for the kernel is exactly 4MB in.
+    uint32_t new_stack = PAGE_SIZE + 0xC0000000;
+    KLOG_INFO("Allocated block: %x", new_stack);
+    KLOG_INFO("Moving kernel stack from %x -> %x", STACK_START, new_stack);
+    uint32_t esp;  asm volatile ("mov %%esp, %0" : "=r" (esp));
+    uint32_t offset = new_stack + PAGE_SIZE - (STACK_START - esp);
+    KLOG_INFO("Redirecting pointers from old stack to new stack. Stack Size: %x...", (STACK_START - esp));
+    for (uint32_t addr = esp; addr < STACK_START; addr += 4, offset += 4) {
+        uint32_t *word = (uint32_t *) addr;
+        if (*word < STACK_START && *word > esp) {
+            uint32_t diff = *word - esp;
+            KLOG_INFO("Redirecting Pointer %x -> %x", *word, new_stack + diff);
+            * (uint32_t *) offset = new_stack + diff; 
+        } else {
+            * (uint32_t *) offset = *word;
+        }
+    }
+
+    KLOG_INFO("Switching to new stack...");
+    
+    uint32_t old_esp, old_ebp, new_esp, new_ebp;
+    asm volatile ("mov %%esp, %0" : "=r" (old_esp));
+    asm volatile ("mov %%ebp, %0" : "=r" (old_ebp));
+    new_esp = new_stack + PAGE_SIZE - (STACK_START - old_esp);
+    new_ebp = new_stack + PAGE_SIZE - (STACK_START - old_ebp);
+
+    KLOG_INFO("ESP: %x -> %x;EBP: %x -> %x", old_esp, new_esp, old_ebp, new_ebp);
+
+    asm volatile ("cli");
+    asm volatile (
+        "mov %0, %%esp;\n"
+        "mov %1, %%ebp;\n"
+        :: "r" (new_esp), "r" (new_ebp)
+    );
+    asm volatile ("sti");
+
+    KLOG_INFO("Moved stack, returning...");
+
+    return new_stack;
+}
+
 void task_init() {
+    // Move ourselves to a larger stack (4MB in size)
+    uint32_t stack = move_stack();
+    KLOG_INFO("Moved stack successfully...");
+
 	tasks = list_create();
 	// Create process of ourselves
 	task_t *task = kmalloc(sizeof(task_t));
@@ -118,7 +164,7 @@ void task_init() {
 	task->eip = 0;
 	task->esp = 0;
 	task->ebp = 0;
-	task->stack_start = 0xC0000000 + STACK_START;
+	task->stack_start = stack;
 	list_append(tasks, task);
 
 	KLOG_INFO("Stack Start: %x", task->stack_start);
