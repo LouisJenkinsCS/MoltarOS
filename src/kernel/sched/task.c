@@ -58,7 +58,7 @@ static void task_switch(regs_t *UNUSED(regs)) {
     curr->ebp = ebp;
 
     // Bugged? Need to initiate a function call or else a page fault occurs
-   	// printf("");
+   	printf("");
     // KLOG_INFO("Task Switch: %d -> %d", curr->id, current->id);
     // KLOG_INFO("Jumping to new process... eip: %x, esp: %x, ebp: %x", current->eip, current->esp, current->ebp);
 
@@ -77,19 +77,20 @@ static void task_switch(regs_t *UNUSED(regs)) {
 // Clones the parent's stack for the child. Also ensures that any base pointer no longer
 // points to the parent stack.
 static void copy_stack(task_t *child, task_t *parent) {
-	KLOG_INFO("Copying stack of %d into %d...", parent->id, child->id);
+	KLOG_INFO("Copying stack of %d at %x into %d...", parent->id, parent->stack_start, child->id);
 
     // Allocate a new page for the child's stack.
     uint32_t new_stack = alloc_block();
     KLOG_INFO("Allocated block: %x", new_stack);
     KLOG_INFO("Copying stack from %x -> %x", parent->stack_start, new_stack);
     uint32_t esp;  asm volatile ("mov %%esp, %0" : "=r" (esp));
-    uint32_t offset = new_stack;
-    for (uint32_t addr = parent->stack_start; addr < parent->stack_start + PAGE_SIZE; addr += 4, offset += 4) {
+    uint32_t offset = new_stack + PAGE_SIZE - (parent->stack_start + PAGE_SIZE - esp) ;
+    // TODO: Do not scan pass stack pointer!!!
+    for (uint32_t addr = esp; addr < parent->stack_start + PAGE_SIZE; addr += 4, offset += 4) {
         uint32_t *word = (uint32_t *) addr;
-        if (*word < parent->stack_start + PAGE_SIZE && *word > parent->stack_start) {
+        if (*word < (parent->stack_start + PAGE_SIZE) && *word > parent->stack_start) {
             uint32_t diff = *word - parent->stack_start;
-            KLOG_INFO("Redirecting Pointer %x -> %x", *word, new_stack + diff);
+            KLOG_INFO("Redirecting Pointer in stack at %x with value %x -> %x", word, *word, new_stack + diff);
             * (uint32_t *) offset = new_stack + diff; 
         } else {
             * (uint32_t *) offset = *word;
