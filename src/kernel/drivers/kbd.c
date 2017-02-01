@@ -212,10 +212,10 @@ static const char *to_string(uint8_t code) {
 			str = "NUMLOCK";
 			break; 
 		case KBD_KP_KEY_ASTERISK:
-			str = "(keypad) ASTERISK";
+			str = "(KP) ASTERISK";
 			break;
 		case KBD_KP_KEY_MINUS:
-			str = "(keypad) MINUS";
+			str = "(KP) MINUS";
 			break; 
 		case KBD_KEY_TAB:
 			str = "TAB";
@@ -260,16 +260,16 @@ static const char *to_string(uint8_t code) {
 			str = "BACK_SLASH";
 			break; 
 		case KBD_KP_KEY_7:
-			str = "(keypad) 7";
+			str = "(KP) 7";
 			break; 
 		case KBD_KP_KEY_8:
-			str = "(keypad) 8";
+			str = "(KP) 8";
 			break; 
 		case KBD_KP_KEY_9:
-			str = "(keypad) 9";
+			str = "(KP) 9";
 			break; 
 		case KBD_KP_KEY_PLUS:
-			str = "(keypad) PLUS";
+			str = "(KP) PLUS";
 			break;
 		case KBD_KEY_CAPS_LOCK:
 			str = "CAPS_LOCK";
@@ -311,13 +311,13 @@ static const char *to_string(uint8_t code) {
 			str = "ENTER";
 			break; 
 		case KBD_KP_KEY_4:
-			str = "(keypad) 4";
+			str = "(KP) 4";
 			break; 
 		case KBD_KP_KEY_5:
-			str = "(keypad) 5";
+			str = "(KP) 5";
 			break; 
 		case KBD_KP_KEY_6:
-			str = "(keypad) 6";
+			str = "(KP) 6";
 			break; 
 		case KBD_KEY_LSHIFT:
 			str = "LSHIFT";
@@ -356,13 +356,13 @@ static const char *to_string(uint8_t code) {
 			str = "RSHIFT";
 			break; 
 		case KBD_KP_KEY_1:
-			str = "(keypad) 1";
+			str = "(KP) 1";
 			break;
 		case KBD_KP_KEY_2:
-			str = "(keypad) 2";
+			str = "(KP) 2";
 			break; 
 		case KBD_KP_KEY_3:
-			str = "(keypad) 3";
+			str = "(KP) 3";
 			break; 
 		case KBD_KEY_LCTRL:
 			str = "LCTRL";
@@ -383,10 +383,10 @@ static const char *to_string(uint8_t code) {
 			str = "SUPER";
 			break;   
 		case KBD_KP_KEY_0:
-			str = "(keypad) 0";
+			str = "(KP) 0";
 			break; 
 		case KBD_KP_KEY_PERIOD:
-		    str = "(keypad) PERIOD";
+		    str = "(KP) PERIOD";
 			break;
 	    default:
 	    	str = "(NULL)";
@@ -401,13 +401,13 @@ static const char *escaped_to_string(uint8_t code) {
 	const char *str;
 	switch (code) {
 		case KBD_KP_KEY_ENTER:
-			str = "(keypad) ENTER";
+			str = "(KP) ENTER";
 			break;
 		case KBD_KEY_RCTRL:
 			str = "RCTRL";
 			break; 
 		case KBD_KP_KEY_SLASH:
-			str = "(keypad) SLASH";
+			str = "(KP) SLASH";
 			break;
 		case KBD_KEY_RALT:
 			str = "RALT";
@@ -465,13 +465,20 @@ static void keyboard_irq_handler(struct registers *UNUSED(regs)) {
 	// State-Based machine, which determines which scan table to decode from.
 	switch (state) {
 		// Waiting for first byte
-		case 0:
-			// On each key press, we write prettily to the same line.
-			vga_clear_line();
-			vga_set_x(0);
-			printf("Scancode: %x, You %s: ", scancode, released ? "Released" : "Pressed");
-			printf("%s", to_string(KBD_SCAN_TABLE[scancode]));
+		case 0: {
+			char *str = to_string(KBD_SCAN_TABLE[scancode]);
+			uint32_t x = vga_get_x();
+			uint32_t y = vga_get_y();
+			vga_set_x(65);
+			vga_set_y(1);
+			for (int i = 0; i < 15 - strlen(str); i++) {
+				vga_putc(' ');
+			}
+			printf("%s", str);
+			vga_set_x(x);
+			vga_set_y(y);
 			return;
+		}
 		// Waiting for second byte of multibyte sequence
 		case 1:
 			switch (KBD_ESCAPED_SCAN_TABLE[scancode]) {
@@ -481,12 +488,19 @@ static void keyboard_irq_handler(struct registers *UNUSED(regs)) {
 				case KBD_KEY_UP:
 					vga_scroll_up();
 					break;
-				default:
-					// On each key press, we write prettily to the same line.
-					vga_clear_line();
-					vga_set_x(0);
-					printf("Scancode: %x, You %s: ", scancode, released ? "Released" : "Pressed");
-					printf("%s", escaped_to_string(KBD_ESCAPED_SCAN_TABLE[scancode]));
+				default: {
+					char *str = escaped_to_string(KBD_ESCAPED_SCAN_TABLE[scancode]);
+					uint32_t x = vga_get_x();
+					uint32_t y = vga_get_y();
+					vga_set_x(65);
+					vga_set_y(1);
+					for (int i = 0; i < 15 - strlen(str); i++) {
+						vga_putc(' ');
+					}
+					printf("%s", str);
+					vga_set_x(x);
+					vga_set_y(y);
+				}
 			}
 			state = 0;
 	}

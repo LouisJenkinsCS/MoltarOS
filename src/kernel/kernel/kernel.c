@@ -23,8 +23,26 @@ uint32_t PHYSICAL_MEMORY_START;
 
 uint32_t STACK_START;
 
-size_t ticks_x, ticks_y, time_x, time_y;
-static bool timer_done = false;
+static void thread_task(void *UNUSED(args)) {
+	uint32_t ticks = 0;
+
+	for (;;) {
+		if (ticks++ == 1000) {
+			ticks = 0;
+			asm volatile ("cli");
+		
+			uint32_t x = vga_get_x();
+			uint32_t y = vga_get_y();
+			vga_set_x(70);
+			vga_set_y(0);
+			rtc_print();
+			vga_set_x(x);
+			vga_set_y(y);
+
+			asm volatile ("sti");
+		}
+	}
+}
 
 void kernel_init(struct multiboot_info *info, uint32_t esp) {
 	STACK_START = esp;
@@ -47,167 +65,14 @@ void kernel_init(struct multiboot_info *info, uint32_t esp) {
 	vga_dynamic_init();
 }
 
-// Memory test that purposefully performs allocation-heavy allocations to test the state of the heap and virtual memory
-// implementation. It works by filling up half of the amount of RAM with a deterministic sequence (for debugging) of
-// values. On each iteration, we resize by allocating and copying into a new container. 
-static void memtest() {
-	uint32_t total_memory = PHYSICAL_MEMORY_END - PHYSICAL_MEMORY_START;
-	uint32_t total_alloc = 0;
-	uint32_t alloc_size = 1;
-	uint32_t **allocated_data = NULL;
-	uint32_t num_alloc = 1;
-
-	printf("Allocated: ");
-	uint32_t x = vga_get_x();
-	uint32_t y = vga_get_y();
-	printf("%d/%d", total_alloc, total_memory / 4);
-
-	// TODO: Stops working at 1/2 RAM used.
-	while (total_alloc < (total_memory / 4)) {
-		// Allocate new storage
-		uint32_t **new_data = kmalloc(sizeof(void *) * num_alloc);
-		memcpy(new_data, allocated_data, sizeof(void *) * (num_alloc - 1));
-		kfree(allocated_data);
-		allocated_data = new_data;
-
-		allocated_data[num_alloc - 1] = kmalloc(alloc_size);
-		*allocated_data[num_alloc - 1] = alloc_size;
-		total_alloc += alloc_size;
-		alloc_size = MIN(2 * 1024 * 1024, alloc_size * 2);
-		num_alloc++;
-
-		vga_set_x(x);
-		vga_set_y(y);
-		printf("%d/%d", total_alloc, total_memory / 4);
-	}
-
-	alloc_size = 1;
-	num_alloc = 0;
-
-	printf("\nTesting and Deallocating: ");
-	x = vga_get_x();
-	y = vga_get_y();
-	printf("%d/%d", total_alloc, total_memory / 4);
-
-	while (total_alloc) {
-		uint32_t *val = allocated_data[num_alloc];
-		if (*val != alloc_size) {
-			KPANIC("Bad Value for Index: %d, Expected: %d, Received: %d, Address: %x", num_alloc, alloc_size, *val, val);
-		}
-
-		total_alloc -= alloc_size;
-		num_alloc++;
-		alloc_size = MIN(2 * 1024 * 1024, alloc_size * 2);
-		kfree(val);
-		vga_set_x(x);
-		vga_set_y(y);
-		printf("%d/%d", total_alloc, total_memory / 4);
-	}
-
-	printf("\n");
-}
-
-static void kernel_tick(struct registers *UNUSED(regs)) {
-	static uint32_t ticks = 0;
-
-	if (ticks == 10000) {
-		timer_done = true;		
-	} else {
-		vga_set_x(ticks_x);
-		vga_set_y(ticks_y);
-		printf("%d", ++ticks);
-	}
-}
-
-static void timer_test() {
-	time_x = vga_get_x();
-	time_y = vga_get_y();
-
-	printf("Ticks: 0");
-	ticks_x = vga_get_x() - 1;
-	ticks_y = vga_get_y();
-
-	timer_set_handler(1000, kernel_tick);
-
-	asm volatile ("sti");
-	while(!timer_done)
-		asm volatile ("hlt");
-
-	// init currently only sets a default callback, so this is adequate
-	timer_init();
-
-	printf("\n");
-}
-
-static void kernel_keyboard_test() {
-	asm volatile ("sti");
-
-	while (true) {
-		asm volatile ("hlt");
-	}
-}
-
-static void thread_task(void *UNUSED(args)) {
-	uint32_t cycles = 0;
-	uint32_t ticks = 0;
-
-	for (;;) {
-		if (ticks++ == 1000) {
-			ticks = 0;
-			asm volatile ("cli");
-		
-			uint32_t x = vga_get_x();
-			uint32_t y = vga_get_y();
-			vga_set_x(70);
-			vga_set_y(0);
-			rtc_print();
-			vga_set_x(x);
-			vga_set_y(y);
-
-			asm volatile ("sti");
-		}
-	}
-}
-
 void kernel_main(void) {
-	// KLOG_INFO("Initializing Keyboard...");
-	// keyboard_init();
-	// kernel_clock_test();
-	// KLOG_INFO("Initiating Keyboard Test...");
-	// kernel_keyboard_test();
-	// printf("Memory Test (%d Bytes): ", (PHYSICAL_MEMORY_END - PHYSICAL_MEMORY_START) / 4);
-	// uint32_t x = vga_get_x();
-	// uint32_t y = vga_get_y();
-	// printf("START\n");
-	// memtest();
-	// uint32_t tmpx = vga_get_x();
-	// uint32_t tmpy = vga_get_y();
-	// vga_set_x(x);
-	// vga_set_y(y);
-	// KLOG_INFO("SUCCESS!");
-	// vga_set_x(tmpx);
-	// vga_set_y(tmpy);
-
-	// printf("SysTimer Test (1KHz): ");
-	// x = vga_get_x();
-	// y = vga_get_y();
-	// printf("START\n");
-	// timer_test();
-	// tmpx = vga_get_x();
-	// tmpy = vga_get_y();
-	// vga_set_x(x);
-	// vga_set_y(y);
-	// KLOG_INFO("SUCCESS!");
-	// vga_set_x(tmpx);
-	// vga_set_y(tmpy);
-
 	KINFO("Initializing Multitasking...");
 	task_init();
 	thread_create(thread_task, NULL);
 
-	KINFO("Tests Complete!");
 	keyboard_init();
-	KINFO("Keyboard Initialized... Press any Button...");
+	KINFO("Keyboard Initialized...");
+	KINFO("Kernel Fully Initialized!");
 
 	// Loop infinitely
 	while (true) {

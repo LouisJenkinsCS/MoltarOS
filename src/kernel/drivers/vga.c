@@ -2,7 +2,7 @@
 #include <string.h>
 
 #include <include/kernel/logger.h>
-#include <include/ds/list.h>
+#include <include/ds/array.h>
 #include <include/drivers/vga.h>
 #include <include/x86/io_port.h>
 #include <include/helpers.h>
@@ -22,8 +22,8 @@ const size_t vga_height = 25;
 const size_t vga_width = 80;
 
 
-static list_t *above_lines;
-static list_t *below_lines;
+static array_t *lines;
+static size_t line_number = 0;
 
 static inline uint8_t make_color(enum vga_color foreground, enum vga_color background);
 
@@ -33,7 +33,13 @@ static inline size_t get_index();
 
 static inline void clear_line(size_t line);
 
+static void save_buffer();
+
+static void draw_buffer();
+
 static void update_cursor();
+
+static bool reserved(size_t i, size_t j);
 
 /*
 	Initializes the buffer's attributes above to their proper values, should be called before kmain().
@@ -51,8 +57,13 @@ void vga_init() {
 
 // Initializes rest of components to support scrolling.
 void vga_dynamic_init() {
-	below_lines = list_create();
-	above_lines = list_create();
+	// Create our buffer of lines.
+	lines = array_create(vga_height);
+
+	// Create the initial 25 lines we require to buffer them
+	for (size_t i = 0; i < vga_height; i++) {
+		array_add(lines, kmalloc(sizeof(uint16_t) * vga_width));
+	}
 }
 
 void vga_print_color(enum vga_color new_color,const char *str) {
@@ -91,12 +102,19 @@ void vga_print_reserved(const char *str, int type) {
 void vga_putc(const char c) {
 	if(c == '\n') {
 		// Fill rest of line with empty space
-		while(x < vga_width) {
+		while(x < vga_width && !reserved(x, y)) {
 			size_t idx = get_index();
 			buf[idx] = color_char(' ');
 			x++;
 		}
 	} else {
+		// On reserved spots, handle as a newline character, and then print
+		if (reserved(x, y)) {
+			vga_putc('\n');
+			vga_putc(c);
+			return;
+		}
+
 		char ch = (c == '\t') ? ' ' : c;
 		size_t idx = get_index();
 		buf[idx] = color_char(ch);
@@ -109,7 +127,7 @@ void vga_putc(const char c) {
 		the keyboard (once the driver is implemented) and storing the previous data as well
 		(once memory management and the heap is implemented).
 	*/
-	if(++x >= vga_width) {
+	if(++x >= vga_width || reserved(x, y)) {
 		x = 0;
 
 		if(++y >= vga_height) {
@@ -131,80 +149,41 @@ void vga_clear_line() {
 }
 
 void vga_scroll_down() {
-	// Preserve the old line's value.
-	uint16_t *line = kmalloc(2 * vga_width);
-	for (size_t i = 0; i < vga_width - 10; i++) {
-		line[i] = buf[i];
-	}
-	list_back(above_lines, line);
+	// Preserve current contents.
+	save_buffer();
 
-	for(size_t i = 1; i < vga_height; i++) {
-		for(size_t j = 0; j < vga_width; j++) {
-			// Previous and current line indexes
-			const size_t prev = ((i-1) * vga_width) + j;
-			const size_t curr = (i * vga_width) + j;
+	// If there is no next line, then we did not save one, and hence we need to allocate
+	// a new one. However, if there IS a next line, we can easily just display that one.
+	if (lines->used <= line_number + vga_height) {
+		uint16_t *line = kmalloc(sizeof(uint16_t) * vga_width);
 
-			// The contents of the current line is moved to the previous line
-			buf[prev] = buf[curr];
-		}
-	}
-
-	// If there is a buffered line below, restore it...
-	if (list_current(below_lines)) {
-		line = list_current(below_lines);
-		list_remove(below_lines, NULL);
-
+		// Fill with blank lines, so it can easily be displayed
 		for (size_t i = 0; i < vga_width; i++) {
-			buf[((vga_height - 1) * vga_width) + i] = line[i];
+			line[i] = color_char(' ');
 		}
-		kfree(line);
-	} else {
-		clear_line((vga_height - 1));
+
+		// Add our new line to the list of lines; Now we can seamlessly obtain the line
+		// to display without extra logic.
+		array_add(lines, line);
 	}
+
+	// Scroll down
+	line_number++;
+	draw_buffer();
 }
 
 void vga_scroll_up() {
-	// No line to scroll
-	if (!list_current(above_lines)) {
+	// No more lines to scroll
+	if (line_number == 0) {
 		return;
 	}
 
-	// Preserve the old line's value.
-	uint16_t *line = kmalloc(2 * vga_width);
-	for (size_t i = 0; i < vga_width; i++) {
-		line[i] = buf[((vga_height - 1) * vga_width) + i];
-	}
-	list_back(below_lines, line);
+	// Preserve current contents.
+	save_buffer();
 
-	for(size_t i = vga_height - 2; i < vga_height; i--) {
-		for(size_t j = 0; j < vga_width; j++) {
-			if (i == 0 && j == vga_width - 10) {
-				break;
-			}
-			// Previous and current line indexes
-			const size_t next = ((i+1) * vga_width) + j;
-			const size_t curr = (i * vga_width) + j;
-
-			// The contents of the current line is moved to the previous line
-			buf[next] = buf[curr];
-		}
-	}
-
-	// If there is a buffered line above, restore it
-	if (list_current(above_lines)) {
-		line = list_current(above_lines);
-		list_remove(above_lines, NULL);
-
-
-		for (size_t i = 0; i < vga_width; i++) {
-			buf[i] = line[i];
-		}
-
-		kfree(line);
-	} else {
-		// Nothing to scroll
-		return;
-	}
+	// Scroll up
+	line_number--;
+	draw_buffer();
 }
 
 void vga_set_x(size_t _x) {
@@ -256,6 +235,48 @@ static inline size_t get_index() {
 static void clear_line(size_t line) {
 	for(size_t i = 0; i < vga_width; i++)
 		buf[(line * vga_width) + i] = color_char(' ');
+}
+
+static bool reserved(size_t i, size_t j) {
+	// TODO: Add 2nd line for key press
+	return (i == 0 && j == vga_width - 10) || (i == 1 && j == vga_width - 15);
+}
+
+static void draw_buffer() {
+	// We simply draw vga_height lines with respect to our current line_number
+	for (size_t i = 0; i < vga_height; i++) {
+		// Get current line to draw
+		uint16_t *line = array_get(lines, line_number + i);
+
+		// Copy the current line into vga buffer
+		for (size_t j = 0; j < vga_width; j++) {
+			if (reserved(i, j)) {
+				break;
+			}
+
+			buf[(i * vga_width) + j] = line[j];
+		}
+	}
+}
+
+static void save_buffer() {
+	// Copy the current buffer's contents (making sure to not copy
+	// reserved memory) into our own buffer
+	for(size_t i = 0; i < vga_height; i++) {
+		// Get current line buffer
+		uint16_t *line = array_get(lines, line_number + i);
+
+		for(size_t j = 0; j < vga_width; j++) {
+			// Reserved...
+			// TODO: Add 2nd line for key press
+			if (reserved(i, j)) {
+				break;
+			}
+
+			// Copy contents
+			line[j] = buf[(i * vga_width) + j];
+		}
+	}
 }
 
 static void update_cursor() {

@@ -14,7 +14,7 @@
 #define LEVEL_ERROR 5
 
 // Current log level. Any below this are filtered
-#define LOG_LEVEL LEVEL_ALL
+#define LOG_LEVEL LEVEL_INFO
 
 #ifndef NDEBUG
 	#define KLOG(level, color, format, ...) \
