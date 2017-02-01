@@ -13,6 +13,8 @@
 
 static list_t *tasks;
 
+extern void perform_task_switch(uint32_t, uint32_t, uint32_t);
+
 extern uint32_t read_eip();
 
 extern uint32_t STACK_START;
@@ -58,24 +60,27 @@ static void task_switch(regs_t *UNUSED(regs)) {
     curr->ebp = ebp;
 
     // Bugged? Need to initiate a function call or else a page fault occurs
-   	printf("");
+   	// printf("");
     // KLOG_INFO("Task Switch: %d -> %d", curr->id, current->id);
     // KLOG_INFO("Jumping to new process... eip: %x, esp: %x, ebp: %x", current->eip, current->esp, current->ebp);
 
 	// Jump to other task. The task's stack pointer and base pointer will accurately point to the
     // task's previous position on the stack.
-    asm volatile (
-        "mov %0, %%ecx;\n"
-        "mov %1, %%esp;\n"
-        "mov %2, %%ebp;\n"
-        "mov $" DUMMY_EIP_STR ", %%eax;\n"
-        "jmp *%%ecx" 
-        : : "r" (next->eip), "r" (next->esp), "r" (next->ebp)
-    );
+    perform_task_switch(next->eip, next->ebp, next->esp);
+    // asm volatile (
+    //     "mov %0, %%ecx;\n"
+    //     "mov %1, %%esp;\n"
+    //     "mov %2, %%ebp;\n"
+    //     "mov $" DUMMY_EIP_STR ", %%eax;\n"
+    //     "jmp *%%ecx" 
+    //     : : "r" (next->eip), "r" (next->esp), "r" (next->ebp)
+    // );
 }
 
-// Clones the parent's stack for the child. Also ensures that any base pointer no longer
-// points to the parent stack.
+// Clones the parent's stack for the child task, ensuring that it can start in a safe
+// and consistent state. All slots in the stack are scanned to determine if they are
+// pointers to the other's stack, and are redirected to the new one. This is so that
+// all frame pointers are corrected.
 static void copy_stack(task_t *child, task_t *parent) {
 	KLOG_INFO("Copying stack of %d at %x into %d...", parent->id, parent->stack_start, child->id);
 
@@ -111,14 +116,22 @@ static void clone_page_directory(uint32_t *parent_dir, uint32_t *child_dir) {
 	// Copy other contents by allocating new page frame by virtual address
 }
 
+// Moves the kernel's stack to a larger one (4KB -> 4MB).
+// All slots in the stack are scanned to determine if they are
+// pointers to the other's stack, and are redirected to the new one. This is so that
+// all frame pointers are corrected.
 static uint32_t move_stack() {
-    // The stack reserved for the kernel is exactly 4MB in.
+    // The stack reserved for the kernel is exactly a page size (4MB) after the first reserved page.
     uint32_t new_stack = PAGE_SIZE + 0xC0000000;
     KLOG_INFO("Allocated block: %x", new_stack);
     KLOG_INFO("Moving kernel stack from %x -> %x", STACK_START, new_stack);
+
     uint32_t esp;  asm volatile ("mov %%esp, %0" : "=r" (esp));
     uint32_t offset = new_stack + PAGE_SIZE - (STACK_START - esp);
     KLOG_INFO("Redirecting pointers from old stack to new stack. Stack Size: %x...", (STACK_START - esp));
+    
+    // Scan all slots from the stack pointer up to the beginning of the stack for potential
+    // pointers, and redirect them.
     for (uint32_t addr = esp; addr < STACK_START; addr += 4, offset += 4) {
         uint32_t *word = (uint32_t *) addr;
         if (*word < STACK_START && *word > esp) {
@@ -132,6 +145,7 @@ static uint32_t move_stack() {
 
     KLOG_INFO("Switching to new stack...");
     
+    // The new stack pointer and base pointer are relative to the new allocated stack.
     uint32_t old_esp, old_ebp, new_esp, new_ebp;
     asm volatile ("mov %%esp, %0" : "=r" (old_esp));
     asm volatile ("mov %%ebp, %0" : "=r" (old_ebp));
@@ -140,6 +154,7 @@ static uint32_t move_stack() {
 
     KLOG_INFO("ESP: %x -> %x;EBP: %x -> %x", old_esp, new_esp, old_ebp, new_ebp);
 
+    // Switch to the new kernel stack. We don't bother cleaning up the old one, as it isn't normally less than 1 KB.
     asm volatile ("cli");
     asm volatile (
         "mov %0, %%esp;\n"
