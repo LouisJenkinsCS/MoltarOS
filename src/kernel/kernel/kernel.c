@@ -29,21 +29,21 @@ static bool timer_done = false;
 void kernel_init(struct multiboot_info *info, uint32_t esp) {
 	STACK_START = esp;
 	vga_init();
-	KLOG_INFO("Stack Start: %x", esp);
-	KLOG_INFO("Virtual Memory (Paging) Initialized...");
-	KLOG_INFO("Video Graphics Array (VGA) Initialized...");
+	KTRACE("Stack Start: %x", esp);
+	KINFO("Virtual Memory (Paging) Initialized...");
+	KINFO("Video Graphics Array (VGA) Initialized...");
 	gdt_init();
-	KLOG_INFO("Global Descriptor Table (GDT) Initialized...");
+	KINFO("Global Descriptor Table (GDT) Initialized...");
 	idt_init();
-	KLOG_INFO("Interrupt Descriptor Table (IDT) Initialized...");
+	KINFO("Interrupt Descriptor Table (IDT) Initialized...");
 	timer_init();
-	KLOG_INFO("System Timer (PIT) Initialized...");
+	KINFO("System Timer (PIT) Initialized...");
 	if (!multiboot_RAM(info, &PHYSICAL_MEMORY_START, &PHYSICAL_MEMORY_END)) {
 		KPANIC("Failed to detect physical memory (RAM)!!!");
 	}
-	KLOG_INFO("Detected => RAM {Start: %d, End: %d, Total: %d}", PHYSICAL_MEMORY_START, PHYSICAL_MEMORY_END, PHYSICAL_MEMORY_END - PHYSICAL_MEMORY_START);
+	KDEBUG("Detected => RAM {Start: %d, End: %d, Total: %d}", PHYSICAL_MEMORY_START, PHYSICAL_MEMORY_END, PHYSICAL_MEMORY_END - PHYSICAL_MEMORY_START);
 	mem_init();
-	KLOG_INFO("Memory Heap and Allocators (kmalloc & kfree) Initialized...");
+	KINFO("Memory Heap and Allocators (kmalloc & kfree) Initialized...");
 	vga_dynamic_init();
 }
 
@@ -201,13 +201,13 @@ void kernel_main(void) {
 	// vga_set_x(tmpx);
 	// vga_set_y(tmpy);
 
-	KLOG_INFO("Initializing Multitasking...");
+	KINFO("Initializing Multitasking...");
 	task_init();
 	thread_create(thread_task, NULL);
 
-	KLOG_INFO("Tests Complete!");
+	KINFO("Tests Complete!");
 	keyboard_init();
-	KLOG_INFO("Keyboard Initialized... Press any Button...");
+	KINFO("Keyboard Initialized... Press any Button...");
 
 	// Loop infinitely
 	while (true) {

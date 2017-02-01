@@ -58,7 +58,7 @@ static void debug_pd(uint32_t idx) {
 	bool rw = pde & READ_WRITE;
 	bool sz = pde & PAGE_MB;
 
-	KLOG_INFO("PDE #%d: addr:%x,present:%d,rw:%d,sz:%d", idx, frame_addr, present, rw, sz);
+	KTRACE("PDE #%d: addr:%x,present:%d,rw:%d,sz:%d", idx, frame_addr, present, rw, sz);
 }
 
 void alloc_init() {
@@ -75,7 +75,7 @@ void alloc_init() {
 		uint32_t cr3;
 		asm volatile ("mov %%cr3, %0" : "=r" (cr3));
 		page_directory = (uint32_t *) (cr3 + 0xC0000000);
-		KLOG_INFO("Address of Page Directory: %x", cr3);
+		KTRACE("Address of Page Directory: %x", cr3);
 }
 
 vaddr_t alloc_block() {
@@ -85,14 +85,14 @@ vaddr_t alloc_block() {
 		uint32_t idx = (virtual_addr / PAGE_SIZE) % NUM_FRAMES;
 		if (!(page_directory[idx] & PRESENT)) {
 			uint32_t frame_idx = first_free_frame(frame_bitmap);
-			// KLOG_INFO("Allocation: PDE #%d, Index: %d, Physical Address: %x, Virtual Address: %x", idx, frame_idx, frame_idx * PAGE_SIZE, virtual_addr);
+			// KTRACE("Allocation: PDE #%d, Index: %d, Physical Address: %x, Virtual Address: %x", idx, frame_idx, frame_idx * PAGE_SIZE, virtual_addr);
 			
 			// Out of Memory
 			if (frame_idx == PAGE_ERR) {
 				KPANIC("Could not find a free physical address!");
 			}
 
-			// KLOG_INFO("Idx: %x, Physical Address %x taken for Virtual Address %x", idx, frame_idx * PAGE_SIZE, (char *) virtual_addr);
+			// KTRACE("Idx: %x, Physical Address %x taken for Virtual Address %x", idx, frame_idx * PAGE_SIZE, (char *) virtual_addr);
 
 			// Claim the frame
 			BITMAP_SET(frame_bitmap, frame_idx);
@@ -119,7 +119,7 @@ vaddr_t alloc_block() {
 	virtual_addr += PAGE_SIZE;
 
 	// Clear the memory allocated frame for the user
-	// KLOG_INFO("Clearing chunk %x for user...", retval);
+	// KTRACE("Clearing chunk %x for user...", retval);
 	memset(retval, 0, PAGE_SIZE);
 	return retval;
 }

@@ -7,14 +7,14 @@
 
 // Our log levels
 #define LEVEL_ALL 0
-#define LEVEL_VERBOSE 1
+#define LEVEL_TRACE 1
 #define LEVEL_DEBUG 2
 #define LEVEL_INFO 3
 #define LEVEL_WARNING 4
-#define LEVEL_SEVERE 5
+#define LEVEL_ERROR 5
 
 // Current log level. Any below this are filtered
-#define LOG_LEVEL LEVEL_INFO
+#define LOG_LEVEL LEVEL_ALL
 
 #ifndef NDEBUG
 	#define KLOG(level, color, format, ...) \
@@ -30,10 +30,34 @@
 	#define KLOG(level, color, format, ...)
 #endif
 
-#if LOG_LEVEL <= LEVEL_INFO
-	#define KLOG_INFO(format, ...) KLOG("INFO", COLOR_GREEN, format, ##__VA_ARGS__)
+#if LOG_LEVEL <= LEVEL_TRACE
+	#define KTRACE(format, ...) KLOG("TRACE", COLOR_BROWN, format, ##__VA_ARGS__)
 #else
-	#define KLOG_INFO(format, ...) printf("")
+	#define KTRACE(format, ...) printf("")
+#endif
+
+#if LOG_LEVEL <= LEVEL_DEBUG
+	#define KDEBUG(format, ...) KLOG("DEBUG", COLOR_BLUE, format, ##__VA_ARGS__)
+#else
+	#define KDEBUG(format, ...) printf("")
+#endif
+
+#if LOG_LEVEL <= LEVEL_INFO
+	#define KINFO(format, ...) KLOG("INFO", COLOR_GREEN, format, ##__VA_ARGS__)
+#else
+	#define KINFO(format, ...) printf("")
+#endif
+
+#if LOG_LEVEL <= LEVEL_WARNING
+	#define KWARNING(format, ...) KLOG("WARNING", COLOR_YELLOW, format, ##__VA_ARGS__)
+#else
+	#define KWARNING(format, ...) printf("")
+#endif
+
+#if LOG_LEVEL <= LEVEL_ERROR
+	#define KERROR(format, ...) KLOG("ERROR", COLOR_RED, format, ##__VA_ARGS__)
+#else
+	#define KERROR(format, ...) printf("")
 #endif
 
 // Kernel Panic which will just print error message and spin
