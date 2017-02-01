@@ -16,9 +16,13 @@ section .multiboot
 ; Setup stack pointer register (esp), as its contents are currently undefined. Allocate 16KBs
 section .create_stack nobits
 
+global STACK_SIZE
+
+STACK_SIZE equ 4 * 1024
+
 	align 4
 		stack_bottom:
-			resb 16 * 1024
+			resb STACK_SIZE
 		stack_top:
 
 ; Below we setup paging (virtual memory) and move our kernel to the higher half
@@ -37,7 +41,7 @@ section .data
 
 	; This is the Page Directory that we use to bootstrap.
 	bootstrap_page_directory:
-		; Because we are remapping our kernel to KERNEL_START, our current
+		; Because we are remapping our kernel to VIRTUAL_ADDRESS_START our current
 		; instruction pointer will cause us to page fault (and then double fault and
 		; then triple fault) and trigger a hardware reset. Hence before we enable paging
 		; we must identity map each virtual address to it's respective physical address.
@@ -46,8 +50,10 @@ section .data
 		times (KERNEL_INDEX - 1) dd 0
 		; Kernel Entry
 		dd PDE_DEFAULT
+		; Kernel Stack (4MB)
+		dd 0x00400083
 		; Pages after the kernel
-		times (1024 - KERNEL_INDEX - 1) dd 0
+		times (1024 - KERNEL_INDEX - 2) dd 0
 
 section .text
 
@@ -89,8 +95,10 @@ global _start
 		mov dword [bootstrap_page_directory], 0
 		invlpg [0]
 
-		; Setup the stack pointer to point to the stack allocated above
+		; Setup the stack pointer to point to the stack allocated above. The stack pointer is also
+		; useful later on for when we move to a larger one.
 		mov esp, stack_top
+		push esp
 
 		; EBX contains a pointer to the multiboot info structure that we should save for later
 		; Since it is the physical address, we need to convert it to it's virtual address
@@ -105,7 +113,7 @@ global _start
 		call kernel_init
 
 		; Clean up stack frame
-		add esp, 4
+		add esp, 8
 
 		; Zero EBP again since kernel_init will have changed it
 		mov ebp, 0

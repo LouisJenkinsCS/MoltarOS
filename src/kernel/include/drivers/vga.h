@@ -18,14 +18,19 @@ enum vga_color {
 	COLOR_LIGHT_CYAN = 11,
 	COLOR_LIGHT_RED = 12,
 	COLOR_LIGHT_MAGENTA = 13,
-	COLOR_LIGHT_BROWN = 14,
+	COLOR_YELLOW = 14,
 	COLOR_WHITE = 15
 };
 
 extern const size_t vga_width;
 extern const size_t vga_height;
 
+#define VGA_RESERVED_KBD 1
+#define VGA_RESERVED_TICK 2
+
 void vga_init();
+
+void vga_dynamic_init();
 
 /*
 	Sets the VGA buffer's background and foreground color.
@@ -34,9 +39,15 @@ void vga_set_color(enum vga_color foreground, enum vga_color background);
 
 void vga_print(const char *str);
 
+void vga_print_color(enum vga_color new_color,const char *str);
+
+void vga_print_reserved(const char *str, int type);
+
 void vga_putc(const char c);
 
 void vga_clear();
+
+void vga_clear_line();
 
 void vga_scroll_down();
 

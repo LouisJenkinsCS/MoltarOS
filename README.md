@@ -14,15 +14,25 @@ The below depicts an early "schedule" or rather a path I will be taking in terms
 - [x] Keyboard Driver
 - [x] Memory Management (Physical + Virtual)
 - [x] Higher Half Kernel
+- [x] Multitasking and Scheduling
 - [ ] File System
 - [ ] Process Creation and Managements
-- [ ] Multitasking and Scheduling
 - [ ] Networking
 - [ ] ELF Binary Support
 - [ ] Interactive Shell
 - [ ] Graphical User Interfaces
 
 #Progress Update & Changelog
+
+## Version .002a
+
+It took me a while, but finally, I've got it! Multitasking! Currently, the CPU may as well be a uniprocessor, but I do implement task switching that allows me to have a VERY simple and __minimal__ multitasking kernel! They are still only threads because they do not have their own page directory (and hence share the same virtual address space). This meant that to create these tasks I had to copy the 'parent' stack for the 'child', and do a ton of trickery to get it working.
+
+As well, the time sharing has no current way to 'yield' to the 'scheduler' either, as I use the software context switching method (meaning, I only task switch from an interrupt handler).
+
+Good news is that I have fixed the Real-Time Clock, and I have it update in the top right corner, and as well as have the last pressed key right below it. I've also taken the time to implement scrolling! Now it buffers each line of the VGA buffer so that scrolling up and down will save and restore them appropriately!
+
+![Screenshot](/multitasking.JPG)
 
 ## Version .002
 

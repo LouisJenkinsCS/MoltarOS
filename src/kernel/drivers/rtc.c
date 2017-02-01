@@ -61,5 +61,7 @@ void rtc_print() {
 	if(hour < 0)
 		hour += 12;
 
-	printf("%d:%d:%d %s", hour, rtc_get_minute(), rtc_get_second(), pm ? "PM" : "AM");
+	uint8_t min = rtc_get_minute();
+	uint8_t sec = rtc_get_second();
+	printf("%d:%s%d:%s%d%s", hour, min < 10 ? "0" : "", min, sec < 10 ? "0" : "", sec, pm ? "PM" : "AM");
 }
