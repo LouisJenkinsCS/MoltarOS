@@ -5,7 +5,7 @@
 #include <include/drivers/timer.h>
 #include <include/kernel/mem.h>
 #include <include/kernel/logger.h>
-#include <include/ds/list.h>
+
 #include <string.h>
 
 #define DUMMY_EIP_STR "0x12345"
@@ -32,7 +32,8 @@ extern uint32_t read_eip();
 
 // The list of tasks. Since we are currently a uniprocessor system, there is no need to worry
 // about concurrent access, however, all accesses to it should disable interrupts.
-static list_t *tasks;
+static LIST_HEAD(task_queue, task) tasks = LIST_HEAD_INITIALIZER(tasks);
+static task_t *current;
 
 // Moves the kernel's stack to a larger one (4KB -> 4MB).
 // All slots in the stack are scanned to determine if they are
@@ -60,14 +61,11 @@ void task_init() {
 
 	// Create process of ourselves
 	task_t *task = kmalloc(sizeof(task_t));
-	task->id = 0;
-	task->eip = 0;
-	task->esp = 0;
-	task->ebp = 0;
+    memset(task, 0, sizeof(*task));
 	task->stack_start = stack;
 	
-    tasks = list_create();
-    list_append(tasks, task);
+    LIST_INSERT_HEAD(&tasks, task, next_task);
+    current = task;
 
 	KTRACE("Stack Start: %x", task->stack_start);
 
@@ -83,7 +81,7 @@ void thread_create(void (*task)(void *args), void *args) {
 
 	// Allocate a new process
     task_t *child = task_new();
-    task_t *parent = list_current(tasks);
+    task_t *parent = current;
     child->id = parent->id + 1;
     
     // Copy from parent
@@ -91,13 +89,13 @@ void thread_create(void (*task)(void *args), void *args) {
     KTRACE("Copied stacks...");
     
     // Append to queue
-    list_front(tasks, child);
+    LIST_INSERT_AFTER(parent, child, next_task);
     KTRACE("Added child to queue...");
     
     uint32_t eip = read_eip();
     
     // If we are the parent, setup esp/ebp/eip for child
-    if (list_current(tasks) == parent) {
+    if (current == parent) {
     	KTRACE("Parent setting up child...");
         uint32_t esp, ebp;
         asm volatile ("mov %%esp, %0" : "=r" (esp));
@@ -130,7 +128,7 @@ static task_t *task_new() {
 static void task_switch(regs_t *UNUSED(regs)) {
     // KTRACE("Preparing to task switch");
     
-    task_t *curr = list_current(tasks);
+    task_t *curr = current;
 
     // Ensure we preserve our current state so we return here later.
     // Information needing to be saved are the registers esp, ebp, and eip
@@ -154,9 +152,9 @@ static void task_switch(regs_t *UNUSED(regs)) {
     }
 
     // Select the next process
-    task_t *next = list_next(tasks);
-    if (!next) {
-        next = list_head(tasks);
+    current = LIST_NEXT(current, next_task);
+    if (!current) {
+        current = LIST_FIRST(&tasks);
     }
 
     // Preserve the current task's progress.
@@ -171,7 +169,7 @@ static void task_switch(regs_t *UNUSED(regs)) {
 
     // Jump to other task. The task's stack pointer and base pointer will accurately point to the
     // task's previous position on the stack.
-    perform_task_switch(next->eip, next->ebp, next->esp);
+    perform_task_switch(current->eip, current->ebp, current->esp);
 }
 
 static void copy_stack(task_t *child, task_t *parent) {
