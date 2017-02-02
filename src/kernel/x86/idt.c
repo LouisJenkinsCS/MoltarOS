@@ -1,6 +1,7 @@
 #include <include/x86/idt.h>
 #include <include/x86/exceptions.h>
 #include <include/x86/io_port.h>
+#include <include/kernel/logger.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -69,10 +70,19 @@ void idt_handler(struct registers *registers) {
 	if(handlers[registers->int_num])
 		handlers[registers->int_num](registers);
 	else
-		printf("\nUnexpected Interrupt: %x\n", registers->int_num);
+		KTRACE("\nUnexpected Interrupt: %x\n", registers->int_num);
 }
 
 void irq_handler(struct registers *registers) {
+	// Spurious interrupts on IRQ7 occur due to line noise (I.E: Too many interrupts)
+	// and are handled specifically here. We must check with the PIC master controller 
+	// to determine if it really is inside of an interrupt or if it is false.
+	if (registers->int_num == IRQ7) {
+		outb(PIC_MASTER_COMMAND, 0x0B);
+		if (inb(PIC_MASTER_COMMAND) & 0x80) {
+			return;
+		}
+	}
 
 	// If this interrupt is meant for the slave, send EOI
 	if(registers->int_num >= PIC_SLAVE_START_OFFSET)
@@ -84,7 +94,7 @@ void irq_handler(struct registers *registers) {
 	if(handlers[registers->int_num])
 		handlers[registers->int_num](registers);
 	else
-		printf("\nUnexpected Interrupt: %x\n", registers->int_num);
+		KTRACE("\nUnexpected Interrupt: %x\n", registers->int_num);
 }
 
 

@@ -11,6 +11,8 @@
 #define DUMMY_EIP_STR "0x12345"
 #define DUMMY_EIP 0x12345
 
+const uint32_t TICKS_PER_SLICE = 50;
+
 // Needed for determining the initial stack start offset, so we know how much to copy over.
 extern uint32_t STACK_START;
 
@@ -33,7 +35,7 @@ extern uint32_t read_eip();
 // The list of tasks. Since we are currently a uniprocessor system, there is no need to worry
 // about concurrent access, however, all accesses to it should disable interrupts.
 static LIST_HEAD(task_queue, task) tasks = LIST_HEAD_INITIALIZER(tasks);
-static task_t *current;
+static volatile task_t *current;
 
 // Moves the kernel's stack to a larger one (4KB -> 4MB).
 // All slots in the stack are scanned to determine if they are
@@ -63,13 +65,15 @@ void task_init() {
 	task_t *task = kmalloc(sizeof(task_t));
     memset(task, 0, sizeof(*task));
 	task->stack_start = stack;
+    task->ticks = TICKS_PER_SLICE;
 	
     LIST_INSERT_HEAD(&tasks, task, next_task);
     current = task;
 
 	KTRACE("Stack Start: %x", task->stack_start);
 
-	timer_set_handler(20, task_switch);
+	timer_set_handler(1000, task_switch);
+    register_interrupt_handler(IRQ_YIELD, task_switch);
 	KTRACE("Multitasking initialized...");
 }
 
@@ -111,11 +115,24 @@ void thread_create(void (*task)(void *args), void *args) {
         
         asm volatile ("sti");
     } else {
-    	// Inside of child, so execute the thread. If we exit early, it is an error as we do not have a way to handle this.
+    	asm volatile ("sti");
+        // Inside of child, so execute the thread. If we exit early, it is an error as we do not have a way to handle this.
     	task(args);
 
     	KPANIC("Thread returned early! Currently no implemented way to return allocated stack!");
     }
+}
+
+// Yield the CPU to the scheduler.
+void yield() {
+    // Give up our time slice...
+    asm volatile ("cli");
+    current->ticks = 0;
+    asm volatile ("sti");
+
+    // To end our time slice, we raise our own interrupt so that
+    // we cal safely reuse task_switch for yielding
+    asm volatile ("INT $255");
 }
 
 static task_t *task_new() {
@@ -126,9 +143,14 @@ static task_t *task_new() {
 }
 
 static void task_switch(regs_t *UNUSED(regs)) {
+    // Check if our timeslice expired
+    if (current->ticks) {
+        current->ticks--;
+        return;
+    }
+
     // KTRACE("Preparing to task switch");
-    
-    task_t *curr = current;
+    volatile task_t *curr = current;
 
     // Ensure we preserve our current state so we return here later.
     // Information needing to be saved are the registers esp, ebp, and eip
@@ -156,6 +178,7 @@ static void task_switch(regs_t *UNUSED(regs)) {
     if (!current) {
         current = LIST_FIRST(&tasks);
     }
+    current->ticks = TICKS_PER_SLICE;
 
     // Preserve the current task's progress.
     curr->eip = eip;
