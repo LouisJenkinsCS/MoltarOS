@@ -24,23 +24,21 @@ uint32_t PHYSICAL_MEMORY_START;
 uint32_t STACK_START;
 
 static void thread_task(void *UNUSED(args)) {
-	uint32_t ticks = 0;
 
 	for (;;) {
-		if (ticks++ == 1000) {
-			ticks = 0;
-			asm volatile ("cli");
-		
-			uint32_t x = vga_get_x();
-			uint32_t y = vga_get_y();
-			vga_set_x(70);
-			vga_set_y(0);
-			rtc_print();
-			vga_set_x(x);
-			vga_set_y(y);
+		asm volatile ("cli");
+	
+		uint32_t x = vga_get_x();
+		uint32_t y = vga_get_y();
+		vga_set_x(70);
+		vga_set_y(0);
+		rtc_print();
+		vga_set_x(x);
+		vga_set_y(y);
 
-			asm volatile ("sti");
-		}
+		asm volatile ("sti");
+
+		yield();
 	}
 }
 

@@ -19,6 +19,7 @@
 #define IRQ13 45
 #define IRQ14 46
 #define IRQ15 47
+#define IRQ_YIELD 255
 
 #define IDT_FLAGS_GATE_TASK 0x5
 #define IDT_FLAGS_GATE_INTERRUPT16 0x6
