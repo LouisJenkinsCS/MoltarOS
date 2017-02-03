@@ -1,10 +1,8 @@
 # MoltarOS
 
-![Icon](./MoltarOS.jpg)
-
 ## Summary
 
-MoltarOS is a 'toy' operating system developed purely for academic purposes and interests. It is a 'toy' in that it never is intended to compete against other well established operating systems, such as FreeBSD, Linux, Windows, or Mac OS X, but rather with the intent that I may learn how they (potentially) work internally. The project by itself is a very ambitious one, but not unachievable. This project was inspired by the [ToaruOS](https://github.com/klange/toaruos), which was developed by a single undergraduate student, which made it clear that it certainly was possible. The operating system will begin implementation by following [OSDev Tutorials](http://wiki.osdev.org/Tutorials), and later potentially adding my own support for other things based on where my interests lead me.
+<img align="left" src="./MoltarOS.jpg" width="128" height="128">MoltarOS is a 'toy' operating system developed purely for academic purposes and interests. It is a 'toy' in that it never is intended to compete against other well established operating systems, such as FreeBSD, Linux, Windows, or Mac OS X, but rather with the intent that I may learn how they (potentially) work internally. The project by itself is a very ambitious one, but not unachievable. This project was inspired by the [ToaruOS](https://github.com/klange/toaruos), which was developed by a single undergraduate student, which made it clear that it certainly was possible. The operating system will begin implementation by following [OSDev Tutorials](http://wiki.osdev.org/Tutorials), and later potentially adding my own support for other things based on where my interests lead me.
 
 ## Progress
 
