@@ -1,5 +1,7 @@
 # MoltarOS
 
+![Icon](./MoltarOS.jpg)
+
 ## Summary
 
 MoltarOS is a 'toy' operating system developed purely for academic purposes and interests. It is a 'toy' in that it never is intended to compete against other well established operating systems, such as FreeBSD, Linux, Windows, or Mac OS X, but rather with the intent that I may learn how they (potentially) work internally. The project by itself is a very ambitious one, but not unachievable. This project was inspired by the [ToaruOS](https://github.com/klange/toaruos), which was developed by a single undergraduate student, which made it clear that it certainly was possible. The operating system will begin implementation by following [OSDev Tutorials](http://wiki.osdev.org/Tutorials), and later potentially adding my own support for other things based on where my interests lead me.
@@ -32,13 +34,13 @@ As well, the time sharing has no current way to 'yield' to the 'scheduler' eithe
 
 Good news is that I have fixed the Real-Time Clock, and I have it update in the top right corner, and as well as have the last pressed key right below it. I've also taken the time to implement scrolling! Now it buffers each line of the VGA buffer so that scrolling up and down will save and restore them appropriately!
 
-![Screenshot](/multitasking.JPG)
+![Screenshot](./multitasking.JPG)
 
 ## Version .002
 
 It is FINALLY here! I have implemented not only memory management (paging and a heap allocator), but even converted to a higher-half kernel approach, which was also easier, surprisingly, than a normal identity-mapped system. I've also fixed up the tests and their output format to better portray the significance of the initialization of the kernel thus far. I am very satisfied with what I have done, but unfortunately, I have to attend to another project for the time being.
 
-![Screenshot](/all_tests_and_heap.PNG)
+![Screenshot](./all_tests_and_heap.PNG)
 
 ## Version .001c
 
@@ -51,17 +53,17 @@ a significant amount of work and should be pushed to master.
 
 Lastly, I also added a nice logger macro, `KLOG`, and panic macro, `KPANIC`.
 
-![Screenshot](/ram_and_kbd.PNG)
+![Screenshot](./ram_and_kbd.PNG)
 
 ## Version .001b
 
 Implemented the keyboard driver, but it won't be able to communicate with other components (such as an interactive shell) until memory management is implemented... perhaps, not even until processes and scheduling is implemented. That is the next thing I will be releasing. Currently, when you execute
 the OS, it will have a blank screen, until you use the keyboard. When executing the keyboard, it will display what key has been pressed and what has been released... but only one at a time unfortunaately, no multi-key press events are supported.
 
-![Screenshot](/kbd_input.PNG)
+![Screenshot](./kbd_input.PNG)
 
 ## Version .001a
 
 Implemented the GDT, IDT (and IRQs and ISRs), reprogrammed the PIC's (Master and Slave), and created an interrupt handler for the PIT. Unfortunately, right now it uses the PIT to call the RTC rather than handling RTc separately, but that will come next, kind of busy right now.
 
-![Screenshot](/os_progress.PNG)
+![Screenshot](./os_progress.PNG)
