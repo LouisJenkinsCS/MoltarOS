@@ -14,9 +14,6 @@ static const uint32_t PAGE_MB = 1 << 7;
 // Maximum number of frames is 1024 / 32 = 32, so -1 is a valid error number.
 static const uint32_t PAGE_ERR = (uint32_t) -1;
 
-// The current physical memory offset we are allocating in memory. This is a very simple allocator
-// and as such only allocates memory, and never frees it, and so this only ever increases.
-static uint32_t virtual_addr;
 static uint32_t *page_directory;
 static uint32_t frame_bitmap[NUM_FRAMES / 32];
 static uint32_t dir_bitmap[NUM_FRAMES / 32];
@@ -62,9 +59,7 @@ static void debug_pd(uint32_t idx) {
 }
 
 void alloc_init() {
-		// Initialize necessary fields. We also start after the first page because the address
-		// 0x0 is commonly used for NULL, and after the second because it was reserved for us.
-		virtual_addr = PAGE_SIZE;
+		// Initialize necessary fields.
 		memset(frame_bitmap, 0, index_of(NUM_FRAMES) * sizeof(uint32_t));
 
 		// The kernel directory is the first page.
@@ -78,12 +73,16 @@ void alloc_init() {
 		KTRACE("Address of Page Directory: %x", cr3);
 }
 
+// TODO: Take parameter for the current process' page directory table.
 vaddr_t alloc_block() {
-	// Obtain the first free frame by cycling through all possible frames for one without it's PRESENT bit set.
+	// Obtain the first free virtual address by cycling through all PDEs for one without it's PRESENT bit set.
+	// This way, even if a process has its own virtual address space, we can easily find an available virtual
+	// address based on it's page directory table. Note: We skip the first virtual address page (0x0) so that
+	// NULL still becomes an invalid address.
 	bool found = false;
-	for (int i = 0; i < 1024; i++) {
-		uint32_t idx = (virtual_addr / PAGE_SIZE) % NUM_FRAMES;
-		if (!(page_directory[idx] & PRESENT)) {
+	uint32_t virtual_addr = PAGE_SIZE;
+	for (int i = 1; i < 1024; i++) {
+		if (!(page_directory[i] & PRESENT)) {
 			uint32_t frame_idx = first_free_frame(frame_bitmap);
 			// KTRACE("Allocation: PDE #%d, Index: %d, Physical Address: %x, Virtual Address: %x", idx, frame_idx, frame_idx * PAGE_SIZE, virtual_addr);
 			
@@ -98,8 +97,8 @@ vaddr_t alloc_block() {
 			BITMAP_SET(frame_bitmap, frame_idx);
 
 			// Mark frame as present and invalidate for TLB
-			page_directory[idx] = (frame_idx * PAGE_SIZE) | PAGE_MB | PRESENT | READ_WRITE;
-			asm volatile ("invlpg (%0)" :: "m" (virtual_addr));
+			page_directory[i] = (frame_idx * PAGE_SIZE) | PAGE_MB | PRESENT | READ_WRITE;
+			asm volatile ("invlpg %0" :: "m" (virtual_addr));
 
 			// debug_pd(idx);
 			// Exit early
@@ -115,11 +114,8 @@ vaddr_t alloc_block() {
 		KPANIC("Could not find a free virtual address!");
 	}
 
-	uint32_t retval = virtual_addr;
-	virtual_addr += PAGE_SIZE;
-
 	// Clear the memory allocated frame for the user
 	// KTRACE("Clearing chunk %x for user...", retval);
-	memset(retval, 0, PAGE_SIZE);
-	return retval;
+	memset(virtual_addr, 0, PAGE_SIZE);
+	return virtual_addr;
 }

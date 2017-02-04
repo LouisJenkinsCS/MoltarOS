@@ -61,6 +61,7 @@ void kernel_init(struct multiboot_info *info, uint32_t esp) {
 	mem_init();
 	KINFO("Memory Heap and Allocators (kmalloc & kfree) Initialized...");
 	vga_dynamic_init();
+	KINFO("VGA Scrolling Initialized...");
 }
 
 void kernel_main(void) {

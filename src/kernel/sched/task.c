@@ -185,11 +185,6 @@ static void task_switch(regs_t *UNUSED(regs)) {
     curr->esp = esp;
     curr->ebp = ebp;
 
-    // Bugged? Need to initiate a function call or else a page fault occurs
-    // printf("");
-    // KTRACE("Task Switch: %d -> %d", curr->id, current->id);
-    // KTRACE("Jumping to new process... eip: %x, esp: %x, ebp: %x", current->eip, current->esp, current->ebp);
-
     // Jump to other task. The task's stack pointer and base pointer will accurately point to the
     // task's previous position on the stack.
     perform_task_switch(current->eip, current->ebp, current->esp);
